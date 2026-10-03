@@ -3,6 +3,10 @@
 > [!NOTE]
 > This repository contains a baseline implementation to get started with developing your own user simulator for **TREC UserSim**. More details about the shared task can be found on the [official website](https://trec.usersim.ai/) and in the [guidelines](https://trec.usersim.ai/guidelines). The code integrates the API of the TREC UserSim platform and provides examples for user simulators with simple response strategies.
 
+## Project research
+
+See the [research notes](docs/research/README.md) for the current approach comparison, source refresh, historical advisor notes, and next experiments. No competitive approach has been validated yet.
+
 ### Contents
 
   * [TREC UserSim Baseline Simulator](#trec-usersim-baseline-simulator)
@@ -58,7 +62,7 @@ The table below provides short descriptions of how the baseline simulator is imp
 | --- | --- |
 | [`user_simulator.py`](./simulator/src/user_simulator.py) | Integrates all other components and coordinates the interaction with the API, the scenario handling, and the response strategy. |
 | [`scenario.py`](./simulator/src/scenario.py) | Contains the data classes of the scenario, including the persona, goal, and persona-goal interactions. |
-| [`response_strategy.py`](./simulator/src/response_strategy.py) | Implements different strategies of how a simulated user generates utterances. |
+| [`response_strategies.py`](./simulator/src/response_strategies.py) | Implements different strategies of how a simulated user generates utterances. |
 | [`api_client.py`](./simulator/src/api_client.py) | Handles the interaction with the TREC UserSim API. |
 
 ## Setup and Getting Started
