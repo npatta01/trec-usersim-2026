@@ -4,6 +4,7 @@ Updated October 3, 2026. This is the canonical research status and proposed expe
 
 ## Start here
 
+- [Possible implementations](implementation-options.md): visual walkthroughs of the shared runtime, alternative generators, training, and evaluation; all labeled as proposals.
 - [October 3 evidence refresh](2026-10-03-research-refresh.md): current sources, version corrections, newly found papers, and limitations.
 - [September 27 advisor reassessment](archive/trec-usersim-advisor-reassessment-2026-09-27.md): Astra and Opus challenged the original ranking; no new advisor consultation was performed for this refresh.
 - [Original research directions](archive/trec-usersim-winning-directions-2026-09-27.md): historical proposal, superseded where it conflicts with this summary.
