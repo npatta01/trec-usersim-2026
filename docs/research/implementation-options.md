@@ -2,6 +2,8 @@
 
 These diagrams explain candidate implementations for the approaches in our [research summary](README.md). They are proposals, not a claim that these components exist or outperform one another. Source evidence and limitations are in the [October 3 refresh](2026-10-03-research-refresh.md).
 
+**Read the [data inspection](2026-10-03-data-inspection.md) before choosing a design.** Official training logs have not been inspected. The supplementary collection has only 16 participants, malformed turn boundaries, interviewer-imposed endings, and no per-turn state labels. Its persona intervention changes the assistant. The training, stopping-calibration, and state-controller diagrams therefore describe conditional possibilities, not methods currently supported by our data.
+
 The central idea is to reuse one conversation runner and swap the component that generates the human's next message. This makes comparisons easier to interpret. Each diagram includes a text explanation so it remains understandable without Mermaid rendering.
 
 ## Shared conversation runner

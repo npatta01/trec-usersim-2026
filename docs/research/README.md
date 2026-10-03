@@ -2,8 +2,11 @@
 
 Updated October 3, 2026. This is the canonical research status and proposed experiment sequence for this repository. Our objective is to simulate how human researchers look for datasets, including their reactions, variation, and decisions to stop. No approach has been validated on this task in our work so far.
 
+**Data evidence takes precedence over the architecture shortlist.** The [supplementary-data inspection](2026-10-03-data-inspection.md) identifies extraction defects, externally truncated sessions, and missing state labels. It also establishes that the study's persona intervention affects the assistant, not the human. Official training logs remain unlocated/inaccessible; no implementation choice is validated against them.
+
 ## Start here
 
+- [Data inspection and corrections](2026-10-03-data-inspection.md): observed supplementary-data constraints and which earlier suggestions need to be withdrawn or narrowed, with an executed audit notebook.
 - [Possible implementations](implementation-options.md): visual walkthroughs of the shared runtime, alternative generators, training, and evaluation; all labeled as proposals.
 - [October 3 evidence refresh](2026-10-03-research-refresh.md): current sources, version corrections, newly found papers, and limitations.
 - [September 27 advisor reassessment](archive/trec-usersim-advisor-reassessment-2026-09-27.md): Astra and Opus challenged the original ranking; no new advisor consultation was performed for this refresh.
@@ -41,7 +44,7 @@ Stopping belongs in every Task 2 comparison. An interviewer ending a recorded se
 ## Current evidence and data status
 
 - **Verified locally on October 3:** repository base `e04d2ae6c0c91071dc869d17ba9f337fd5ec8c3a`; the [complete-run example](../../simulator/examples/complete_run.py) selects `RandomStrategy`; the [simulator loop](../../simulator/src/user_simulator.py) passes `is_final=False`. These are inspected source facts, not runtime test results.
-- **Historical observation, not remeasured here:** the September chat reported 32 supplementary sessions from 16 people and 151 user messages in the spreadsheet; only examples from three sessions were read. That was a partial data inspection, not a complete quality audit.
+- **Remeasured October 3:** 32 supplementary sessions from 16 people and 151 prompt openings, matching the workbook session by session. All prompt spans and session endings were reviewed; malformed boundaries and alternate/regenerated outputs mean these are not yet clean training pairs. See the [audit](2026-10-03-data-inspection.md).
 - **Unknown:** official training-log availability locally, independent participant/goal coverage, usable stopping labels, compute budget, and measured simulator performance. The previous unauthenticated download returned 401; that does not establish that authorized local access is unavailable.
 - The supplementary data and official logs are separate collections. No participant transcripts, credentials, raw chat histories, or private model outputs are included in these notes.
 
@@ -60,7 +63,7 @@ For persona tests, change one attribute while keeping the goal and history fixed
 
 ## Decisions and next action
 
-**Decision:** retain direct prompting, retrieval, and UserLM as competing initial approaches. Give learned state alignment a place in the literature and later experiments; do not infer that a hand-written state/action pipeline is superior. Defer substantial new training until the data inventory and inexpensive comparisons justify it.
+**Decision:** treat direct prompting, retrieval, and UserLM as candidate comparisons, not a selected implementation. First inspect official logs and repair supplementary extraction. The supplementary audit does not support substantial new training, direct stop-label fitting from final turns, or a labeled personality/state controller. Keep learned state alignment in the literature without treating its prerequisites as satisfied.
 
 **Next action:** locate and inspect official training logs, then define reproducible splits and the smallest offline comparison. These notes do not authorize paid runs, official submissions, or uploading participant data to external providers.
 
