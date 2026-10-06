@@ -5,7 +5,8 @@
 The [illustrated architecture](../task2_architecture.md) explains the researcher
 loop, model calls, module boundaries, and why uncertain requests halt.
 The [four-model design review](task2-design-review.md) records panel findings,
-our decisions, and verification limits.
+our decisions, and verification limits. The subsequent [code-structure refactor](code-structure-plan.md)
+separates the runtime from historical experiments and preserves captured model requests.
 
 The [Task 2 runner](../task2_debug_runner.md) is implemented with checkpointed
 transport, scenario resets, full-history or incremental reply handling, and

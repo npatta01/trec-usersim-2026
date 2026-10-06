@@ -2,9 +2,10 @@
 
 import copy
 import json
-from task2_core import Turn, parse_turn, validate_text
-from run_task1_debug import build_messages, model_payload
-from run_style_postedit import editor_messages
+from usersim.task2.core import Turn, parse_turn, validate_text
+from usersim.prompts import build_messages
+from usersim.requests import model_payload
+from usersim.prompts import editor_messages
 
 STOP_INSTRUCTION = """\n\nThis is an ongoing interaction. Decide what this researcher would say next and whether they would end this conversation now. Use the supplied persona, goal and actual history. They may finish because the available help is sufficient, or abandon an unproductive search. They may continue when something still matters to them. Do not require perfect information, force a fixed number of turns, or keep inventing extra requirements to prolong the search. Do not claim downloads or other external actions you did not observe. Keep the message consistent with the stop decision. Return JSON with exactly "text" (the researcher message) and "is_final" (boolean). Emit no reasoning or extra fields."""
 SCHEMA = {
@@ -42,18 +43,3 @@ def generate_turn(conversation, call, *, style_postedit=True):
     edit_messages[1]["content"] = json.dumps(evidence, ensure_ascii=False)
     edited = validate_text(call("edit", model_payload(edit_messages)))
     return Turn(edited, draft.is_final)
-
-
-def generate_attributed_turn(conversation, call):
-    """Opt-in experimental draft, grounded plan, and attributed render path."""
-    draft = generate_turn(conversation, call, style_postedit=False)
-    from task2_attributed_renderer import attributed_revision
-    evidence_messages = build_messages(conversation.item())
-    if not conversation.history:
-        # The Task 1 builder adds a synthetic start control for draft generation.
-        # It is not an utterance and therefore is not attribution evidence.
-        evidence_messages = evidence_messages[:1]
-    rendered = attributed_revision(
-        evidence_messages, draft.text, draft.is_final, call
-    )
-    return Turn(rendered, draft.is_final)

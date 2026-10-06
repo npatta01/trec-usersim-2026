@@ -5,7 +5,8 @@ import math
 import os
 import re
 from pathlib import Path
-from run_single_call_prompt_comparison import atomic, digest, validate
+from usersim.checkpoints import atomic, digest
+from usersim.requests import validate
 
 
 class CheckpointedModel:
@@ -20,7 +21,10 @@ class CheckpointedModel:
         self.pricing = None if pricing is None else dict(pricing)
         if self.pricing is not None:
             for rates in self.pricing.values():
-                if len(rates) != 2 or any(type(v) not in (int, float) or not math.isfinite(v) or v <= 0 for v in rates):
+                if len(rates) != 2 or any(
+                    type(v) not in (int, float) or not math.isfinite(v) or v <= 0
+                    for v in rates
+                ):
                     raise ValueError("Invalid per-million token prices")
         os.umask(0o077)
         self.out.mkdir(parents=True, exist_ok=True)
@@ -44,7 +48,11 @@ class CheckpointedModel:
             if isinstance(reserve, (int, float)) and math.isfinite(reserve):
                 reserved += float(reserve)
             response = saved.get("response", {})
-            cost = response.get("usage", {}).get("cost") if isinstance(response, dict) else None
+            cost = (
+                response.get("usage", {}).get("cost")
+                if isinstance(response, dict)
+                else None
+            )
             if isinstance(cost, (int, float)) and math.isfinite(cost):
                 spent += float(cost)
             if saved.get("status") == 200:
@@ -62,15 +70,27 @@ class CheckpointedModel:
             if request.get("model") not in self.pricing:
                 raise ValueError("Model has no frozen price")
             input_rate, output_rate = self.pricing[request["model"]]
-            limits = [request[k] for k in ("max_tokens", "max_completion_tokens") if k in request]
-            if len(limits) != 1 or type(limits[0]) is not int or not 0 < limits[0] <= 4096:
+            limits = [
+                request[k]
+                for k in ("max_tokens", "max_completion_tokens")
+                if k in request
+            ]
+            if (
+                len(limits) != 1
+                or type(limits[0]) is not int
+                or not 0 < limits[0] <= 4096
+            ):
                 raise ValueError("Expected one bounded output token limit")
             output_limit = limits[0]
             provider = request.get("provider", {})
-            if provider.get("max_price") != {"prompt": input_rate, "completion": output_rate}:
+            if provider.get("max_price") != {
+                "prompt": input_rate,
+                "completion": output_rate,
+            }:
                 raise ValueError("Provider caps differ from reserved prices")
-        return ((len(json.dumps(request, ensure_ascii=False).encode()) + 4096)
-                * input_rate / 1e6 + output_limit * output_rate / 1e6)
+        return (
+            len(json.dumps(request, ensure_ascii=False).encode()) + 4096
+        ) * input_rate / 1e6 + output_limit * output_rate / 1e6
 
     def _valid(self, saved):
         if saved["status"] != 200:

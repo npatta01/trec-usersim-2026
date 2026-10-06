@@ -1,7 +1,7 @@
 import tempfile
 import unittest
 from pathlib import Path
-from task2_model import CheckpointedModel
+from usersim.task2.model import CheckpointedModel
 
 REQ = {"messages": [{"role": "user", "content": "Synthetic"}]}
 

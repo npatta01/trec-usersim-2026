@@ -1,8 +1,8 @@
 import copy
 import json
 import unittest
-from task2_core import Conversation, Turn, parse_turn, rollout
-from task2_generator import generate_turn
+from usersim.task2.core import Conversation, Turn, parse_turn, rollout
+from usersim.task2.generator import generate_turn
 
 SCENARIO = {
     "goal": {"context": "Need Latin letters", "topic": "Transcribed Latin letters"},

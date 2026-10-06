@@ -18,10 +18,10 @@ from pathlib import Path
 
 import requests
 
-from run_prompt_iteration_b21 import EXPECTED_DATASET_SHA256, _records
-from run_researcher_role_diagnostic import make_messages
-from run_single_call_prompt_comparison import atomic, charge, digest, validate
-from run_task1_debug import model_payload
+from experiments.run_prompt_iteration_b21 import EXPECTED_DATASET_SHA256, _records
+from experiments.run_researcher_role_diagnostic import make_messages
+from experiments.run_single_call_prompt_comparison import atomic, charge, digest, validate
+from experiments.run_task1_debug import model_payload
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data/official/final_dataset_curation_v1.jsonl"
@@ -235,11 +235,11 @@ def build_manifest():
         raise RuntimeError("B22 reservation exceeds remaining combined cap")
     random.Random(2026100622).shuffle(items)
     source_paths = [
-        "scripts/run_researcher_role_diagnostic.py",
-        "scripts/run_prompt_iteration_b21.py",
-        "scripts/run_task1_debug.py",
-        "scripts/run_single_call_prompt_comparison.py",
-        "scripts/run_offline_baseline.py",
+        "experiments/run_researcher_role_diagnostic.py",
+        "experiments/run_prompt_iteration_b21.py",
+        "experiments/run_task1_debug.py",
+        "experiments/run_single_call_prompt_comparison.py",
+        "experiments/run_offline_baseline.py",
         "simulator/src/response_strategies.py",
         "simulator/src/scenario.py",
     ]

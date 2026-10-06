@@ -2,9 +2,9 @@
 import hashlib
 import json
 from pathlib import Path
-from run_single_call_prompt_comparison import digest, validate
-from run_task1_debug import model_payload
-import run_prompt_iteration_b22 as execution
+from experiments.run_single_call_prompt_comparison import digest, validate
+from experiments.run_task1_debug import model_payload
+import experiments.run_prompt_iteration_b22 as execution
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'data/official/style-postedit-b23'
@@ -39,7 +39,7 @@ def build_manifest():
     if len(selected)!=12 or len({i['conversation_id'] for i in selected})!=12: raise RuntimeError('Unexpected case inventory')
     if sum(i['reserved_usd'] for i in selected) >= .10: raise RuntimeError('Reservation exceeds cap')
     for name in ('run_style_postedit.py','run_prompt_iteration_b22.py','run_task1_debug.py','run_single_call_prompt_comparison.py'):
-        p=ROOT/'scripts'/name;sources[str(p.relative_to(ROOT))]=hashlib.sha256(p.read_bytes()).hexdigest()
+        p=ROOT/'experiments'/name;sources[str(p.relative_to(ROOT))]=hashlib.sha256(p.read_bytes()).hexdigest()
     return {'experiment':'B23','items':selected,'source_hashes':sources,'cap_usd':.10,'real_cases':12,'synthetic_cases':0,'arms':['edited']}
 
 if __name__=='__main__':

@@ -8,7 +8,7 @@ import urllib.request
 from pathlib import Path
 from types import SimpleNamespace
 
-from run_offline_baseline import ROOT, prepare, strategies
+from experiments.run_offline_baseline import ROOT, prepare, strategies
 
 ROLE_INSTRUCTION = (
     '\n\nYou are the researcher seeking datasets, not the search assistant. '

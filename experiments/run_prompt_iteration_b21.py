@@ -17,9 +17,9 @@ from pathlib import Path
 
 import requests
 
-from run_researcher_role_diagnostic import ROLE_INSTRUCTION, make_messages
-from run_single_call_prompt_comparison import atomic, charge, digest, validate
-from run_task1_debug import model_payload
+from experiments.run_researcher_role_diagnostic import ROLE_INSTRUCTION, make_messages
+from experiments.run_single_call_prompt_comparison import atomic, charge, digest, validate
+from experiments.run_task1_debug import model_payload
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data/official/final_dataset_curation_v1.jsonl"
@@ -168,10 +168,10 @@ def build_manifest():
         "runner_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         "source_hashes": {path: hashlib.sha256((ROOT / path).read_bytes()).hexdigest()
                           for path in (
-                              "scripts/run_researcher_role_diagnostic.py",
-                              "scripts/run_task1_debug.py",
-                              "scripts/run_single_call_prompt_comparison.py",
-                              "scripts/run_offline_baseline.py",
+                              "experiments/run_researcher_role_diagnostic.py",
+                              "experiments/run_task1_debug.py",
+                              "experiments/run_single_call_prompt_comparison.py",
+                              "experiments/run_offline_baseline.py",
                               "simulator/src/response_strategies.py",
                               "simulator/src/scenario.py")},
         "cap_usd": CAP,

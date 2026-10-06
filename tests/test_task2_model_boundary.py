@@ -2,7 +2,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from task2_model import CheckpointedModel
+from usersim.task2.model import CheckpointedModel
 
 
 def response(text="reply", cost=0.0001):
@@ -97,7 +97,9 @@ class PendingAndReceiptTests(unittest.TestCase):
     def test_pending_marker_blocks_even_when_receipt_exists(self):
         with tempfile.TemporaryDirectory() as td:
             out = Path(td)
-            client = CheckpointedModel(out, 0.1, lambda request: (503, {"detail": "failure"}))
+            client = CheckpointedModel(
+                out, 0.1, lambda request: (503, {"detail": "failure"})
+            )
             with self.assertRaises(RuntimeError):
                 client.call("failed", REQ)
             (out / "inflight.json").write_text('{"name":"failed"}')
@@ -119,8 +121,18 @@ class PricingGuardTests(unittest.TestCase):
                 priced_request("other/model"),
                 priced_request(max_price={"prompt": 0.2, "completion": 0.5}),
                 priced_request(max_completion_tokens=0),
-                {"model": MODEL, "messages": [], "provider": {"max_price": {"prompt": 0.1, "completion": 0.5}}},
-                {"model": MODEL, "messages": [], "max_tokens": 4, "max_completion_tokens": 4, "provider": {"max_price": {"prompt": 0.1, "completion": 0.5}}},
+                {
+                    "model": MODEL,
+                    "messages": [],
+                    "provider": {"max_price": {"prompt": 0.1, "completion": 0.5}},
+                },
+                {
+                    "model": MODEL,
+                    "messages": [],
+                    "max_tokens": 4,
+                    "max_completion_tokens": 4,
+                    "provider": {"max_price": {"prompt": 0.1, "completion": 0.5}},
+                },
             ]
             for request in cases:
                 with self.assertRaises(ValueError):

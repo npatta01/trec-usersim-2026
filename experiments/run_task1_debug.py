@@ -7,7 +7,7 @@ import json
 import os
 from pathlib import Path
 import requests
-from run_researcher_role_diagnostic import make_messages
+from experiments.run_researcher_role_diagnostic import make_messages
 
 ROOT=Path(__file__).resolve().parents[1]
 BASE='http://f03-iim-lin1.cit-f03.fh-koeln.de/api'

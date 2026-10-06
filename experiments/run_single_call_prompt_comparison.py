@@ -9,8 +9,8 @@ import random
 import time
 from pathlib import Path
 import requests
-from run_researcher_role_diagnostic import make_messages
-from run_task1_debug import model_payload
+from experiments.run_researcher_role_diagnostic import make_messages
+from experiments.run_task1_debug import model_payload
 
 ROOT=Path(__file__).resolve().parents[1]
 DATA=ROOT/'data/official/final_dataset_curation_v1.jsonl'
@@ -87,7 +87,7 @@ def prepare():
     assert len({x['conversation_id'] for x in items})==12
     assert sum(x['reserved_usd'] for x in items)<CAP
     random.Random(20261005).shuffle(items)
-    return {'dataset_sha256':hashlib.sha256(DATA.read_bytes()).hexdigest(),'runner_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'source_hashes':{p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in ('scripts/run_researcher_role_diagnostic.py','scripts/run_offline_baseline.py','scripts/run_task1_debug.py','simulator/src/response_strategies.py','simulator/src/scenario.py')},'cap_usd':CAP,'items':items}
+    return {'dataset_sha256':hashlib.sha256(DATA.read_bytes()).hexdigest(),'runner_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'source_hashes':{p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in ('experiments/run_researcher_role_diagnostic.py','experiments/run_offline_baseline.py','experiments/run_task1_debug.py','simulator/src/response_strategies.py','simulator/src/scenario.py')},'cap_usd':CAP,'items':items}
 
 def atomic(path,data):
     tmp=path.with_suffix('.tmp')

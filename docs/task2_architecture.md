@@ -66,36 +66,55 @@ conversation-memory API or automatic compaction behind this diagram.
 
 ## Code boundaries
 
+```text
+scripts/                 Thin command-line entry points
+  run_task2_debug.py
+usersim/                 Reusable code; no experiment imports
+  prompts.py             Persona/history and style-editor prompts
+  requests.py            Model payload and response validation
+  checkpoints.py         JSON persistence and request hashes
+  task2/
+    core.py              Conversation and researcher-turn types
+    generator.py         Draft and optional style edit
+    protocol.py          Organizer response and transition validation
+    model.py             Model receipts and spending safeguards
+    debug.py             Run lifecycle and injected transports
+experiments/             Historical replays and unselected variants
+tests/                   Offline tests and synthetic parity fixtures
+simulator/               Original organizer implementation
+```
+
 ```mermaid
 flowchart TD
-    R[run_task2_debug: lifecycle and protocol] --> C[task2_core: conversation and turn types]
-    R --> G[task2_generator: draft then style edit]
-    G --> P[Shared prompt builders]
-    R --> K[task2_model: checkpoints and cost cap]
+    CLI[scripts/run_task2_debug.py] --> R[task2.debug: run lifecycle]
+    R --> V[task2.protocol: validate organizer transitions]
+    R --> C[task2.core: conversations and turns]
+    R --> G[task2.generator: draft then style edit]
+    G --> P[prompts + requests: pure builders]
+    R --> K[task2.model: checkpoints and cost cap]
     G -. Injected call function .-> K
-    K --> MC[Private model request and response checkpoints]
+    K --> MC[Private model receipts]
     K --> O[OpenRouter: OpenAI-only Luna]
     R --> T[Injected organizer transport]
     T --> A[Organizer debug API]
-    R --> S[Private request receipts and state]
+    R --> S[Private organizer receipts and state]
 ```
 
 | Responsibility | Module | What it does not decide |
 |---|---|---|
-| Represent conversations and validate generated text/stop types | `task2_core.py` | HTTP behavior or wording |
-| Construct model requests and edit one draft | `task2_generator.py` | Retries, quota, or session transitions |
-| Save/reuse model results and reserve spend | `task2_model.py` | Researcher personality or when to stop |
-| Validate incoming history, interpret organizer responses and advance state | `run_task2_debug.py` | Whether a recommendation is good |
+| Represent conversations and validate text/stop types | `usersim/task2/core.py` | HTTP behavior or wording |
+| Construct model requests and edit one draft | `usersim/task2/generator.py` | Retries, quota, or session transitions |
+| Save/reuse model results and reserve spend | `usersim/task2/model.py` | Researcher personality or when to stop |
+| Validate incoming history and transitions | `usersim/task2/protocol.py` | Network calls or persistence |
+| Advance the run and coordinate transports | `usersim/task2/debug.py` | Whether a recommendation is good |
 
-Current packaging still imports historical replay modules for shared prompt and
-checkpoint helpers. The runtime boundaries are separate, but those imports are
-a cleanup opportunity; they are not evidence of a fully independent package.
 The runner owns the checkpointed model and injects its call function into the
-generator. Prompt-helper extraction is deferred until byte-for-byte request
-parity is covered, to avoid changing the tested behavior during recovery work.
-The current runner is sequential. Its inherited prompt-capture helper temporarily
-replaces a module-level function, so it must not be reused concurrently without
-first removing that shared mutation.
+generator. Prompt construction is pure: it no longer imports experiment runners,
+loads LiteLLM, or temporarily replaces a global completion function. Scenario
+classes remain shared with the organizer baseline to preserve their exact prompt
+representation. Twelve synthetic fixtures preserve pre-refactor requests across
+openings, follow-ups, longer histories, missing persona fields, and stop decisions.
+The runtime remains sequential; this refactor does not add concurrent execution.
 
 ## Why we stop on an uncertain request
 

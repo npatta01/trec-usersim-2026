@@ -15,28 +15,31 @@ From the repository root:
 ```bash
 python -m venv .venv
 .venv/bin/pip install -r simulator/requirements-dev.txt
-.venv/bin/python -m unittest discover -s scripts -p 'test_*.py'
+.venv/bin/python -m unittest discover -s tests -p 'test_*.py'
 .venv/bin/python -m pytest simulator/tests
 ```
 
-Verification for this PR: all 56 included script tests pass; the 35 protocol
+Verification for this PR: all 60 included runtime tests pass; the 35 protocol
 tests also pass under optimized Python. The unchanged legacy simulator suite
 cannot collect two modules because they import the removed `PersonaDefinition`;
 the same error reproduces on the remote base (`45de4e1`).
 
 The new tests use synthetic inputs and injected transports; they do not require
 credentials, the official dataset, paid inference, or organizer access.
-The existing historical replay modules are included as transitive prompt/helper
-dependencies. Their separate experiment CLIs require private local artifacts;
-they are not part of the debug invocation below.
+Historical replay modules live under `experiments/` and are not imported by the
+runtime. They require private local artifacts and are not part of the debug
+invocation below. See [code layout](../experiments/README.md) for provenance.
 
 ## Modules
 
-- `scripts/task2_core.py`: immutable conversation state and strict text/stop parsing.
-- `scripts/task2_generator.py`: draft and default-on style editor.
-- `scripts/task2_model.py`: cached model calls, cost reservations, uncertain-request guard.
-- `scripts/run_task2_debug.py`: organizer protocol, run lock, source/config snapshot,
-  private receipts, scenario reset, and recovery guards.
+- `usersim/prompts.py`, `requests.py`, `checkpoints.py`: shared pure builders and persistence.
+- `usersim/task2/core.py`: immutable conversation state and strict text/stop parsing.
+- `usersim/task2/generator.py`: draft and default-on style editor.
+- `usersim/task2/protocol.py`: organizer history and transition validation.
+- `usersim/task2/model.py`: cached model calls and cost reservations.
+- `usersim/task2/debug.py`: run lock, source/config snapshot, scenario lifecycle,
+  injected transports, and recovery guards.
+- `scripts/run_task2_debug.py`: thin CLI wrapper; `tests/` contains offline tests.
 
 The only organizer write routes allowed are `/task2/debug/start` and
 `/task2/debug/continue`. HTTP200 consumes a verified incremental assistant reply

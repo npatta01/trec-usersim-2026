@@ -1,5 +1,13 @@
 # Task 2 architecture and panel review
 
+## Subsequent structural refactor
+
+The user subsequently requested the helper extraction. See the
+[refactor record](code-structure-plan.md): runtime and experiments are separated,
+12 synthetic pre-refactor cases protect exact requests, and the earlier decision
+to defer extraction is now superseded. The panel findings below refer to the
+previous source layout; the current architecture guide takes precedence.
+
 ## Objective and scope
 
 Make [PR #2](https://github.com/npatta01/trec-usersim-2026/pull/2) easy to
