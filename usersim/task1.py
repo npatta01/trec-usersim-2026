@@ -154,18 +154,18 @@ def _checked_item(status: int, body: Any, *, previous: dict | None = None) -> di
     ):
         raise RuntimeError("Invalid organizer Task 1 scenario")
     history = _semantic_history(body)
-    build_messages(body)
+    messages = build_messages(body)
     if previous is not None:
         previous_history = _semantic_history(previous)
-        if status == 200:
-            if (
-                body["conversation_id"] != previous["conversation_id"]
-                or body["scenario"] != previous["scenario"]
-                or history == previous_history
-            ):
-                raise RuntimeError("Task 1 status 200 did not advance the target")
-        elif body["conversation_id"] == previous["conversation_id"]:
-            raise RuntimeError("Task 1 status 201 did not start a new conversation")
+        previous_messages = build_messages(previous)
+        current_target = (body["conversation_id"], messages, history)
+        previous_target = (
+            previous["conversation_id"],
+            previous_messages,
+            previous_history,
+        )
+        if current_target == previous_target:
+            raise RuntimeError("Organizer response did not advance the Task 1 target")
     return copy.deepcopy(body)
 
 

@@ -104,10 +104,9 @@ class Task1FlowTests(unittest.TestCase):
                 self.assertEqual(task.run(), result)
                 self.assertEqual((len(organizer_calls), len(model_calls)), before)
 
-    def test_201_nonempty_prefix_replaces_context(self):
+    def test_201_distinct_nonempty_target_replaces_context_without_id_inference(self):
         with tempfile.TemporaryDirectory() as td:
             second = copy.deepcopy(ITEM)
-            second["conversation_id"] = "two"
             second["scenario"]["goal"]["context"] = "NEW GOAL"
             second["chat_messages"] = [
                 {"participant_name": "user", "text": "New question"},
@@ -153,14 +152,19 @@ class Task1FlowTests(unittest.TestCase):
                 task.run()
             self.assertEqual(model_calls, [])
 
-    def test_stale_200_target_stops_before_another_model_or_post(self):
+    def test_stale_200_target_ignores_message_metadata(self):
         with tempfile.TemporaryDirectory() as td:
             organizer_calls = []
             model_calls = []
+            stale = copy.deepcopy(ITEM)
+            stale["chat_messages"][0]["timestamp"] = "metadata-only-change"
+            stale["chat_messages"][1]["annotations"] = {"new": True}
 
             def organizer_post(path, _payload):
                 organizer_calls.append(path)
-                return 200, copy.deepcopy(ITEM)
+                if path.endswith("/start"):
+                    return 200, copy.deepcopy(ITEM)
+                return 200, copy.deepcopy(stale)
 
             def model_post(_request):
                 model_calls.append(True)
@@ -174,6 +178,32 @@ class Task1FlowTests(unittest.TestCase):
             self.assertEqual(len(organizer_calls), 2)
             self.assertEqual(len(model_calls), 1)
             self.assertFalse(task.result_path.exists())
+
+    def test_200_new_conversation_id_accepts_identical_context(self):
+        with tempfile.TemporaryDirectory() as td:
+            second = copy.deepcopy(ITEM)
+            second["conversation_id"] = "two"
+            organizer_count = 0
+            model_calls = []
+
+            def organizer_post(path, _payload):
+                nonlocal organizer_count
+                if path.endswith("/start"):
+                    return 200, copy.deepcopy(ITEM)
+                organizer_count += 1
+                if organizer_count == 1:
+                    return 200, copy.deepcopy(second)
+                return 428, {"detail": "Run completed"}
+
+            def model_post(request):
+                model_calls.append(copy.deepcopy(request))
+                return 200, model_response("Researcher reply")
+
+            result = runner(
+                td, organizer_post, model_post, style_postedit=False
+            ).run()
+            self.assertEqual(result["submitted"], 2)
+            self.assertEqual(len(model_calls), 2)
 
     def test_200_extension_uses_actual_human_turn_not_prediction(self):
         with tempfile.TemporaryDirectory() as td:

@@ -34,7 +34,7 @@ it does not verify the selected editor-enabled integration.
 
 ## Status
 
-One shared runner now supports explicit debug/official modes. All 73 offline tests
+One shared runner now supports explicit debug/official modes. All 74 offline tests
 pass normally and under optimized Python. All 64 prior debug inputs reproduce
 exact draft requests; a full injected-transport replay completed 64 cases and 128
 stubbed model stages with no calls or spend (hypothetical reservation $0.408231).
@@ -48,5 +48,16 @@ Planned new IDs and private artifact directories:
 - Conditional official: `np-labs-luna-style-task1-official-20261006-v1`:
   `/home/npatta01/data/trec-usersim-runs/task1-official-style-20261006-v1`
 
-No new organizer POST or model call yet. The provider key check succeeded and
-confirmed available credit. Next: reviewed debug execution and contextual review.
+The new debug run started and accepted its first prediction. Its HTTP200 reply
+contained a different conversation ID and an eight-message history. A client
+validation guard incorrectly assumed that only HTTP201 could change conversation
+IDs, so execution stopped after saving the successful response. No request is
+uncertain and no pending marker remains. This was a client assumption bug.
+
+The corrected guard accepts both success statuses without inferring conversation
+identity, while rejecting an unchanged semantic target. A private copy of the
+actual receipts replayed through the first accepted case with **zero organizer
+POSTs**, then reached exactly the model request for the returned next target.
+Recovery preserves the original source manifest and snapshots with an audit
+record, then resumes the same run ID; it does not start another debug allowance
+or resend the accepted prediction. Contextual quality review remains pending.
