@@ -61,3 +61,68 @@ POSTs**, then reached exactly the model request for the returned next target.
 Recovery preserves the original source manifest and snapshots with an audit
 record, then resumes the same run ID; it does not start another debug allowance
 or resend the accepted prediction. Contextual quality review remains pending.
+
+
+### Recovery verification
+
+Commit `2fd6cad` corrects only next-target validation. All 74 tests pass normally
+and under optimized Python, and independent review found no blocker. The original
+run manifest and source snapshots are preserved under its private
+`recovery/001-http200-next-target/` directory with receipt hashes. Configuration,
+model requests, and previously accepted predictions are unchanged. The same run
+resumed from the cached response; a read-only quota check confirmed Task 1 debug
+8 and official 4 remaining. This consumes only the single authorized debug run.
+
+
+### Debug outcome and submission decision
+
+The organizer accepted **64 predictions** across **10 goals** (21 openings,
+43 follow-ups). The final HTTP428 explicitly said no more open goals remained
+for this run and that the run was finished. All 128 draft/editor calls returned
+nonempty text with `finish_reason=stop` through the selected OpenAI provider.
+Actual model cost: **$0.0376755**; 16 of 64 drafts changed during editing.
+The longest draft input was 5,286 tokens; maximum supplied history was 8 messages.
+Every saved context, model request, chosen output and organizer payload matched
+in the local audit. No uncertain request remains.
+
+The exact completion response included a run-specific explanatory sentence that
+the conservative parser did not yet accept. The receipt is definitive evidence;
+completion is reconciled locally without another organizer or model request.
+
+**Do not start official submission yet.** Contextual review found two substantive
+fidelity concerns, both already present in drafts and retained by the style editor:
+- Case 0027 explicitly makes requested vendor metadata optional. Location/country
+  requirements remain intact; the concern is the vendor requirement alone.
+- Case 0036 speaks as if the researcher checked for reliable external evidence,
+  although no such check is present in the supplied history. Its broader skepticism
+  is plausible given the moderately familiar persona and known datasets.
+
+These are qualitative reviewer judgments, not official scores or proof of the
+unique human response. Some other replies are more polished than observed speech.
+The current style-only editor cannot be counted on to correct content problems.
+A targeted follow-up should test preserving explicitly stated requirements and
+avoiding claims of unobserved checks, using the same cases plus successful controls.
+Do not silently change the frozen generation prompt within this debug run.
+
+Remaining allowances after this run: Task 1 debug **8**, official **4**;
+Task 2 debug **9**, official **4**. No official submission was started.
+
+
+### Final local verification
+
+Commit `89adde7` accepts the exact observed completion template only when it
+names the current run. Wrong IDs, negative prefixes, suffixes and extra fields
+are rejected. Task 2 parsing is unchanged. All **75 tests** pass normally and
+under optimized Python; independent review found no actionable issue.
+A copy of all 64 receipts replayed to completion with both transports forbidden,
+then the actual run was reconciled the same way: **zero additional API calls**.
+The second original source manifest is preserved under
+`recovery/002-completion-template/` with receipt hashes; `result.json` now records
+64 submitted predictions, 128 model calls, $0.0376755 actual spend and $0.4083422
+reserved upper bound. The reservation is not an additional charge.
+
+All 64 cases received contextual review. Primary adjudication: **55 acceptable,
+7 minor concerns, 2 substantive concerns**. Minor concerns include polished voice,
+recap and a low-impact inferred situation. No material editor reversal was found.
+These judgments are not an official metric or a human-ground-truth pass rate.
+Private per-case reports and the consolidated review remain outside git.

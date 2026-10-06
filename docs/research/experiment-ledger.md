@@ -24,3 +24,20 @@ captured at commit `946aacf` preserve exact model requests. This removes live
 dependence on experiment code and the module-global completion monkeypatch.
 See [refactor verification](code-structure-plan.md). No new simulator experiment
 or organizer request is part of this change.
+
+## October 6: Task 1 selected-baseline live validation
+
+User authorized local/debug validation and conditional official submission.
+Luna plus the default style editor completed 64 debug predictions across 10 goals,
+for $0.0376755 (128 model calls). Exact context/request/output receipts were audited;
+16 drafts changed. Live responses corrected two client assumptions: HTTP200 can
+supply a new conversation, and completion can include a run-specific explanatory
+sentence. Recovery reuses durable receipts without duplicate predictions.
+
+Contextual review identified vendor-requirement relaxation and an unobserved
+external-check claim; both survive unchanged from draft through style editing.
+Official submission is deferred under the user's quality condition. Test content
+fidelity separately from style: preserve explicit needs and distinguish researcher
+knowledge from claims of performed actions, with successful controls to detect
+regressions. No prompt change or new experiment is implied by this hypothesis.
+[Full evidence, review limits and remaining quota](task1-live-validation.md).

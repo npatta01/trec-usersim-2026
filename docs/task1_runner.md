@@ -60,7 +60,7 @@ power-loss durability is not established.
 
 ## Verification
 
-The current suite has 73 offline tests. Task 1 coverage includes debug/official
+The current suite has 75 offline tests. Task 1 coverage includes debug/official
 route isolation, default editor, independent prefix replacement, replay without
 reposting, uncertainty, cost caps and source/config changes. A separate local
 replay of all 64 saved debug cases preserved every draft request and editor input;

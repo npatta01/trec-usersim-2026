@@ -4,6 +4,8 @@
 
 The user authorized a new editor-enabled debug run and an official Task 1 run
 if contextual review is acceptable. [Current evidence and status](task1-live-validation.md).
+The debug run completed 64 predictions for $0.0376755. Review found two substantive
+fidelity concerns, so no official submission was started.
 This narrowly supersedes the historical debug-only notes for that sequence;
 Task 2 remains halted. [Runner and mode safeguards](../task1_runner.md).
 
