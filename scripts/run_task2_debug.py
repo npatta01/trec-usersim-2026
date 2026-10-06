@@ -136,6 +136,8 @@ def validate_start_response(status: int, body: Any) -> dict:
     item = _normalize_item(body, allow_missing_history=True)
     if "utterance" in body and body["utterance"] is not None:
         raise ValueError("Start response unexpectedly contains an utterance")
+    if item["chat_messages"]:
+        raise ValueError("Start response unexpectedly contains history")
     return item
 
 
@@ -266,10 +268,13 @@ def is_completion(status: int, body: Any) -> bool:
     if status != 428 or not isinstance(body, dict):
         return False
     detail = body.get("detail", "")
-    if isinstance(detail, (dict, list)):
-        detail = json.dumps(detail, ensure_ascii=False)
-    detail = str(detail).lower()
-    return "not exist" not in detail and ("completed" in detail or "run was finished" in detail)
+    if not isinstance(detail, str):
+        return False
+    # Unknown prose is not a completion protocol. In particular, substring
+    # matches also accept "not completed" and "completed partially".
+    return detail.strip().lower().rstrip(".!") in {
+        "run was finished", "run completed",
+    }
 
 
 def _source_hash(path: Path) -> str:
@@ -326,6 +331,8 @@ def default_source_files() -> list[Path]:
         "task2_model.py",
         "run_task1_debug.py",
         "run_style_postedit.py",
+        "run_prompt_iteration_b21.py",
+        "run_prompt_iteration_b22.py",
         "run_single_call_prompt_comparison.py",
         "run_researcher_role_diagnostic.py",
         "run_offline_baseline.py",
@@ -381,7 +388,10 @@ class Task2DebugRunner:
         self.organizer_dir = self.out / "organizer"
         self.organizer_dir.mkdir(parents=True, exist_ok=True)
         self._source_files = source_files
-        self.model = CheckpointedModel(self.out / "model", cap_usd, model_post)
+        self.model = CheckpointedModel(
+            self.out / "model", cap_usd, model_post,
+            pricing={MODEL: (0.1, 0.5)},
+        )
 
     @property
     def state_path(self) -> Path:
@@ -443,7 +453,7 @@ class Task2DebugRunner:
                 if not _same_json(old_compare, new_compare):
                     raise RuntimeError("Organizer checkpoint request changed")
             return int(saved["status"]), saved["body"]
-        if (self.out / "model" / "inflight.json").exists():
+        if self.model.has_pending():
             raise RuntimeError("Uncertain model request; reconcile before resuming")
         # This file contains the complete timestamped payload before the
         # external side effect.  A crash leaves it as an explicit stop signal.
@@ -476,21 +486,7 @@ class Task2DebugRunner:
         )
 
     def _store_model_totals(self, state: dict) -> None:
-        reserves = 0.0
-        spent = 0.0
-        calls = 0
-        for path in (self.out / "model").glob("*.json"):
-            saved = json.loads(path.read_text())
-            reserves += float(saved.get("reserve_usd", 0.0))
-            response = saved.get("response", {})
-            cost = response.get("usage", {}).get("cost") if isinstance(response, dict) else None
-            if isinstance(cost, (int, float)) and math.isfinite(cost):
-                spent += float(cost)
-            if saved.get("status") == 200:
-                calls += 1
-        state["reserved_usd"] = reserves
-        state["spent_usd"] = spent
-        state["model_calls"] = calls
+        state.update(self.model.totals())
 
     def _config(self) -> dict:
         return {
@@ -519,7 +515,7 @@ class Task2DebugRunner:
         state = self._load_state()
         if self.pending_path.exists():
             raise RuntimeError("Uncertain organizer request; reconcile before resuming")
-        if (self.out / "model" / "inflight.json").exists():
+        if self.model.has_pending():
             raise RuntimeError("Uncertain model request; reconcile before resuming")
         if state["status"] in {"complete", "halted"}:
             return state
@@ -695,7 +691,11 @@ def main(argv=None):
         try:
             runner.freeze()
             existing_state = json.loads((out / "state.json").read_text()) if (out / "state.json").exists() else {}
-            starting_new = existing_state.get("status", "not_started") == "not_started"
+            start_receipt = out / "organizer" / "start.json"
+            starting_new = (
+                existing_state.get("status", "not_started") == "not_started"
+                and not start_receipt.is_file()
+            )
             budget = _preflight(session, require_available=starting_new)
             if (out / "budget_before.json").exists():
                 _write_json(out / "budget_resume.json", budget)

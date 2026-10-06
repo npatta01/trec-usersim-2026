@@ -2,6 +2,11 @@
 
 ## October 6: Task 2 debug integration
 
+The [illustrated architecture](../task2_architecture.md) explains the researcher
+loop, model calls, module boundaries, and why uncertain requests halt.
+The [four-model design review](task2-design-review.md) records panel findings,
+our decisions, and verification limits.
+
 The [Task 2 runner](../task2_debug_runner.md) is implemented with checkpointed
 transport, scenario resets, full-history or incremental reply handling, and
 explicit stopping. The first live debug attempt halted on organizer HTTP500

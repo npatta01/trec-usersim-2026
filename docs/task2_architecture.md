@@ -1,0 +1,160 @@
+# Task 2: how our researcher simulator works
+
+We generate the **researcher’s side** of a conversation. The organizer supplies
+the dataset-search assistant. These are two separate systems.
+
+## Task 1 versus Task 2
+
+| | Task 1 | This Task 2 runner |
+|---|---|---|
+| Starting point | A supplied conversation prefix | A new persona and goal |
+| Our output | One next researcher message | Repeated researcher messages and a stop decision |
+| History | Supplied for each prediction | Built from our messages and organizer replies |
+| End of work | That prediction is returned | Organizer says the full run is finished |
+
+## One conversation, from start to finish
+
+```mermaid
+flowchart TD
+    A[Organizer gives persona and research goal] --> B[Reset persona, goal and history]
+    B --> C[Generate the next researcher message]
+    C --> D[Send message and stop decision to organizer]
+    D --> E{Organizer response}
+    E -->|Assistant reply| F[Add both messages to history]
+    F --> C
+    E -->|Next scenario| B
+    E -->|Run finished| G[Save completion]
+    E -->|Error or uncertain outcome| H[Halt and preserve evidence]
+```
+
+Each new scenario supplies a new persona and goal. The history resets completely.
+Within a conversation we retain all available messages. We do not compact or
+summarize them in the current baseline.
+
+## What happens inside one researcher turn?
+
+```mermaid
+flowchart TD
+    A[Persona + goal + full conversation] --> B[Draft call: Luna]
+    B --> C[Validate text and boolean stop decision]
+    C --> D[Style-edit call: Luna]
+    A --> D
+    D --> E[Validate nonempty edited text]
+    E --> F[Researcher text + original stop decision]
+```
+
+The first call produces the next message and decides whether this researcher
+would stop: because they have enough help, or because the search is unproductive.
+The second call compares the wording with their last two messages and persona.
+It may leave the draft unchanged. It preserves the original stop boolean; the
+prompt also asks it to preserve the meaning and closure, but code does not prove
+semantic preservation. This is not a repeated judge/retry loop.
+
+Chat API roles are mapped from the simulator’s viewpoint:
+
+| Conversation speaker | Model API role | Why |
+|---|---|---|
+| Instructions, persona and goal | system | Defines whom to simulate |
+| Earlier researcher messages | assistant | The model continues this speaker |
+| Dataset-search assistant messages | user | These are incoming replies to react to |
+| Fixed opening cue, when history is empty | user | Requests the first researcher message |
+
+Opening turns use the supplied scenario without an observed speaking history.
+The model does not receive future human messages or reference answers. Each
+model request resends the needed context explicitly; there is no hosted
+conversation-memory API or automatic compaction behind this diagram.
+
+## Code boundaries
+
+```mermaid
+flowchart TD
+    R[run_task2_debug: lifecycle and protocol] --> C[task2_core: conversation and turn types]
+    R --> G[task2_generator: draft then style edit]
+    G --> P[Shared prompt builders]
+    R --> K[task2_model: checkpoints and cost cap]
+    G -. Injected call function .-> K
+    K --> MC[Private model request and response checkpoints]
+    K --> O[OpenRouter: OpenAI-only Luna]
+    R --> T[Injected organizer transport]
+    T --> A[Organizer debug API]
+    R --> S[Private request receipts and state]
+```
+
+| Responsibility | Module | What it does not decide |
+|---|---|---|
+| Represent conversations and validate generated text/stop types | `task2_core.py` | HTTP behavior or wording |
+| Construct model requests and edit one draft | `task2_generator.py` | Retries, quota, or session transitions |
+| Save/reuse model results and reserve spend | `task2_model.py` | Researcher personality or when to stop |
+| Validate incoming history, interpret organizer responses and advance state | `run_task2_debug.py` | Whether a recommendation is good |
+
+Current packaging still imports historical replay modules for shared prompt and
+checkpoint helpers. The runtime boundaries are separate, but those imports are
+a cleanup opportunity; they are not evidence of a fully independent package.
+The runner owns the checkpointed model and injects its call function into the
+generator. Prompt-helper extraction is deferred until byte-for-byte request
+parity is covered, to avoid changing the tested behavior during recovery work.
+The current runner is sequential. Its inherited prompt-capture helper temporarily
+replaces a module-level function, so it must not be reused concurrently without
+first removing that shared mutation.
+
+## Why we stop on an uncertain request
+
+```mermaid
+sequenceDiagram
+    participant R as Our runner
+    participant D as Private checkpoints
+    participant A as Organizer
+    R->>D: Save request before sending
+    R->>A: Submit researcher message
+    alt Response received
+        A-->>R: Reply or HTTP error
+        R->>D: Save response receipt
+        R->>R: Validate response
+        alt Valid reply or transition
+            R->>D: Advance conversation state
+        else Invalid response or server failure
+            R->>D: Preserve evidence and halt
+        end
+    else No confirmed response
+        R->>D: Keep pending request and halt
+    end
+```
+
+A request can reach the server even when its reply fails. Repeating it could add
+the same researcher message twice. We reuse completed local receipts, block
+uncertain calls, and never treat HTTP500 or a timeout as successful completion.
+This prevents blind retries; it does not guarantee exactly-once delivery or
+repair a server-side partial turn.
+
+| Response | Action |
+|---|---|
+| 200 + valid assistant reply | Append the exchange and generate the next researcher turn |
+| 201 + new empty scenario | Record the ending and reset persona, goal, and history |
+| 428 + explicit run-finished message | Mark the entire debug run complete |
+| Other errors, mismatched IDs, invalid history, uncertain transport | Halt for inspection |
+
+The limits ($3 reservation, 500 total researcher turns, 30 per conversation) are
+operational safeguards. Hitting one persists `status="halted"` and stops the
+whole run without sending an artificial user-stop message. Protocol or transport
+errors instead exit the process, preserving the last validated state and private
+error evidence; that state can still say `running`.
+
+A saved error receipt is replayed locally and fails again without resending. A
+pending marker blocks resume even if a receipt also exists: that crash boundary
+requires reconciliation. CLI resume still performs read-only authentication and
+budget checks. Source/configuration hashes must match the frozen run; this updated
+PR cannot directly resume the older live run. Its frozen code and receipts must
+remain intact until recovery is explicitly resolved.
+
+## What is demonstrated, and what is still open?
+
+Synthetic tests cover the lifecycle (including 201/428 transitions not yet
+observed in our live run), resets, stop propagation, budget guards and
+safe receipt replay. The first live attempt reached three complete exchanges,
+then the organizer saved our fourth message and failed to generate its reply.
+We have **not completed a live Task 2 conversation**, and no official submission
+has been made. Persona realism, natural voice, and semantic editor fidelity still
+need behavioral evaluation; passing software tests does not establish them.
+
+See the [runner guide](task2_debug_runner.md) for commands and the
+[recovery handoff](research/task2-debug-handoff.md) for the actual run status.

@@ -1,10 +1,16 @@
 import json
 import tempfile
+import subprocess
+import sys
 import unittest
 from pathlib import Path
+from unittest import mock
+
+import run_task2_debug as debug
 
 from run_task2_debug import (
     DEBUG_ROUTES,
+    MODEL,
     Task2DebugRunner,
     build_continue_payload,
     freeze_manifest,
@@ -40,6 +46,15 @@ class ContractTests(unittest.TestCase):
     def test_start_normalizes_missing_history(self):
         item = validate_start_response(200, {"conversation_id": "c1", "scenario": scenario()})
         self.assertEqual(item["chat_messages"], [])
+
+    def test_fresh_start_rejects_nonempty_history(self):
+        body = start_body()
+        body["chat_messages"] = [
+            {"participant_name": "user", "text": "Unexpected prior turn."},
+            {"participant_name": "agent", "text": "Unexpected prior reply."},
+        ]
+        with self.assertRaises(ValueError):
+            validate_start_response(200, body)
 
     def test_200_requires_exact_full_history(self):
         current = start_body()
@@ -137,6 +152,15 @@ class ContractTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             validate_continue_response(201, {"conversation_id": "c2", "scenario": scenario("other"), "utterance": {"participant_name": "agent", "text": "leak"}}, current, payload)
 
+    def test_completion_rejects_negated_partial_and_nested_messages(self):
+        for detail in (
+            "Run not completed", "Run has not completed", "Run completed partially",
+            "Run was finished incorrectly", {"status": "completed"},
+            "Run does not exist or was completed",
+        ):
+            with self.subTest(detail=detail):
+                self.assertFalse(is_completion(428, {"detail": detail}))
+
     def test_completion_requires_explicit_finished_text(self):
         self.assertTrue(is_completion(428, {"detail": "Run was finished!"}))
         self.assertTrue(is_completion(428, {"detail": "Run completed"}))
@@ -172,6 +196,38 @@ class ReceiptTests(unittest.TestCase):
             runner = Task2DebugRunner(out, run_id="run", organizer_post=lambda *_: (200, {}), model_post=lambda _: (200, {}))
             with self.assertRaises(RuntimeError):
                 runner._organizer_call("start", "/task2/debug/start", {"run_id": "run"})
+
+    def test_transport_exception_leaves_pending_and_blocks_retry(self):
+        with tempfile.TemporaryDirectory() as td:
+            calls = []
+
+            def unavailable(path, payload):
+                calls.append((path, payload))
+                raise TimeoutError("transport outcome unknown")
+
+            runner = Task2DebugRunner(Path(td), run_id="run", organizer_post=unavailable, model_post=lambda _: (200, {}))
+            with self.assertRaises(TimeoutError):
+                runner._organizer_call("start", "/task2/debug/start", {"run_id": "run"})
+            self.assertTrue(runner.pending_path.exists())
+            with self.assertRaises(RuntimeError):
+                runner._organizer_call("start", "/task2/debug/start", {"run_id": "run"})
+            self.assertEqual(len(calls), 1)
+
+    def test_pending_and_receipt_crash_window_blocks_retry(self):
+        with tempfile.TemporaryDirectory() as td:
+            calls = []
+            out = Path(td)
+
+            def post(path, payload):
+                calls.append((path, payload))
+                return 200, start_body()
+
+            runner = Task2DebugRunner(out, run_id="run", organizer_post=post, model_post=lambda _: (200, {}))
+            runner._organizer_call("start", "/task2/debug/start", {"run_id": "run"})
+            runner.pending_path.write_text(json.dumps({"path": "/task2/debug/start"}))
+            with self.assertRaises(RuntimeError):
+                runner._organizer_call("start", "/task2/debug/start", {"run_id": "run"})
+            self.assertEqual(len(calls), 1)
 
     def test_only_debug_routes_are_allowed(self):
         self.assertEqual(DEBUG_ROUTES, {"/task2/debug/start", "/task2/debug/continue"})
@@ -224,6 +280,109 @@ class ReceiptTests(unittest.TestCase):
             self.assertEqual(second_organizer_calls, [])
             self.assertEqual(len(model_calls), 2)
             self.assertEqual(json.loads((out / "organizer" / "continue-0000.json").read_text())["payload"]["user_utterance"]["timestamp"], submitted_timestamp)
+
+    def test_saved_500_replays_without_model_or_organizer_calls(self):
+        with tempfile.TemporaryDirectory() as td:
+            out = Path(td)
+            organizer_calls = []
+            model_calls = []
+            responses = [(200, start_body()), (500, {"detail": "agent generation failed"})]
+
+            def organizer_post(path, payload):
+                organizer_calls.append((path, payload))
+                return responses.pop(0)
+
+            def model_post(request):
+                model_calls.append(request)
+                content = '{"text":"Find a dataset.","is_final":false}' if request.get("response_format") else "Find a dataset."
+                return 200, {"choices": [{"finish_reason": "stop", "message": {"content": content}}], "usage": {"cost": 0.001}}
+
+            first = Task2DebugRunner(out, run_id="run", organizer_post=organizer_post, model_post=model_post, source_files=[])
+            with self.assertRaises(ValueError):
+                first.run()
+            before = json.loads(first.state_path.read_text())
+            self.assertEqual((len(organizer_calls), len(model_calls)), (2, 2))
+
+            def unexpected(*_args):
+                raise AssertionError("saved failure replayed an external call")
+
+            second = Task2DebugRunner(out, run_id="run", organizer_post=unexpected, model_post=unexpected, source_files=[])
+            with self.assertRaises(ValueError):
+                second.run()
+            self.assertEqual(json.loads(second.state_path.read_text()), before)
+
+    def test_201_and_428_receipts_replay_once_after_state_write_crash(self):
+        cases = (
+            (201, start_body("c2", "other"), "halted"),
+            (428, {"detail": "Run completed"}, "complete"),
+        )
+        for status, body, expected_status in cases:
+            with self.subTest(status=status), tempfile.TemporaryDirectory() as td:
+                out = Path(td)
+                organizer_calls = []
+                model_calls = []
+                responses = [(200, start_body()), (status, body)]
+
+                def organizer_post(path, payload):
+                    organizer_calls.append((path, payload))
+                    return responses.pop(0)
+
+                def model_post(request):
+                    model_calls.append(request)
+                    content = '{"text":"Find a dataset.","is_final":false}' if request.get("response_format") else "Find a dataset."
+                    return 200, {"choices": [{"finish_reason": "stop", "message": {"content": content}}], "usage": {"cost": 0.001}}
+
+                first = Task2DebugRunner(out, run_id="run", organizer_post=organizer_post, model_post=model_post, max_total_turns=1, source_files=[])
+                original_save = first._save_state
+                saves = [0]
+
+                def crash_after_receipt(state):
+                    saves[0] += 1
+                    if saves[0] == 2:
+                        raise RuntimeError("simulated state-write crash")
+                    original_save(state)
+
+                first._save_state = crash_after_receipt
+                with self.assertRaises(RuntimeError):
+                    first.run()
+
+                def unexpected(*_args):
+                    raise AssertionError("receipt replayed an external call")
+
+                second = Task2DebugRunner(out, run_id="run", organizer_post=unexpected, model_post=unexpected, max_total_turns=1, source_files=[])
+                state = second.run()
+                self.assertEqual(state["status"], expected_status)
+                self.assertEqual(state["total_user_turns"], 1)
+                self.assertEqual(state["completed_conversations"], 1)
+                self.assertEqual((len(organizer_calls), len(model_calls)), (2, 2))
+                self.assertEqual(second.run(), state)
+                self.assertEqual((len(organizer_calls), len(model_calls)), (2, 2))
+
+    def test_negative_428_replay_leaves_state_unchanged(self):
+        with tempfile.TemporaryDirectory() as td:
+            out = Path(td)
+            responses = [(200, start_body()), (428, {"detail": "Run not completed"})]
+
+            def organizer_post(_path, _payload):
+                return responses.pop(0)
+
+            def model_post(request):
+                content = '{"text":"Continue.","is_final":false}' if request.get("response_format") else "Continue."
+                return 200, {"choices": [{"finish_reason": "stop", "message": {"content": content}}], "usage": {"cost": 0.001}}
+
+            first = Task2DebugRunner(out, run_id="run", organizer_post=organizer_post, model_post=model_post, source_files=[])
+            with self.assertRaises(ValueError):
+                first.run()
+            before = json.loads(first.state_path.read_text())
+            self.assertEqual(before["total_user_turns"], 0)
+
+            def unexpected(*_args):
+                raise AssertionError("negative completion replayed an external call")
+
+            second = Task2DebugRunner(out, run_id="run", organizer_post=unexpected, model_post=unexpected, source_files=[])
+            with self.assertRaises(ValueError):
+                second.run()
+            self.assertEqual(json.loads(second.state_path.read_text()), before)
 
     def test_malformed_model_output_never_sends_continue(self):
         with tempfile.TemporaryDirectory() as td:
@@ -349,6 +508,36 @@ class RunnerFlowTests(unittest.TestCase):
 
 
 class ManifestTests(unittest.TestCase):
+    def test_default_source_closure_includes_loaded_style_dependencies(self):
+        # A fresh interpreter avoids accidentally counting test-only imports.
+        check = """
+import sys
+from pathlib import Path
+import run_task2_debug as runner
+root = runner.ROOT.resolve()
+frozen = {p.resolve() for p in runner.default_source_files()}
+loaded = set()
+for module in list(sys.modules.values()):
+    filename = getattr(module, '__file__', None)
+    if filename:
+        path = Path(filename).resolve()
+        if path.is_relative_to(root) and '.venv' not in path.parts and path.suffix == '.py':
+            loaded.add(path)
+missing = sorted(str(p.relative_to(root)) for p in loaded - frozen)
+if missing:
+    raise RuntimeError('Loaded source absent from manifest: ' + repr(missing))
+"""
+        result = subprocess.run(
+            [sys.executable, "-c", check], cwd=debug.ROOT / "scripts",
+            capture_output=True, text=True, timeout=60,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_runner_freezes_luna_pricing(self):
+        with tempfile.TemporaryDirectory() as td:
+            runner = Task2DebugRunner(Path(td), run_id="run", organizer_post=lambda *_: (200, {}), model_post=lambda _: (200, {}), source_files=[])
+            self.assertEqual(runner.model.pricing, {MODEL: (0.1, 0.5)})
+
     def test_manifest_rejects_changed_config(self):
         with tempfile.TemporaryDirectory() as td:
             out = Path(td)
@@ -367,6 +556,62 @@ class ManifestTests(unittest.TestCase):
             source.write_text("VERSION = 2\n")
             with self.assertRaises(RuntimeError):
                 freeze_manifest(out, {"run_id": "run"}, source_files=[source])
+
+
+class MainTests(unittest.TestCase):
+    def test_receipt_only_start_recovery_allows_zero_remaining_quota(self):
+        class Response:
+            status_code = 200
+
+            def __init__(self, body):
+                self.body = body
+
+            def json(self):
+                return self.body
+
+        class Session:
+            def get(self, path, **_kwargs):
+                if path.endswith("/auth/verify"):
+                    return Response({"team_id": debug.TEAM_ID})
+                return Response({"debug": {debug.TASK_NAME: {"remaining": 0}}})
+
+        with tempfile.TemporaryDirectory() as td:
+            out = Path(td)
+            organizer_calls = []
+            model_calls = []
+
+            def organizer_post(path, payload):
+                organizer_calls.append((path, payload))
+                return 200, start_body()
+
+            def model_post(request):
+                model_calls.append(request)
+                raise AssertionError("zero-turn recovery called the model")
+
+            runner = Task2DebugRunner(
+                out, run_id="run", organizer_post=organizer_post,
+                model_post=model_post, max_total_turns=0, source_files=[],
+            )
+            start_payload = {
+                "run_id": runner.run_id,
+                "task_name": debug.TASK_NAME,
+                "description": runner.description,
+                "team_id": runner.team_id,
+            }
+            runner._organizer_call("start", "/task2/debug/start", start_payload)
+            organizer_calls.clear()
+            with (
+                mock.patch.object(debug, "_read_secret", return_value="synthetic"),
+                mock.patch.object(debug, "_live_transports", return_value=(organizer_post, model_post, Session())),
+                mock.patch.object(debug, "Task2DebugRunner", return_value=runner),
+                mock.patch("builtins.print"),
+            ):
+                debug.main(["--run", "--output-dir", str(out), "--run-id", "run"])
+            self.assertEqual(organizer_calls, [])
+            self.assertEqual(model_calls, [])
+            state = json.loads(runner.state_path.read_text())
+            self.assertEqual(state["status"], "halted")
+            self.assertEqual(state["current"]["item"]["conversation_id"], "c1")
 
 
 if __name__ == "__main__":

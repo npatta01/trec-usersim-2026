@@ -25,6 +25,36 @@ class CheckpointedModel:
         os.umask(0o077)
         self.out.mkdir(parents=True, exist_ok=True)
 
+    def has_pending(self):
+        """Return whether a model request has an unresolved transport outcome."""
+
+        return (self.out / "inflight.json").exists()
+
+    def totals(self):
+        """Return checkpoint totals using the runner's accounting rules."""
+
+        reserved = 0.0
+        spent = 0.0
+        model_calls = 0
+        for path in self.out.glob("*.json"):
+            if path.name == "inflight.json":
+                continue
+            saved = json.loads(path.read_text())
+            reserve = saved.get("reserve_usd")
+            if isinstance(reserve, (int, float)) and math.isfinite(reserve):
+                reserved += float(reserve)
+            response = saved.get("response", {})
+            cost = response.get("usage", {}).get("cost") if isinstance(response, dict) else None
+            if isinstance(cost, (int, float)) and math.isfinite(cost):
+                spent += float(cost)
+            if saved.get("status") == 200:
+                model_calls += 1
+        return {
+            "reserved_usd": reserved,
+            "spent_usd": spent,
+            "model_calls": model_calls,
+        }
+
     def reservation(self, request):
         input_rate, output_rate = 0.1, 0.5
         output_limit = 4096
@@ -84,6 +114,10 @@ class CheckpointedModel:
             "reserve_usd": reserve,
         }
         atomic(dest, saved)
-        text = self._valid(saved)
+        # The receipt is now durable.  Validation errors (including an HTTP
+        # failure or malformed model payload) must be replayed from the
+        # receipt, while a transport exception above intentionally leaves the
+        # pending marker in place as an uncertain side effect.
         pending.unlink()
+        text = self._valid(saved)
         return text

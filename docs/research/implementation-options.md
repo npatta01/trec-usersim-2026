@@ -1,5 +1,8 @@
 # Current Task 2 implementation
 
+See the [current architecture diagrams](../task2_architecture.md). The diagrams
+below this update are historical proposals, not the implemented debug runner.
+
 The [debug runner](../task2_debug_runner.md) now wraps the full-history Luna
 generator and style editor with checkpointed organizer transport. Compaction
 and experimental generation variants remain unselected. The first live attempt

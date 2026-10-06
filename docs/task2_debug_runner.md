@@ -5,6 +5,9 @@ It sends the supplied persona, goal, and full available history to GPT-6 Luna,
 then applies one style edit that preserves the generated boolean stop decision.
 This integration does not change the selected prompts or enable compaction.
 
+See the [illustrated architecture](task2_architecture.md) for the complete loop,
+model calls, code boundaries, and recovery behavior.
+
 ## Setup and offline verification
 
 From the repository root:
@@ -16,7 +19,7 @@ python -m venv .venv
 .venv/bin/python -m pytest simulator/tests
 ```
 
-Verification for this PR: all 40 included script tests pass; the 25 protocol
+Verification for this PR: all 56 included script tests pass; the 35 protocol
 tests also pass under optimized Python. The unchanged legacy simulator suite
 cannot collect two modules because they import the removed `PersonaDefinition`;
 the same error reproduces on the remote base (`45de4e1`).
@@ -63,7 +66,10 @@ All private outputs under `data/official/` are ignored by git.
 Do not invoke the historical default run ID from a clean checkout: its local
 receipts are not in git. Use the original private run directory for recovery.
 Completed receipts are reused, while an in-flight marker blocks automatic retry.
-A changed source/configuration also blocks resume. A saved server failure is not
+A changed source/configuration also blocks resume. The manifest currently records
+absolute source paths, so moving the checkout is not a supported automatic resume.
+This PR changes the frozen source and cannot directly resume the older live run.
+A saved server failure is not
 silently retried. Preserve timestamped requests and receipts before reconciliation.
 
 The first live attempt accepted four researcher messages but failed generating
