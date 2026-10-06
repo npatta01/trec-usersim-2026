@@ -11,6 +11,7 @@ from usersim.task1 import (
     MODE_ROUTES,
     MODEL,
     Task1Runner,
+    _is_task1_completion,
     default_source_files,
     main,
 )
@@ -49,6 +50,36 @@ def runner(out, organizer_post, model_post, **kwargs):
 
 
 class Task1FlowTests(unittest.TestCase):
+    def test_observed_completion_template_is_exact_and_bound_to_run_id(self):
+        detail = 'No more open goals for run "test-run". Run was finished!'
+        self.assertTrue(_is_task1_completion(428, {"detail": detail}, "test-run"))
+        for body in (
+            {
+                "detail": 'No more open goals for run "another-run". '
+                "Run was finished!"
+            },
+            {"detail": "Not complete: " + detail},
+            {"detail": detail + " Extra text"},
+            {"detail": detail, "extra": True},
+        ):
+            with self.subTest(body=body):
+                self.assertFalse(_is_task1_completion(428, body, "test-run"))
+
+        with tempfile.TemporaryDirectory() as td:
+            def organizer_post(path, _payload):
+                if path.endswith("/start"):
+                    return 200, copy.deepcopy(ITEM)
+                return 428, {"detail": detail}
+
+            result = runner(
+                td,
+                organizer_post,
+                lambda _request: (200, model_response("Researcher reply")),
+                style_postedit=False,
+            ).run()
+            self.assertEqual(result["status"], "complete")
+            self.assertEqual(result["submitted"], 1)
+
     def test_debug_and_official_routes_edit_and_complete_replay(self):
         for mode in ("debug", "official"):
             with self.subTest(mode=mode), tempfile.TemporaryDirectory() as td:

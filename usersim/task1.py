@@ -169,6 +169,18 @@ def _checked_item(status: int, body: Any, *, previous: dict | None = None) -> di
     return copy.deepcopy(body)
 
 
+def _is_task1_completion(status: int, body: Any, run_id: str) -> bool:
+    """Recognize shared completions or the exact Task 1 run-specific response."""
+
+    return is_completion(status, body) or (
+        status == 428
+        and body
+        == {
+            "detail": f'No more open goals for run "{run_id}". Run was finished!'
+        }
+    )
+
+
 class _Task1Model(CheckpointedModel):
     """Use the shared checkpoint engine with strict Task 1 cost validation."""
 
@@ -397,7 +409,7 @@ class Task1Runner:
                 self.routes["continue"],
                 case["submission_request"],
             )
-            if is_completion(status, body):
+            if _is_task1_completion(status, body, self.run_id):
                 result = {
                     "status": "complete",
                     "mode": self.mode,
