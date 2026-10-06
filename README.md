@@ -3,7 +3,10 @@
 > [!NOTE]
 > This repository contains a baseline implementation to get started with developing your own user simulator for **TREC UserSim**. More details about the shared task can be found on the [official website](https://trec.usersim.ai/) and in the [guidelines](https://trec.usersim.ai/guidelines). The code integrates the API of the TREC UserSim platform and provides examples for user simulators with simple response strategies.
 
-## Our Task 2 debug implementation
+## Our researcher simulators
+
+The [Task 1 runner](docs/task1_runner.md) supports explicit debug and official
+modes, with the same draft/editor pipeline.
 
 Start with the [visual architecture guide](docs/task2_architecture.md): who plays
 the researcher, how draft and style editing work, and how the runner preserves
