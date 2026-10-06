@@ -1,3 +1,10 @@
+# Current Task 2 implementation
+
+The [debug runner](../task2_debug_runner.md) now wraps the full-history Luna
+generator and style editor with checkpointed organizer transport. Compaction
+and experimental generation variants remain unselected. The first live attempt
+was interrupted by an organizer error; see [recovery](task2-debug-handoff.md).
+
 # Possible UserSim implementations
 
 These diagrams explain candidate implementations for the approaches in our [research summary](README.md). They are proposals, not a claim that these components exist or outperform one another. Source evidence and limitations are in the [October 3 refresh](2026-10-03-research-refresh.md).

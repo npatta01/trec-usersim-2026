@@ -1,5 +1,16 @@
 # TREC UserSim research notes
 
+## October 6: Task 2 debug integration
+
+The [Task 2 runner](../task2_debug_runner.md) is implemented with checkpointed
+transport, scenario resets, full-history or incremental reply handling, and
+explicit stopping. The first live debug attempt halted on organizer HTTP500
+after four accepted researcher messages and three assistant replies; no complete
+conversation or official submission. [Evidence and recovery](task2-debug-handoff.md).
+The entries below are historical research proposals; this update takes precedence
+for current Task 2 implementation status.
+
+
 Updated October 3, 2026. This is the canonical research status and proposed experiment sequence for this repository. Our objective is to simulate how human researchers look for datasets, including their reactions, variation, and decisions to stop. No approach has been validated on this task in our work so far.
 
 **Data evidence takes precedence over the architecture shortlist.** The [supplementary-data inspection](2026-10-03-data-inspection.md) identifies extraction defects, externally truncated sessions, and missing state labels. It also establishes that the study's persona intervention affects the assistant, not the human. Official training logs remain unlocated/inaccessible; no implementation choice is validated against them.
