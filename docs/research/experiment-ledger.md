@@ -1,5 +1,9 @@
 # Experiment ledger for the Task 2 integration
 
+Organizer submissions and remaining allowances are tracked separately in the
+[submission ledger](../submission-ledger.md). Model-only experiments below do not
+consume an organizer run allowance.
+
 This checkout records the Task 2 PR work. Earlier private experiment outputs and
 local-only research records are not published by this PR.
 

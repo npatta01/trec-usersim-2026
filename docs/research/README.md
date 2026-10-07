@@ -1,5 +1,8 @@
 # TREC UserSim research notes
 
+[Submission ledger](../submission-ledger.md): every organizer run, quota used,
+status, model cost and private input/output artifact locations.
+
 ## October 6: Task 1 official submission complete
 
 The authorized Task 1 official run completed **62 predictions across 10 goals**
