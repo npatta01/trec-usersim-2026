@@ -20,10 +20,10 @@ usage, separate from the organizer's run quota.
 | Task 1 official | 4 | 1 | **3** |
 | Task 1 debug | 10 | 2 | **8** |
 | Task 2 official | 4 | 0 | **4** |
-| Task 2 debug | 10 | 1 | **9** |
+| Task 2 debug | 10 | 2 | **8** |
 
 Initial counts were verified before the first debug run. Latest saved HTTP200
-`/budget/check` agrees with this table. Debug and official allowances are separate,
+`/budget/check` agrees with this table (`task2-debug-luna-20261006-v2/budget_after_500.json`). Debug and official allowances are separate,
 and each task has its own allowance. A halted run still uses an allowance.
 Resuming the same run did not start another run or resend accepted predictions.
 
@@ -35,8 +35,9 @@ Resuming the same run did not start another run or resend accepted predictions.
 | Oct 6 | Task 1 debug | `np-labs-luna-style-task1-debug-20261006-v1` | Complete: 64 predictions; Luna plus style editor | 0.037675500 |
 | Oct 6 | Task 1 official | `np-labs-luna-fidelity-task1-official-20261006-v1` | **Complete: 62 predictions across 10 goals**; Luna plus narrow fidelity editor | 0.029373225 |
 | Oct 6 | Task 2 debug | `np-labs-luna-task2-debug-20261006-v1` | **Halted:** 4 researcher messages saved, 3 assistant replies, 0 complete conversations; organizer HTTP500 | 0.004248240 |
+| Oct 6 | Task 2 debug | `np-labs-luna-task2-debug-20261006-v2` | **Halted:** 5 researcher messages saved, 4 assistant replies, 0 complete conversations; organizer HTTP500 | 0.005123280 |
 
-There is exactly **one official submission**, for Task 1. The two debug runs each
+There is exactly **one official submission**, for Task 1. The two Task 1 debug runs each
 contain 64 predictions, but should not be added to the 62 official predictions as
 one 190-example official evaluation or treated as 190 independent examples.
 Model-only editor comparisons, synthetic probes and offline replays are not
@@ -71,7 +72,8 @@ contents. Let `RUNS=/home/npatta01/data/trec-usersim-runs` and
 | First Task 1 debug | `$OLD/task1-debug-luna/` |
 | Second Task 1 debug | `$RUNS/task1-debug-style-20261006-v1/` |
 | Task 1 official | `$RUNS/task1-official-fidelity-20261006-v1/` |
-| Task 2 debug | `$OLD/task2-debug-luna/` |
+| First Task 2 debug | `$OLD/task2-debug-luna/` |
+| Second Task 2 debug | `$RUNS/task2-debug-luna-20261006-v2/` |
 
 In the official directory:
 
@@ -93,8 +95,8 @@ historical runs use the current file layout.
 
 Task 1 is submitted; do not restart its completed run or spend another allowance
 without a new decision. Task 2 remains halted; do not blindly resend its persisted
-fourth message. See [Task 1 completion/recovery](research/task1-live-validation.md)
-and [Task 2 recovery evidence](research/task2-debug-handoff.md).
+fourth or fifth message. See [Task 1 completion/recovery](research/task1-live-validation.md)
+and [Task 2 second-attempt evidence](research/task2-debug-second-attempt.md).
 
 Update this ledger whenever an organizer run starts, halts, resumes or completes.
 Record a new quota snapshot after the transition; distinguish predictions, model

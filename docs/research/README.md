@@ -25,6 +25,17 @@ resumed the same run without duplicate submissions. [Runner safeguards](../task1
 Task 2 remains halted and untouched. Next: await Task 1 evaluation; any additional
 official run or Task 2 recovery is a separate decision.
 
+## October 6: second Task 2 debug attempt
+
+The user authorized a fresh attempt because the old pending assistant reply could
+not be safely recovered through the documented API. The new run again halted on
+organizer HTTP500: five researcher messages saved, four assistant replies, no
+complete conversation. Ten model calls cost $0.00512328. No messages were retried.
+Task 2 debug allowance is now 8; official 4 remains untouched. Requests were already
+sequential and 15–25 seconds apart. [Evidence and next action](task2-debug-second-attempt.md).
+The [support draft](task2-debug-recovery-request.md) covers both runs and is not sent.
+Do not consume another allowance automatically.
+
 ## October 6: Task 2 debug integration
 
 The [illustrated architecture](../task2_architecture.md) explains the researcher

@@ -1,5 +1,9 @@
 # Task 2 debug handoff — October 6, 2026
 
+This file records the **first** attempt. A separately authorized
+[second attempt](task2-debug-second-attempt.md) also halted; the current
+[submission ledger](../submission-ledger.md) has both runs and updated quotas.
+
 ## Authorization and selected behavior
 
 The user explicitly authorized one Task 2 debug run. No official submission.

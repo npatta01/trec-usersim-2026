@@ -1,21 +1,28 @@
 # Organizer recovery request — draft, not sent
 
-Subject: Task 2 debug run: HTTP500 after user message persisted
+Subject: Task 2 debug: HTTP500 after user message persisted — safe recovery?
 
-Hello,
+Hi organizers,
 
-Our team, NP Labs, started Task 2 debug run
-`np-labs-luna-task2-debug-20261006-v1` on October 6, 2026.
-After three successful exchanges, the fourth `/task2/debug/continue` request
-returned HTTP500 with an error generating the agent response.
+Our NP Labs Task 2 debug runs both stopped while generating an agent response:
 
-Two read-only `/debug/session` checks show that the fourth user message was
-persisted, but no assistant response was added: seven messages ending in the
-submitted user message. We have not retried the request or started another run.
+- `np-labs-luna-task2-debug-20261006-v1`: four researcher messages saved, three assistant replies.
+- `np-labs-luna-task2-debug-20261006-v2`: five researcher messages saved, four assistant replies.
 
-Could you restore the missing assistant response, roll back the partial turn,
-or provide a supported recovery procedure that avoids duplicating the user
-message? The published API does not appear to expose an agent-retry or rollback
-operation. We have the timestamped request and response saved privately if needed.
+In each case, `/task2/debug/continue` returned HTTP500 with an error generating
+the agent response. Repeated GET `/debug/session` checks show that our submitted
+user message was persisted, but its assistant reply is missing. The last message
+in the second run has `is_final=false`.
 
-Thank you.
+We have not reposted those messages. Our requests are sequential (about 15–25
+seconds between submissions), with a 180-second client timeout. Both runs retain
+all local request/response checkpoints.
+
+Can you repair the pending assistant turn, or confirm a supported way to resume
+the same run without duplicating its already-saved user message? Specifically,
+is resending the exact continue payload idempotent, or is a server-side action
+needed? If recovery is impossible, could you advise whether the failed debug
+allowance can be restored?
+
+Thanks,
+NP Labs
