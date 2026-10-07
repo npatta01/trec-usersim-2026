@@ -51,6 +51,36 @@ def runner(out, organizer_post, model_post, **kwargs):
 
 
 class Task1FlowTests(unittest.TestCase):
+    def test_researcher_ending_next_target_is_preserved_and_submitted(self):
+        tail = copy.deepcopy(ITEM)
+        tail["conversation_id"] = "researcher-tail"
+        tail["chat_messages"] = [{"participant_name": "user", "text": "Need dated letters"}]
+        model_calls, submitted = [], []
+
+        def organizer_post(path, payload):
+            if path.endswith("/start"):
+                return 200, copy.deepcopy(ITEM)
+            submitted.append(copy.deepcopy(payload))
+            return (200, copy.deepcopy(tail)) if len(submitted) == 1 else (
+                428, {"detail": "Run completed"})
+
+        def model_post(request):
+            model_calls.append(copy.deepcopy(request))
+            return 200, model_response("Researcher continuation")
+
+        with tempfile.TemporaryDirectory() as td:
+            result = runner(td, organizer_post, model_post,
+                            editor_policy="fidelity").run()
+        self.assertEqual(result["submitted"], 2)
+        tail_messages = model_calls[2]["messages"]
+        self.assertEqual(tail_messages[1:], [
+            {"role": "assistant", "content": "Need dated letters"}])
+        editor_input = json.loads(model_calls[3]["messages"][1]["content"])
+        self.assertEqual(editor_input["original_request_messages"], tail_messages)
+        self.assertEqual(editor_input["researcher_last_two_messages"], ["Need dated letters"])
+        self.assertEqual(submitted[1]["user_utterance"]["conversation_id"], "researcher-tail")
+        self.assertEqual(submitted[1]["user_utterance"]["text"], "Researcher continuation")
+
     def test_editor_policy_routes_full_request_and_defaults_to_style(self):
         def capture(policy=None):
             organizer_calls = []

@@ -3,7 +3,12 @@
 `usersim/task1.py` runs one next-utterance evaluation with the shared Luna prompt
 and default-on style editor. Every organizer-supplied prefix replaces the prior
 input completely. Unlike Task 2, it never appends its own predictions to the next
-supplied history. The editor receives the same persona/goal/history and the last
+supplied history. A supplied history may also end with the researcher: every turn is preserved,
+and a conditional instruction requests a researcher continuation without
+inventing an intervening search-assistant reply. Empty and assistant-ending
+requests retain their existing format.
+
+The editor receives the same persona/goal/history and the last
 two researcher messages. It can leave a draft unchanged; an invalid edit stops
 execution rather than silently substituting the draft.
 
@@ -69,7 +74,7 @@ power-loss durability is not established.
 
 ## Verification
 
-The current suite has 83 offline tests. Task 1 coverage includes debug/official
+The current suite has 87 offline tests. Task 1 coverage includes debug/official
 route isolation, default editor, independent prefix replacement, replay without
 reposting, uncertainty, cost caps and source/config changes. A separate local
 replay of all 64 saved debug cases preserved every draft request and editor input;

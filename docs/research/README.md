@@ -10,7 +10,8 @@ fidelity concerns, so no official submission was started. The subsequent
 labels: a researcher may reasonably compromise. A broad editor repair introduced
 requirement hardening and was rejected. The narrower provenance repair passed
 contextual regression review and is selected explicitly for the conditional
-official run. Some voice limitations and reviewer disagreement remain; see the
+official run, currently halted for a researcher-ending input-boundary repair as `np-labs-luna-fidelity-task1-official-20261006-v1`.
+Some voice limitations and reviewer disagreement remain; see the
 study for the evidence and its limits.
 This narrowly supersedes the historical debug-only notes for that sequence;
 Task 2 remains halted. [Runner and mode safeguards](../task1_runner.md).

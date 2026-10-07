@@ -126,3 +126,57 @@ All 64 cases received contextual review. Primary adjudication: **55 acceptable,
 recap and a low-impact inferred situation. No material editor reversal was found.
 These judgments are not an official metric or a human-ground-truth pass rate.
 Private per-case reports and the consolidated review remain outside git.
+
+
+### Narrow repair and official run (recovery in progress)
+
+The [editor-repair study](task1-fidelity-fix.md) tested two candidates, rejected
+broad goal enforcement and selected a narrow action-provenance clarification.
+This supersedes the earlier categorical judgment of the vendor compromise: it
+can be a plausible human adjustment. Some voice concerns remain; the study
+documents reviewer disagreement and an uncorrected synthetic requirement waiver.
+
+After 83 passing offline tests, the 64-case zero-network integration replay and
+contextual regression review, the user's conditional single official run started:
+`np-labs-luna-fidelity-task1-official-20261006-v1`. Source commit `6a69e2a`, explicit
+`--mode official --editor-policy fidelity`, $1 reservation cap. Private artifacts:
+`/home/npatta01/data/trec-usersim-runs/task1-official-fidelity-20261006-v1`.
+
+This is a new official run, not a resubmission of debug predictions. Each fresh
+organizer prefix receives the frozen draft-plus-editor policy; no official output
+is used to retune it mid-run. Task2 remains halted and untouched.
+
+
+The official run accepted 30 predictions, then safely stopped when the next
+HTTP200 target contained one researcher message and no assistant reply. The
+client incorrectly required every nonempty prefix to end with the search
+assistant. No draft was generated for target 31 and no request is uncertain.
+Read-only `/run/status` confirms the same active target, and `/run/session`
+confirms the same researcher-only history. Budget: Task 1 debug 8/official 3;
+Task 2 debug 9/official 4. No new run is needed.
+
+The [official Task1 definition](https://trec.usersim.ai/guidelines) and bundled
+workflow describe a partial conversation without requiring an assistant-ending
+prefix. Independent source review therefore identifies a client assumption,
+not proof of a malformed organizer target. The bundled parser also tolerates
+histories with no assistant, though its empty-message fallback is not copied.
+Mailing-list email searches found no matching explanation of this boundary case.
+
+Recovery plan: preserve all supplied speakers/text and continue as the researcher
+without inventing an intervening assistant turn. Existing empty/assistant-ending
+requests must remain byte-identical. Test synthetic boundaries and provider
+acceptance; replay 30 cached submissions to the first unseen model request with
+organizer writes forbidden. Archive the original frozen manifest/sources and
+receipt hashes before any reviewed source amendment. This is content-agnostic
+schema recovery, not prompt selection based on official model outputs. The
+intended reason for a researcher-ending prefix remains undocumented.
+
+
+The boundary repair now passes 87 offline tests (normal and optimized), including
+request parity for earlier input shapes, full speaker/order preservation and a
+Task1 transition into a researcher-ending target. Two newly synthetic real-provider
+examples generated researcher continuations without inventing an assistant reply;
+four draft/editor calls cost $0.0005505 (reserved $0.0110674). This is a protocol
+smoke test, not an official-content quality experiment. A copied-checkpoint replay
+reached exactly the first unseen model request after all 30 cached submissions and
+verified all 60 prior model payloads unchanged, with zero live calls.
