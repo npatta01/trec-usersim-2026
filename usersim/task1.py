@@ -29,6 +29,7 @@ TASK_NAME = "next_utterance_prediction"
 MODEL = "openai/gpt-6-luna"
 CAP_USD = 1.0
 MAX_CASES = 1000
+EDITOR_POLICIES = ("style", "fidelity")
 MODE_ROUTES = {
     "debug": {
         "start": "/task1/debug/start",
@@ -236,6 +237,7 @@ class Task1Runner:
         model_post: Callable[[dict], tuple[int, Any]],
         mode: str = "debug",
         style_postedit: bool = True,
+        editor_policy: str = "style",
         cap_usd: float = CAP_USD,
         max_cases: int = MAX_CASES,
         team_id: str = TEAM_ID,
@@ -247,6 +249,10 @@ class Task1Runner:
             raise ValueError("Task 1 mode must be debug or official")
         if type(style_postedit) is not bool:
             raise ValueError("style_postedit must be a boolean")
+        if editor_policy not in EDITOR_POLICIES:
+            raise ValueError("Invalid Task 1 editor policy")
+        if editor_policy == "fidelity" and not style_postedit:
+            raise ValueError("Fidelity editor requires post-editing")
         if (
             type(cap_usd) not in (int, float)
             or not math.isfinite(cap_usd)
@@ -263,15 +269,24 @@ class Task1Runner:
         self.mode = mode
         self.routes = copy.deepcopy(MODE_ROUTES[mode])
         self.style_postedit = style_postedit
+        self.editor_policy = editor_policy
         self.cap_usd = float(cap_usd)
         self.max_cases = max_cases
         self.team_id = team_id
-        self.description = DESCRIPTION + (
-            "One conditional style-edit pass uses recent researcher speech and "
-            "persona; no retrieval."
-            if style_postedit
-            else "Direct generation; no post-editing or retrieval."
-        )
+        if not style_postedit:
+            edit_description = "Direct generation; no post-editing or retrieval."
+        elif editor_policy == "style":
+            edit_description = (
+                "One conditional style-edit pass uses recent researcher speech and "
+                "persona; no retrieval."
+            )
+        else:
+            edit_description = (
+                "One conditional fidelity edit pass preserves observed voice and "
+                "repairs unsupported performed-action claims using the full supplied "
+                "context; no retrieval."
+            )
+        self.description = DESCRIPTION + edit_description
         self.organizer_post = organizer_post
         self.organizer_dir = self.out / "organizer"
         self.organizer_dir.mkdir(parents=True, exist_ok=True)
@@ -300,6 +315,7 @@ class Task1Runner:
             "description": self.description,
             "model": MODEL,
             "style_postedit": self.style_postedit,
+            "editor_policy": self.editor_policy,
             "cap_usd": self.cap_usd,
             "max_cases": self.max_cases,
             "routes": copy.deepcopy(self.routes),
@@ -401,7 +417,9 @@ class Task1Runner:
             if self.style_postedit:
                 selected = self.model.call(
                     f"case-{index:04d}-edit",
-                    model_payload(editor_messages(messages, draft)),
+                    model_payload(
+                        editor_messages(messages, draft, policy=self.editor_policy)
+                    ),
                 )
             case = self._case(index, item, draft, selected)
             status, body = self._organizer_call(
@@ -480,11 +498,16 @@ def main(argv=None):
     parser.add_argument(
         "--style-postedit", action=argparse.BooleanOptionalAction, default=True
     )
+    parser.add_argument(
+        "--editor-policy", choices=EDITOR_POLICIES, default="style"
+    )
     parser.add_argument("--max-cases", type=int, default=MAX_CASES)
     parser.add_argument(
         "--run", action="store_true", help="perform the authenticated Task 1 run"
     )
     args = parser.parse_args(argv)
+    if args.editor_policy == "fidelity" and not args.style_postedit:
+        parser.error("Fidelity editor requires post-editing")
     preview = {
         "dry_run": not args.run,
         "run_id": args.run_id,
@@ -492,6 +515,7 @@ def main(argv=None):
         "routes": copy.deepcopy(MODE_ROUTES[args.mode]),
         "model": MODEL,
         "style_postedit": args.style_postedit,
+        "editor_policy": args.editor_policy,
         "model_calls_per_case": 2 if args.style_postedit else 1,
         "cap_usd": CAP_USD,
         "max_cases": args.max_cases,
@@ -511,6 +535,7 @@ def main(argv=None):
         model_post=model_post,
         mode=args.mode,
         style_postedit=args.style_postedit,
+        editor_policy=args.editor_policy,
         cap_usd=CAP_USD,
         max_cases=args.max_cases,
     )

@@ -11,7 +11,7 @@ execution rather than silently substituting the draft.
 flowchart TD
     A[Organizer supplies persona, goal and conversation prefix] --> B[Build researcher prompt from this input only]
     B --> C[Luna draft]
-    C --> D[One style-edit call]
+    C --> D[One selected editor call]
     D --> E[Save exact response and timestamp]
     E --> F[Send next researcher message]
     F --> G{Organizer response}
@@ -39,6 +39,15 @@ Adding `--run` executes that selected mode. Official submission requires explici
 same generation path; only their organizer routes differ. `--no-style-postedit`
 is an explicit opt-out, not the selected default.
 
+`--editor-policy fidelity` selects the tested narrow editor: the same voice pass,
+plus local repair of unsupported performed-action claims. It preserves optional
+preferences and reasonable compromises. The compatibility default is `style`;
+new runs selecting the repair must pass `--editor-policy fidelity` explicitly.
+Combining fidelity with `--no-style-postedit` is rejected, rather than silently
+skipping the chosen editor. The policy is frozen in the manifest; changing it
+requires a new run directory and run ID, never resuming a historical run with a
+new policy. See the [comparison and limits](research/task1-fidelity-fix.md).
+
 Private credentials remain in `~/.config/trec-usersim/organizer.key` and
 `~/.config/trec-usersim/openrouter.key`. Check team identity and the relevant quota
 before a new run. A start consumes that mode's allowance; completion is only
@@ -60,7 +69,7 @@ power-loss durability is not established.
 
 ## Verification
 
-The current suite has 75 offline tests. Task 1 coverage includes debug/official
+The current suite has 83 offline tests. Task 1 coverage includes debug/official
 route isolation, default editor, independent prefix replacement, replay without
 reposting, uncertainty, cost caps and source/config changes. A separate local
 replay of all 64 saved debug cases preserved every draft request and editor input;

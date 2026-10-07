@@ -41,3 +41,18 @@ fidelity separately from style: preserve explicit needs and distinguish research
 knowledge from claims of performed actions, with successful controls to detect
 regressions. No prompt change or new experiment is implied by this hypothesis.
 [Full evidence, review limits and remaining quota](task1-live-validation.md).
+
+
+## October 6: narrow Task 1 editor repair
+
+[Plan and advisor disposition](task1-fidelity-fix.md). Four standard advisor lanes
+challenged both initial failure labels and advised a narrow edit rather than goal
+enforcement. V1 applied a broad fidelity editor to64 saved drafts plus8 synthetic
+paired controls (80 calls, $0.0289408). Masked review found newly hardened
+preferences, so reject V1. V2 preserves compromises and optionality and permits
+local repair of unsupported performed-action claims; it completed the same-input comparison without newly introduced material harm
+in contextual review. Targeted repeats support the action-provenance repair;
+requirement enforcement remains outside its demonstrated scope. Both variants
+and repeats cost $0.055381045 total (172 model calls). Neither comparison contacts
+the organizer. Task2 is unchanged. V2 is selected for the authorized conditional
+Task1 official baseline after 83 tests and exact 64-case offline replay.
