@@ -195,8 +195,15 @@ with the above limitations. No second debug allowance is needed for fixed-input
 editor evaluation. Before live start, read-only checks confirmed NP Labs, Task 1
 debug 8/official 4, Task 2 debug 9/official 4 and an empty official summary.
 
-Planned single official run: `np-labs-luna-fidelity-task1-official-20261006-v1`.
+Selected single official run (now complete; do not restart): `np-labs-luna-fidelity-task1-official-20261006-v1`.
 It retains the same model, provider controls and full-context draft prompt. Only
 the second call uses the tested narrow policy. Cap $1; checkpointed, no automatic
 retries after uncertain effects. No Task2 recovery or submission is authorized by
 this decision.
+
+
+The authorized official run subsequently completed 62 predictions for $0.029373225.
+A generic input-boundary repair was required for a researcher-ending prefix;
+87 tests, synthetic provider checks and cached-request replay verified it before
+same-run recovery. [Official outcome and provenance](task1-live-validation.md).
+No official outputs were used to select another prompt variant.

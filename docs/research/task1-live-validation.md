@@ -89,7 +89,8 @@ The exact completion response included a run-specific explanatory sentence that
 the conservative parser did not yet accept. The receipt is definitive evidence;
 completion is reconciled locally without another organizer or model request.
 
-**Do not start official submission yet.** Contextual review found two substantive
+**Initial decision, superseded by the verified outcome below:** official
+submission was deferred. Contextual review found two substantive
 fidelity concerns, both already present in drafts and retained by the style editor:
 - Case 0027 explicitly makes requested vendor metadata optional. Location/country
   requirements remain intact; the concern is the vendor requirement alone.
@@ -128,7 +129,7 @@ These judgments are not an official metric or a human-ground-truth pass rate.
 Private per-case reports and the consolidated review remain outside git.
 
 
-### Narrow repair and official run (recovery in progress)
+### Narrow repair and official run (complete)
 
 The [editor-repair study](task1-fidelity-fix.md) tested two candidates, rejected
 broad goal enforcement and selected a narrow action-provenance clarification.
@@ -180,3 +181,39 @@ four draft/editor calls cost $0.0005505 (reserved $0.0110674). This is a protoco
 smoke test, not an official-content quality experiment. A copied-checkpoint replay
 reached exactly the first unseen model request after all 30 cached submissions and
 verified all 60 prior model payloads unchanged, with zero live calls.
+
+
+Commit `b87419e` repairs the prefix boundary. Independent review cleared the code,
+synthetic smoke, cached replay and bounded amendment script. The original
+manifest/frozen sources and all 121 receipt hashes are preserved under
+`recovery/001-researcher-ending-prefix/`. Only `usersim/prompts.py` changed in
+the frozen runtime dependency closure; configuration and prior requests are
+identical. The same run resumed and accepted prediction 31 without resending any
+previous prediction or starting another run.
+
+
+### Verified official outcome
+
+The organizer explicitly completed the run after **62 predictions across 10 goals**:
+36 openings and 26 follow-ups. The selected editor changed 9 drafts. All 124 model
+responses were nonempty, finished with `stop`, and used the selected OpenAI
+provider. The largest draft input was 4,589 tokens; maximum supplied history was
+eight messages. Exact draft/editor request payloads, saved selected text and
+organizer submission payloads matched in the post-run audit.
+
+Actual official model cost **$0.029373225**; reserved upper bound $0.3796706.
+The repair comparisons, boundary smoke and official run together used 300 model
+calls for **$0.08530477** recorded API cost. Reservations are not extra charges.
+No additional debug run or official run was started during recovery.
+
+The final HTTP428 explicitly names this run as finished. Read-only `/run/status`
+returns `complete`, and `/run/team-summary` includes the run. A final completed-run
+replay with both transports forbidden returned the saved result without calls.
+Remaining: Task 1 debug 8/official 3; Task 2 debug 9/official 4. No request is pending.
+
+These completion/integrity checks are not official realism scores. The persona
+and voice limitations and subjective reviewer disagreements remain as documented
+in the repair study. Task2 remains halted at its earlier saved HTTP500 response.
+
+The completed official inputs included 2 researcher-ending prefix(es); this
+count is a schema observation, not a quality metric.

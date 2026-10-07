@@ -1,20 +1,26 @@
 # TREC UserSim research notes
 
-## October 6: Task 1 validation and conditional submission
+## October 6: Task 1 official submission complete
 
-The user authorized a new editor-enabled debug run and an official Task 1 run
-if contextual review is acceptable. [Current evidence and status](task1-live-validation.md).
-The debug run completed 64 predictions for $0.0376755. Initial review flagged two
-fidelity concerns, so no official submission was started. The subsequent
-[fidelity-repair study](task1-fidelity-fix.md) challenges the certainty of those
-labels: a researcher may reasonably compromise. A broad editor repair introduced
-requirement hardening and was rejected. The narrower provenance repair passed
-contextual regression review and is selected explicitly for the conditional
-official run, currently halted for a researcher-ending input-boundary repair as `np-labs-luna-fidelity-task1-official-20261006-v1`.
-Some voice limitations and reviewer disagreement remain; see the
-study for the evidence and its limits.
-This narrowly supersedes the historical debug-only notes for that sequence;
-Task 2 remains halted. [Runner and mode safeguards](../task1_runner.md).
+The authorized Task 1 official run completed **62 predictions across 10 goals**
+(36 openings, 26 follow-ups), for **$0.029373225** in 124 model calls. Organizer
+completion, read-only run status and team summary agree. All exact requests,
+outputs and submitted texts passed local integrity checks. Remaining Task 1
+allowances: debug 8, official 3. [Run evidence and recovery](task1-live-validation.md).
+
+The [editor repair](task1-fidelity-fix.md) uses a narrow action-provenance exception
+while preserving voice and legitimate compromises. The broad first candidate
+was rejected for requirement hardening. The selected candidate was checked on
+64 saved debug drafts, synthetic controls and repeats, with reviewer disagreement
+and limitations recorded. This is an acceptable baseline submission, not proof
+of perfect human style or an official quality score.
+
+The run also exposed an unsupported client assumption about the last speaker.
+A generic researcher-ending-prefix path preserves all supplied turns without
+inventing an assistant reply. 87 tests and cached-request replay passed; recovery
+resumed the same run without duplicate submissions. [Runner safeguards](../task1_runner.md).
+Task 2 remains halted and untouched. Next: await Task 1 evaluation; any additional
+official run or Task 2 recovery is a separate decision.
 
 ## October 6: Task 2 debug integration
 

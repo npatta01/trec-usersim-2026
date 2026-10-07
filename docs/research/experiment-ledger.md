@@ -54,5 +54,18 @@ local repair of unsupported performed-action claims; it completed the same-input
 in contextual review. Targeted repeats support the action-provenance repair;
 requirement enforcement remains outside its demonstrated scope. Both variants
 and repeats cost $0.055381045 total (172 model calls). Neither comparison contacts
-the organizer. Task2 is unchanged. V2 is selected for the authorized conditional
-Task1 official baseline after 83 tests and exact 64-case offline replay.
+the organizer. Task 2 is unchanged. V2 is selected for the authorized conditional
+Task 1 official baseline after 83 tests and exact 64-case offline replay.
+
+
+## October 6: official Task 1 completion and schema recovery
+
+The selected narrow editor baseline completed 62 official predictions across 10
+goals, cost $0.029373225. After 30 accepted predictions, a researcher-only prefix
+exposed an undocumented client restriction. The generic builder now preserves
+researcher-ending histories and asks for a researcher continuation, without
+fabricating an assistant reply. Existing requests remain unchanged. 87 tests,
+a two-case synthetic provider check (four calls, $0.0005505) and a zero-network
+replay verified recovery; original source snapshots and receipt hashes are kept.
+The same run resumed without duplicate predictions or another run allowance.
+[Completion and remaining quotas](task1-live-validation.md). No Task 2 change.
