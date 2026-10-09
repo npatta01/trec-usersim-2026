@@ -4,6 +4,21 @@ Organizer submissions and remaining allowances are tracked separately in the
 [submission ledger](../submission-ledger.md). Model-only experiments below do not
 consume an organizer run allowance.
 
+## October 9: budget continuation
+
+Operational change, not a new simulator comparison. Recovery advanced v5 to 403
+turns (58 completed,16 operational closures) before the $3 cumulative reservation
+guard blocked the editor after its draft was saved. Actual cost: $0.293755280;
+reservations: $2.998644; 775 successful model calls. The user authorized increasing
+budget and continuing through the end. Select $6 total reservations for the same
+run. No generator, style, provider or recovery-policy change.
+
+A finite positive `--cap-usd` option preserves the $3 default and frozen-manifest
+checks. Full runtime 124 tests / 69 subtests pass; optimized focused 39 / 19 pass.
+The migration dry run replayed all 775 cached model requests and verified exact
+current server history, without POSTs. Independent review and explicit archive
+precede same-run resume; the cached draft will be reused once.
+
 ## October 9: automatic original-timeout recovery
 
 Engineering correction, with generator and style-editor requests unchanged.

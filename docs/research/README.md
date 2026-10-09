@@ -1,5 +1,19 @@
 # TREC UserSim research notes
 
+## October 9: authorized budget increase
+
+Automatic recovery succeeded and v5 reached 403 turns: 58 completed conversations
+and 16 operational closures. The next editor call hit the original$3 cumulative
+reservation limit; actual cost $0.293755280,775 successful model calls. No request
+is uncertain. The user authorized increasing the budget and continuing to the
+end; select a $6 total reservation ceiling for this same debug run.
+
+The CLI now exposes a frozen, validated `--cap-usd` option; its default stays $3.
+All 775 saved model requests replay unchanged, the current draft is cached, and
+fresh GET exactly matches the saved history. 124 runtime tests / 69 subtests pass.
+Explicit archive/migration and independent review precede resume. No new debug
+allowance or official start. [Recovery plan](task2-recovery-plan.md).
+
 ## October 9: verified backend-error recovery
 
 Latest verified checkpoint: v5 halted on an original response timeout at request

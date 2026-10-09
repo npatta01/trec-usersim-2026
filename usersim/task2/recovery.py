@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import os
 from requests.exceptions import ReadTimeout
 from pathlib import Path
@@ -314,11 +315,19 @@ def main(argv=None):
     parser.add_argument("--mode", choices=["debug", "official"], required=True)
     parser.add_argument("--run-id", required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument(
+        "--cap-usd",
+        type=float,
+        default=CAP_USD,
+        help="Authorized total model-reservation ceiling (default: %(default)s)",
+    )
     parser.add_argument("--debug-evidence-dir", type=Path)
     parser.add_argument("--debug-review-file", type=Path)
     args = parser.parse_args(argv)
     if not args.run:
         parser.error("Explicit --run is required")
+    if not math.isfinite(args.cap_usd) or args.cap_usd <= 0:
+        parser.error("--cap-usd must be finite and positive")
     gate = None
     if args.mode == "official":
         gate = verify_official_gate(args.debug_evidence_dir, args.debug_review_file)
@@ -344,6 +353,7 @@ def main(argv=None):
             run_id=args.run_id,
             organizer_post=post,
             model_post=model_post,
+            cap_usd=args.cap_usd,
             **options,
         )
         policy = {**POLICY, "mode": mode}

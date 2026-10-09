@@ -5,7 +5,9 @@
 User authorizes recovering conversations blocked by backend failures in the existing debug
 run, then trying one official Task 2 run if debug verifies this procedure.
 Same Luna generator, full history and editor; recovery is a transport policy,
-not a researcher behavior. Existing $3 model-reservation ceiling remains.
+not a researcher behavior. The original $3 reservation ceiling is being raised
+to $6 under the user's October 9 instruction to increase budget and continue
+through the end. This changes only the selected run's budget, not its generator.
 No new debug allowance is required to resume v5. No external message is sent.
 
 ## Design
@@ -111,6 +113,32 @@ remain; no new allowance, no official start. Inspect service and private state
 before treating this dated snapshot as current completion evidence.
 
 ## Latest live evidence
+
+### October 9 budget pause and authorized continuation
+
+Automatic timeout recovery at 0327 succeeded. The same run then reached 403 user
+turns, 58 completed conversations and 16 operational closures. It stopped between
+the current draft and editor when cumulative reservations reached $2.998644;
+actual model cost was $0.293755280 in 775 successful calls. No organizer or model
+request is uncertain. Draft 0403 is durable; editor 0403 and organizer 0403 are absent.
+
+The user explicitly authorized increasing budget and continuing until the end.
+Select a $6 total reservation ceiling, keeping prompts, model route, recovery
+policy and existing turn bounds unchanged. The new `--cap-usd` option validates
+finite positive input before credential access, keeps the $3 default, and cannot
+silently override a frozen manifest. Explicit migration archives the old
+configuration/state/error/source and checks all 775 cached generation requests,
+terminal counts, history and the remaining editor reservation. Only the cap and
+halted/running state change; no turn is advanced and no saved request is repeated.
+
+Tests cover the real CLI loop with the selected cap, refusal to change a frozen
+cap, invalid input before credentials, and a budget pause after draft followed
+by same-run completion with one cached draft and one editor. Full runtime:
+124 tests / 69 subtests pass. Focused optimized checks: 39 tests / 19 subtests pass.
+Dry-run migration reproduced all 775 model requests and a fresh GET matched the
+server history exactly; no POST. Independent review precedes apply/resume.
+
+### Earlier recovery checkpoints
 
 v5 reached 28 completed conversations and seven verified backend-error closures,
 then halted on a response timeout at request 0198. GET session confirms the

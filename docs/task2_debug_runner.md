@@ -19,8 +19,8 @@ python -m venv .venv
 .venv/bin/python -m pytest simulator/tests
 ```
 
-Verification for this PR: all 121 included runtime tests and 64 subtests pass.
-The 34 transport/recovery tests and 14 subtests also pass under optimized Python.
+Verification for this PR: all 124 included runtime tests and 69 subtests pass.
+The 39 focused budget/model/recovery tests and 19 subtests also pass under optimized Python.
 The unchanged legacy simulator suite
 cannot collect two modules because they import the removed `PersonaDefinition`;
 the same error reproduces on the remote base (`45de4e1`).
@@ -106,6 +106,10 @@ on a closing request. Policy v2 freezes max 24 skips, max 25% with a denominator
 floor 8, and max 3 consecutive skips, alongside existing spend/turn limits.
 The recovery policy is frozen separately. See the
 [canonical recovery plan](research/task2-recovery-plan.md) for migration evidence.
+The recovery CLI accepts `--cap-usd AMOUNT` for an explicitly authorized total
+reservation ceiling; its default remains $3. Invalid amounts are rejected before
+credential access. Changing a frozen run still requires an audited checkpoint
+migration; passing a higher flag alone cannot bypass its manifest.
 `--mode official` selects strictly official routes and requires an authorized
 official run plus `--debug-evidence-dir` and `--debug-review-file` verifying
 completed, reviewed debug evidence; it never adopts a debug run or directory.
