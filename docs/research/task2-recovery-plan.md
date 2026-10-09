@@ -2,7 +2,7 @@
 
 ## Objective and authorization
 
-User authorizes skipping conversations blocked by HTTP500/502 in the existing debug
+User authorizes recovering conversations blocked by backend failures in the existing debug
 run, then trying one official Task 2 run if debug verifies this procedure.
 Same Luna generator, full history and editor; recovery is a transport policy,
 not a researcher behavior. Existing $3 model-reservation ceiling remains.
@@ -18,10 +18,23 @@ completion confirms success; then advance request index past both messages and
 increment skipped_conversations, not completed_conversations or user_stops.
 If a delayed reply exists, reconcile it and continue normally. If a final turn
 already advanced the session, reconcile the new empty scenario normally.
-No recovery for malformed model output, bad response schemas, uncertain in-flight
-requests, authentication/quota failures or mismatched server history. No blind
-repost. A failed close halts. Maximum 12 automatic skips per invocation policy;
-this limit is operational and must not be interpreted as human behavior.
+For a durably classified original `ReadTimeout`, preserve the original in-flight
+request and read the server session. The 30-minute grace starts at the first
+durable observation proving that exact request is persisted unanswered. Poll
+read-only every 30 seconds, bounded to 65 observations per invocation. A matching
+delayed reply is reconciled without a POST. Only after the grace and another
+fresh exact session check may one distinct operational close be sent. Its
+receipt is separate from the absent original POST response. A timeout during
+that close cannot trigger another automatic close.
+
+No recovery for malformed model output, bad response schemas, unclassified
+in-flight requests, model uncertainty, authentication/quota failures or mismatched
+server history. No blind repost. A failed close halts. Policy v2 permits at most
+24 operational skips, at most 25% of terminal conversations, and at most three
+consecutive skips. The fraction denominator has a floor of eight conversations,
+allowing at most two early skips while preserving the outage circuit. Existing
+per-conversation, total-turn and model-spend limits also apply. These limits are
+operational and must not be interpreted as human behavior.
 
 A recovery wrapper keeps debug and official routes explicit and distinct. The
 wrapper persists its own policy and frozen source. Tests use synthetic sessions,
@@ -41,7 +54,8 @@ source/state during explicit checkpoint migration; resume same run and monitor.
 Recovery verifies all available raw message fields, including stop flag and
 timestamp; UTC Z and +00:00 spellings are compared as the same instant. Both
 per-conversation and total frozen bounds apply to operational close messages.
-Only observed 500/502 are recovered automatically. The official CLI requires
+The standalone debug runner still halts on errors; the explicit recovery wrapper
+handles saved 500/502 and classified original ReadTimeouts. The official CLI requires
 completed debug evidence, an explicit organizer completion receipt and a review
 artifact bound to the exact final state before credentials or API access.
 
@@ -49,6 +63,36 @@ Existing v5 started before recovery was enabled, so its organizer description
 cannot retroactively disclose skips. The local policy, recovery receipts and
 ledger disclose this limitation. Fresh recovery-enabled debug and official run
 descriptions disclose operational closures. No generator change.
+
+Delayed replies have separate GET-derived reconciliation events, bound to the
+original request and transport evidence. Future raw-prefix checks consume these
+events. Recovery observations, intent, closing receipt and resulting state are
+hash-bound; state is committed last. Cached receipts permit replay after a crash
+without posting again. A matching closing pending marker can be archived and
+cleared only when its bound intent and durable receipt confirm advancement.
+An unknown or uncertain closing request remains blocked.
+
+## October 9 automatic-timeout correction
+
+The prior wrapper halted at every original ReadTimeout, requiring two reviewed
+manual closures. That was an integration gap, not a generator failure. A third
+timeout halted v5 at request 0327: 46 completed conversations, 11 operational
+closes, 634 successful model calls and $0.245687720 recorded model cost.
+
+The new timeout controller is verified with synthetic full-loop tests, delayed
+reply arrival during the final check, receipt-before-unlink crash replay, closing
+uncertainty, changed metadata, missing or altered proof, model uncertainty, and
+outage bounds. Independent review checks the implementation before live migration.
+Preserve the legacy manifest, source, policy, state, error and pending bytes;
+replay all confirmed outcomes and reconstruct consecutive skips before resuming.
+New classification evidence must separately record its migration provenance.
+
+Independent follow-up review found no remaining actionable blocker after both
+corrections. Full runtime verification: 121 tests / 64 subtests pass; 34 focused
+tests / 14 subtests pass under optimized Python. Formatting, new-module lint and
+diff checks pass. Bare pytest still fails collection of two unchanged organizer
+test modules importing the removed `PersonaDefinition`, as previously observed
+on the base. No claim that the legacy organizer suite passes.
 
 ## Latest live evidence
 

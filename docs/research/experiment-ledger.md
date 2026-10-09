@@ -4,6 +4,27 @@ Organizer submissions and remaining allowances are tracked separately in the
 [submission ledger](../submission-ledger.md). Model-only experiments below do not
 consume an organizer run allowance.
 
+## October 9: automatic original-timeout recovery
+
+Engineering correction, with generator and style-editor requests unchanged.
+The old wrapper recovered known HTTP500/502 but halted on original ReadTimeouts;
+v5 required manual closures at 0198 and 0288, then halted again at 0327. The generic
+controller records the exact transport error, waits for delayed replies, and
+requires 30 minutes from the first exact persisted-turn observation plus a
+fresh final check before one distinct operational close. Delayed replies are
+stored separately from POST receipts and remain available to future prefix checks.
+Closing uncertainty cannot recursively trigger another close. Policy v2 adds
+24 absolute skips, a 25% fraction with denominator floor 8, and 3 consecutive skips.
+
+Synthetic tests cover the actual full recovery loop, receipt replay, reply arrival
+at the final check, evidence corruption, missing persistence and outage bounds.
+A fail-first test and reviewer both identified a missing direct link from
+delayed-reply evidence to its original timeout proof; fixed before migration.
+A second fail-first test reproduced the durable-close-receipt/pending-marker
+crash boundary; verified receipt replay now clears only an exact matching marker.
+This is software verification, not a new semantic-quality experiment. See the
+[recovery plan](task2-recovery-plan.md) for verification and current status.
+
 This checkout records the Task 2 PR work. Earlier private experiment outputs and
 local-only research records are not published by this PR.
 

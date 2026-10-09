@@ -120,6 +120,8 @@ def default_source_files() -> list[Path]:
             "usersim/task2/generator.py",
             "usersim/task2/model.py",
             "usersim/task2/recovery.py",
+            "usersim/task2/reconciliation.py",
+            "usersim/task2/timeout.py",
             "scripts/run_task2_recovery.py",
             "simulator/src/scenario.py",
         )
@@ -248,9 +250,29 @@ class Task2DebugRunner:
         # external side effect.  A crash leaves it as an explicit stop signal.
         _write_json(
             self.pending_path,
-            {"path": path, "payload": payload, "request_sha256": request_hash},
+            {
+                "path": path,
+                "payload": payload,
+                "request_sha256": request_hash,
+                "checkpoint_name": name,
+            },
         )
-        status, body = self.organizer_post(path, payload)
+        try:
+            status, body = self.organizer_post(path, payload)
+        except requests.exceptions.ReadTimeout:
+            # A transport error is not an HTTP response. Keep the pending request
+            # and classify only the exact exception eligible for reconciliation.
+            _write_json(
+                self.organizer_dir / f"transport-error-{name}.json",
+                {
+                    "type": "ReadTimeout",
+                    "path": path,
+                    "checkpoint_name": name,
+                    "request_sha256": request_hash,
+                    "observed_at": utc_timestamp(),
+                },
+            )
+            raise
         _write_json(
             receipt,
             {
@@ -341,9 +363,7 @@ class Task2DebugRunner:
                 "description": self.description,
                 "team_id": self.team_id,
             }
-            status, body = self._organizer_call(
-                "start", self.start_path, start_payload
-            )
+            status, body = self._organizer_call("start", self.start_path, start_payload)
             item = validate_start_response(status, body)
             state["current"] = {"item": item, "turns": 0}
             state["status"] = "running"
@@ -386,6 +406,7 @@ class Task2DebugRunner:
             if result["kind"] == "complete":
                 state["status"] = "complete"
                 state["completed_conversations"] += 1
+                state["consecutive_operational_skips"] = 0
                 if turn.is_final:
                     state["user_stops"] += 1
                 else:
@@ -395,6 +416,7 @@ class Task2DebugRunner:
                 self._save_state(state)
                 return state
             if result["kind"] == "new_conversation":
+                state["consecutive_operational_skips"] = 0
                 if turn.is_final:
                     state["user_stops"] += 1
                 else:
@@ -477,6 +499,7 @@ class _RunLock:
 def _preflight(session, *, require_available=True, mode="debug"):
     if mode not in {"debug", "run"}:
         raise ValueError("Invalid organizer mode")
+
     def get(path):
         response = session.get(BASE + path, timeout=60, allow_redirects=False)
         if response.status_code != 200:

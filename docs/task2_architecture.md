@@ -25,11 +25,15 @@ flowchart TD
     E -->|Next scenario| B
     E -->|Run finished| G[Save completion]
     E -->|Saved HTTP500 or HTTP502| R[Verify exact server session]
+    E -->|Classified original ReadTimeout| W[Poll for delayed reply]
+    W -->|Matching reply| F
+    W -->|Exact unanswered turn for 30 minutes| R
+    W -->|Unknown or changed evidence| H[Halt and preserve evidence]
     R -->|Delayed matching reply| F
-    R -->|Persisted turn without reply| K[Send one operational final message]
+    R -->|Fresh exact check and outage limits allow| K[Send one operational final message]
     K -->|New scenario confirmed| J[Record error-driven closure separately]
     J --> B
-    R -->|Mismatch or uncertainty| H[Halt and preserve evidence]
+    R -->|Mismatch, uncertainty or outage bound| H
     K -->|Closing request fails| H
     E -->|Other error or uncertain outcome| H
 ```
@@ -92,7 +96,9 @@ usersim/                 Reusable code; no experiment imports
     protocol.py          Organizer response and transition validation
     model.py             Model receipts and spending safeguards
     debug.py             Run lifecycle and injected transports
-    recovery.py          Exact-session reconciliation and operational closure
+    recovery.py          Policy, CLI, known HTTP errors and official gate
+    reconciliation.py    Shared evidence checks and progress accounting
+    timeout.py           Original-timeout polling and durable recovery
 experiments/             Historical replays and unselected variants
 tests/                   Offline tests and synthetic parity fixtures
 simulator/               Original organizer implementation
@@ -102,6 +108,9 @@ simulator/               Original organizer implementation
 flowchart TD
     CLI[scripts/run_task2_recovery.py] --> W[task2.recovery: verified recovery]
     W --> R[task2.debug: run lifecycle]
+    W --> X[task2.timeout: delayed-reply grace]
+    W --> Q[task2.reconciliation: evidence and outage limits]
+    X --> Q
     R --> V[task2.protocol: validate organizer transitions]
     R --> C[task2.core: conversations and turns]
     R --> G[task2.generator: draft then style edit]
@@ -123,6 +132,8 @@ flowchart TD
 | Validate incoming history and transitions | `usersim/task2/protocol.py` | Network calls or persistence |
 | Advance the run and coordinate transports | `usersim/task2/debug.py` | Whether a recommendation is good |
 | Reconcile saved backend failures and close blocked conversations | `usersim/task2/recovery.py` | Whether the researcher naturally wants to stop |
+| Wait for delayed replies and reconcile classified original timeouts | `usersim/task2/timeout.py` | Generator wording or recursive closing retries |
+| Verify raw evidence and count operational outcomes | `usersim/task2/reconciliation.py` | Network calls or researcher satisfaction |
 
 The runner owns the checkpointed model and injects its call function into the
 generator. Prompt construction is pure: it no longer imports experiment runners,
@@ -150,8 +161,21 @@ sequenceDiagram
         else Invalid response or server failure
             R->>D: Preserve evidence and halt
         end
-    else No confirmed response
-        R->>D: Keep pending request and halt
+    else Original request raises ReadTimeout
+        R->>D: Keep pending request and classify exact ReadTimeout
+        R->>A: Read session; wait for delayed reply
+        alt Exact original turn remains unanswered for 30 minutes
+            R->>A: Fresh session check
+            R->>A: One distinct final close, if outage limits allow
+            A-->>R: New scenario or explicit completion
+            R->>D: Save separate close receipt and operational skip
+        else Matching delayed reply
+            R->>D: Save GET-derived reconciliation event
+        else Unknown, changed evidence or closing uncertainty
+            R->>D: Halt without another POST
+        end
+    else Other uncertain transport outcome
+        R->>D: Retain pending request and halt
     end
 ```
 
@@ -167,6 +191,7 @@ repair a server-side partial turn.
 | 201 or strictly validated 200 + new empty scenario | Record the ending and reset persona, goal, and history |
 | 428 + explicit run-finished message | Mark the entire run complete |
 | Saved 500/502 with exact persisted unanswered turn | Recovery wrapper sends one distinct final message, verifies advancement, and records a skip |
+| Classified original ReadTimeout with exact persisted unanswered turn | Wait for a delayed reply; after 30 minutes and a fresh check, allow one distinct close within outage bounds |
 | Other errors, mismatched IDs, invalid history, uncertain transport | Halt for inspection |
 
 The limits ($3 reservation, 500 total researcher turns, 30 per conversation) are
@@ -174,7 +199,10 @@ operational safeguards. Hitting one persists `status="halted"` and stops the
 whole run without sending an artificial user-stop message. Protocol or transport
 errors preserve the last validated progress and private evidence with
 `status="halted"`. The recovery wrapper reconciles only the narrow observed
-backend-error case described above.
+backend-error and classified-original-timeout cases described above. It permits
+at most 24 skips, at most 25% of terminal conversations with a denominator floor 8,
+and at most 3 consecutive operational skips. A close timeout never enters that
+automatic path again.
 
 A saved error receipt is replayed locally and fails again without resending. A
 pending marker blocks resume even if a receipt also exists: that crash boundary
@@ -186,9 +214,10 @@ remain intact until recovery is explicitly resolved.
 ## What is demonstrated, and what is still open?
 
 Synthetic tests cover the lifecycle, resets, stop propagation, budget guards,
-safe receipt replay, metadata mismatches and official-route isolation. On October 9,
-v5 had completed ten live conversations and confirmed three operational closes;
-the resumed debug run was still running. No official Task 2 submission had started.
+safe receipt replay, metadata mismatches, timeout polling, delayed-reply evidence,
+outage limits and official-route isolation. At the October 9 migration checkpoint,
+v5 had 46 completed conversations and 11 operational closes and was halted on an
+original timeout. No official Task 2 submission had started.
 Official launch requires completed debug evidence and a conversation review bound
 to the final state, completion receipt, frozen code and recovery policy.
 Persona realism, natural voice, and semantic editor fidelity still need behavioral

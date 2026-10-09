@@ -4,10 +4,9 @@ from __future__ import annotations
 
 import argparse
 import hashlib
-import copy
 import json
 import os
-from datetime import datetime
+from requests.exceptions import ReadTimeout
 from pathlib import Path
 
 from usersim.checkpoints import atomic, digest
@@ -23,6 +22,15 @@ from .debug import (
     _preflight,
     _read_secret,
 )
+from .reconciliation import (
+    _advance,
+    _verify_message_fields,
+    _verify_raw_prefix,
+    check_skip_bounds,
+    persist_reply_event,
+    OPERATIONAL_POLICY,
+)
+from .timeout import TIMEOUT_POLICY, recover_timeout
 from .protocol import (
     build_continue_payload,
     is_completion,
@@ -33,7 +41,11 @@ from .protocol import (
 
 BACKEND_ERRORS = {500, 502}
 DEBUG_RECOVERY_DESCRIPTION = "Debug Task 2 Luna full-history simulation with style editor; verified backend failures may be closed operationally and recorded separately as skipped conversations."
-POLICY = {"policy": "verified_persisted_turn_operational_close_v1", "max_skips": 12}
+POLICY = {
+    "policy": "verified_persisted_turn_operational_close_v2",
+    **OPERATIONAL_POLICY,
+    "timeout": TIMEOUT_POLICY,
+}
 
 
 class Task2OfficialRunner(Task2DebugRunner):
@@ -49,78 +61,6 @@ class Task2OfficialRunner(Task2DebugRunner):
             "GPT-6 Luna full-history researcher simulator with one style edit; structured text and stop decision. Verified backend failures are closed operationally and logged separately as skipped conversations.",
         )
         super().__init__(out, **kwargs)
-
-
-def _advance(state, result, *, is_final, skipped):
-    state = copy.deepcopy(state)
-    if skipped:
-        state["skipped_conversations"] = state.get("skipped_conversations", 0) + 1
-        state["operational_closing_turns"] = (
-            state.get("operational_closing_turns", 0) + 1
-        )
-        state["accepted_error_turns"] = state.get("accepted_error_turns", 0) + 1
-    elif result["kind"] in {"new_conversation", "complete"}:
-        state["completed_conversations"] += 1
-        state["user_stops" if is_final else "server_cutoffs"] += 1
-    state["total_user_turns"] += 2 if skipped else 1
-    state["status"] = "complete" if result["kind"] == "complete" else "running"
-    state.pop("halt_reason", None)
-    if result["kind"] == "complete":
-        state["current"] = None
-    else:
-        turns = (
-            0 if result["kind"] == "new_conversation" else state["current"]["turns"] + 1
-        )
-        state["current"] = {"item": result["item"], "turns": turns}
-    return state
-
-
-def _verify_message_fields(expected, actual):
-    """Compare available raw transport fields, allowing equivalent UTC spelling."""
-    if not isinstance(actual, dict):
-        raise RuntimeError("Server message is not an object")
-    for key, value in expected.items():
-        if key not in actual:
-            raise RuntimeError(f"Server message omitted {key}")
-        if key == "timestamp":
-            try:
-                match = datetime.fromisoformat(value) == datetime.fromisoformat(
-                    actual[key]
-                )
-            except (ValueError, TypeError):
-                match = False
-        else:
-            match = same_json(value, actual[key])
-        if not match:
-            raise RuntimeError(f"Server message changed {key}")
-
-
-def _verify_raw_prefix(runner, index, remote_messages, conversation_id):
-    """Verify raw submitted user fields and recorded incremental agent fields."""
-    expected = []
-    for path in sorted(runner.organizer_dir.glob("continue-*.json")):
-        number = int(path.stem.split("-")[-1])
-        if number > index:
-            continue
-        receipt = json.loads(path.read_text())
-        if receipt["payload"]["user_utterance"]["conversation_id"] != conversation_id:
-            continue
-        if digest(receipt["payload"]) != receipt["request_sha256"]:
-            raise RuntimeError("Prior request integrity mismatch")
-        expected.append(receipt["payload"]["user_utterance"])
-        body = receipt.get("body")
-        if number < index and isinstance(body, dict):
-            reply = body.get("utterance")
-            if isinstance(reply, dict):
-                expected.append(reply)
-            elif isinstance(body.get("chat_messages"), list):
-                expected = body["chat_messages"]
-            else:
-                raise RuntimeError("No prior reply metadata available for recovery")
-    if len(remote_messages) < len(expected):
-        raise RuntimeError("Server prefix is incomplete")
-    for old, current in zip(expected, remote_messages):
-        _verify_message_fields(old, current)
 
 
 def verify_official_gate(debug_dir, review_file):
@@ -217,7 +157,7 @@ def verify_official_gate(debug_dir, review_file):
     }
 
 
-def recover_backend_error(runner, get_session, *, max_skips=12):
+def recover_backend_error(runner, get_session, *, max_skips=24):
     """Reconcile one saved 5xx; close only an exactly verified unanswered turn.
 
     get_session is read-only and injectable. A durable closing receipt permits
@@ -284,15 +224,7 @@ def recover_backend_error(runner, get_session, *, max_skips=12):
                 {"participant_name": "user", "text": payload["user_utterance"]["text"]}
             ]
             if same_json(normalized["chat_messages"], expected):
-                if state.get("skipped_conversations", 0) >= max_skips:
-                    raise RuntimeError("Operational skip limit reached")
-                if (
-                    index + 2 > runner.max_total_turns
-                    or state["current"]["turns"] + 2 > runner.max_conversation_turns
-                ):
-                    raise RuntimeError(
-                        "Operational close would exceed frozen turn limits"
-                    )
+                check_skip_bounds(runner, state, max_skips=max_skips)
                 if closing is None:
                     closing = build_continue_payload(
                         runner.run_id,
@@ -326,6 +258,10 @@ def recover_backend_error(runner, get_session, *, max_skips=12):
                 skipped = False
     if skipped and result["kind"] not in {"new_conversation", "complete"}:
         raise RuntimeError("Operational close did not confirm advancement")
+    if not skipped and result["kind"] == "continue":
+        persist_reply_event(
+            runner, index, payload, remote, origin=f"HTTP{failed['status']}"
+        )
     recovered = _advance(
         state, result, is_final=payload["user_utterance"]["is_final"], skipped=skipped
     )
@@ -346,16 +282,28 @@ def recover_backend_error(runner, get_session, *, max_skips=12):
     return recovered
 
 
-def run_with_recovery(runner, get_session):
+def run_with_recovery(runner, get_session, *, now=None, wait=None):
+    def recover_current():
+        state = runner._load_state()
+        index = state["total_user_turns"]
+        timeout_proof = (
+            runner.organizer_dir / f"transport-error-continue-{index:04d}.json"
+        )
+        if runner.pending_path.exists() or timeout_proof.exists():
+            return recover_timeout(
+                runner, get_session, max_skips=POLICY["max_skips"], now=now, wait=wait
+            )
+        return recover_backend_error(runner, get_session, max_skips=POLICY["max_skips"])
+
     state = runner._load_state()
     if state["status"] == "halted":
-        recover_backend_error(runner, get_session, max_skips=POLICY["max_skips"])
+        recover_current()
     while True:
         try:
             return runner.run()
-        except ValueError:
+        except (ValueError, ReadTimeout):
             runner.record_failure()
-            recover_backend_error(runner, get_session, max_skips=POLICY["max_skips"])
+            recover_current()
 
 
 def main(argv=None):

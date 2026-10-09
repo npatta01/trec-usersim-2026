@@ -2,6 +2,19 @@
 
 ## October 9: verified backend-error recovery
 
+Latest verified checkpoint: v5 halted on an original response timeout at request
+327, with 46 completed conversations and 11 separately recorded operational
+closes. Recorded model cost: $0.245687720 in 634 successful model calls.
+The correction adds automatic exact-timeout reconciliation to the recovery
+wrapper: wait for a delayed reply, then allow one verified operational close
+after 30 minutes of observed persistence. Unknown requests and closing uncertainty
+still halt. Policy v2 adds absolute, fraction and consecutive-outage bounds.
+Independent implementation review and explicit frozen-checkpoint migration
+precede same-run resume. No new debug allowance or official Task 2 start is part
+of this correction. See the [recovery plan](task2-recovery-plan.md).
+
+The paragraphs below preserve the earlier checkpoints and manual recovery scope.
+
 Current snapshot: v5 resumed at request 290 with 40 completed conversations and
 11 operational closes; recorded model cost $0.219581060. A second timeout at 0288
 remained unanswered after 118 minutes. The same reviewed one-off procedure closed

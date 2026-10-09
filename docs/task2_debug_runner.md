@@ -19,7 +19,8 @@ python -m venv .venv
 .venv/bin/python -m pytest simulator/tests
 ```
 
-Verification for this PR: all 107 included runtime tests and 60 subtests pass.
+Verification for this PR: all 121 included runtime tests and 64 subtests pass.
+The 34 transport/recovery tests and 14 subtests also pass under optimized Python.
 The unchanged legacy simulator suite
 cannot collect two modules because they import the removed `PersonaDefinition`;
 the same error reproduces on the remote base (`45de4e1`).
@@ -39,6 +40,8 @@ invocation below. See [code layout](../experiments/README.md) for provenance.
 - `usersim/task2/model.py`: cached model calls and cost reservations.
 - `usersim/task2/debug.py`: run lock, source/config snapshot, scenario lifecycle,
   injected transports, and recovery guards.
+- `usersim/task2/recovery.py`, `reconciliation.py`, `timeout.py`: explicit policy,
+  evidence accounting and bounded original-timeout reconciliation.
 - `scripts/run_task2_debug.py`: thin CLI wrapper; `tests/` contains offline tests.
 
 The default runner permits only `/task2/debug/start` and `/task2/debug/continue`.
@@ -46,7 +49,8 @@ HTTP200 consumes a verified incremental assistant reply, full history, or a
 strictly validated new empty scenario; HTTP201 starts a new empty scenario.
 HTTP428 is completion only with explicit completion text. HTTP500 and timeouts
 stop the default runner. The explicit recovery wrapper below can reconcile
-observed HTTP500/502 failures; uncertain outcomes still halt.
+observed HTTP500/502 failures and durably classified original ReadTimeouts;
+unknown outcomes and uncertain closing requests still halt.
 
 ## Authenticated execution
 
@@ -94,7 +98,14 @@ The opt-in `scripts/run_task2_recovery.py --run --mode debug --run-id ID
 A persisted unanswered turn may be followed by one operational final message,
 then advancement must be confirmed. This is counted as a skip, not researcher
 satisfaction. Delayed replies are reconciled without reposting. Unknown outcomes
-and failed closing requests halt. The recovery policy is frozen separately.
+and failed closing requests halt. A classified original ReadTimeout preserves
+its pending request, polls GET session every 30 seconds, and starts a 30-minute
+grace at the first exact observation of its persisted unanswered turn. Another
+fresh check precedes any operational close. This does not apply to a timeout
+on a closing request. Policy v2 freezes max 24 skips, max 25% with a denominator
+floor 8, and max 3 consecutive skips, alongside existing spend/turn limits.
+The recovery policy is frozen separately. See the
+[canonical recovery plan](research/task2-recovery-plan.md) for migration evidence.
 `--mode official` selects strictly official routes and requires an authorized
 official run plus `--debug-evidence-dir` and `--debug-review-file` verifying
 completed, reviewed debug evidence; it never adopts a debug run or directory.
@@ -106,9 +117,13 @@ flowchart TD
   A -->|New scenario| G[Reset conversation]
   A -->|Explicit completion| C[Run complete]
   A -->|Recorded backend error| S[Read server session]
+  A -->|Classified original timeout| W[Wait for delayed reply during 30-minute grace]
+  W -->|Matching reply| N
+  W -->|Exact unanswered turn after grace| S
+  W -->|Changed or unknown evidence| H[Halt for reconciliation]
   S -->|Delayed reply matches history| N
-  S -->|Exact unanswered saved turn| E[One operational close]
-  S -->|Mismatch or unknown| H[Halt for reconciliation]
+  S -->|Fresh exact check and outage limits allow| E[One operational close]
+  S -->|Mismatch, unknown or outage bound| H
   E -->|New scenario confirmed| K[Record skip separately]
   E -->|Error or uncertain outcome| H
   K --> G
