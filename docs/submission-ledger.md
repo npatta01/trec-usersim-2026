@@ -288,3 +288,21 @@ Same recovery service restarted with `--cap-usd 6`, retaining draft 0403 for reu
 No outcome was advanced by migration; no new debug allowance or official start.
 Monitor the same service until explicit organizer completion, preserving future
 request/response receipts and recovery guards.
+
+## v5 total-turn guard increase and same-run continuation
+
+v5 paused cleanly at 500 turns with 72 normal completions, 19 operational closures,
+962 model calls, $0.369902385 actual cost and $3.742345800 reservations. No error
+or uncertain request remained. The user had authorized continuing until the end.
+An explicit independently reviewed migration raised only this run's total-turn
+guard from 500 to 1,000. Cap $6, per-conversation limit 30, generator and outage
+policy are unchanged; other runs still default to 500 total turns.
+
+All 962 cached model requests and saved outcomes replayed exactly; fresh GET
+matched the current server history. Original manifest, state, source and policy
+are byte-preserved privately in `migration-before-total-turns-1000/`. The new
+configuration and migration evidence became durable before final state
+enablement; post-apply hashes and unchanged counters passed. Same v5 service
+resumed with `--cap-usd 6 --max-total-turns 1000`. No start/request repeated,
+no new debug allowance, no official start. Runtime tests: 126 / 73 subtests.
+This is a resume checkpoint, not explicit run completion or quality approval.

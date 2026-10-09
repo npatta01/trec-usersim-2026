@@ -209,6 +209,12 @@ in the run manifest. On October 9 the user authorized raising v5's reservation
 ceiling to $6 after a budget halt; an audited migration preserved its original
 checkpoint/source, replayed 775 cached model requests, and retained the current
 draft. Passing a larger flag alone cannot bypass an existing frozen budget.
+The positive integer `--max-total-turns` override is also frozen, with default
+500. After v5 cleanly reached that guard, an audited migration raised only its
+total-turn allowance to 1,000, preserving all 962 cached model requests and
+saved outcomes. The old configuration/source/state are archived, server history
+is checked before migration, and state enablement is last. Per-conversation,
+budget and outage bounds remain active; this does not change modeled stopping.
 
 A saved error receipt is replayed locally and fails again without resending. A
 pending marker blocks resume even if a receipt also exists: that crash boundary

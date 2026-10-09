@@ -1,5 +1,25 @@
 # TREC UserSim research notes
 
+## October 9: same-run continuation beyond the turn guard
+
+v5 paused cleanly at 500 submitted turns: 72 normally completed conversations,
+19 operational backend-error closures, 962 model calls and $0.369902385 actual
+model cost. No error or uncertain request remained. Under the user's instruction
+to continue until the end, raise this run's total-turn guard to 1,000, preserving
+the $6 reservation ceiling, 30-turn conversation guard, generator and outage
+policy. Other runs still default to 500 turns.
+
+All 962 model requests and saved outcomes replayed exactly; a fresh GET matched
+the complete current server history. Independent review cleared the selector
+and explicit migration, including exact source/policy bindings and state
+enablement last. Full runtime verification: 126 tests / 73 subtests pass.
+Original manifest, frozen source and halted state are archived privately in
+`migration-before-total-turns-1000/`. Post-apply configuration, counters and
+archive hashes passed. The same service resumed with `--cap-usd 6
+--max-total-turns 1000`. No start or saved request was repeated; no new allowance
+or official run. This is a dated resume checkpoint, not completion or a quality
+score. [Recovery plan](task2-recovery-plan.md).
+
 ## October 9: authorized budget increase
 
 Automatic recovery succeeded and v5 reached 403 turns: 58 completed conversations

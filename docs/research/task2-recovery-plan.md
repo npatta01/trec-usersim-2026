@@ -114,6 +114,32 @@ before treating this dated snapshot as current completion evidence.
 
 ## Latest live evidence
 
+### October 9 total-turn pause and continuation
+
+After the budget increase, v5 reached its 500-turn operational guard with 72
+normally completed conversations and 19 backend-error closures. Model accounting:
+962 calls, $0.369902385 actual cost and $3.742345800 cumulative reservations.
+The service exited normally; no error, pending request or next-turn draft existed.
+
+The reviewed `--max-total-turns` selector retains the default 500, rejects invalid
+input before credentials and cannot silently change a frozen manifest. Full
+runtime verification passes 126 tests / 73 subtests, including clean guard pause,
+refused override, configuration-only migration remaining halted, and explicit
+same-run resume without another start or repeated message.
+
+Under the existing continuation authorization, a reviewed one-off migration
+selected 1,000 total turns, keeping cap $6, per-conversation limit 30 and policy
+v2 unchanged. Dry-run and apply each reproduced all 962 cached model requests,
+outcomes and counters, then fresh GET verified the current server history.
+Exact reviewed CLI source, complete frozen source coverage, unchanged policy,
+start request and failure/close pairing are checked before writes. Old source,
+manifest, policy and halted state are archived in private
+`migration-before-total-turns-1000/`; enabling the state is the final write.
+Post-apply hashes passed, and the same service resumed with the selected limits.
+No model or organizer POST was made by migration. No new debug allowance or
+official start. Continue monitoring until explicit HTTP428; no remaining pool
+size or semantic-quality score is inferred from this checkpoint.
+
 ### October 9 budget pause and authorized continuation
 
 Automatic timeout recovery at 0327 succeeded. The same run then reached 403 user

@@ -4,6 +4,23 @@ Organizer submissions and remaining allowances are tracked separately in the
 [submission ledger](../submission-ledger.md). Model-only experiments below do not
 consume an organizer run allowance.
 
+## October 9: total-turn continuation
+
+Operational adjustment, not a new simulator variant. The clean 500-turn halt
+had 72 normal completions, 19 backend-error closures and 962 model calls costing
+$0.369902385. The user authorized finishing the same run. A reviewed selector
+and explicit checkpoint migration raise only its total-turn guard to 1,000;
+other runs default to 500. Cap $6, conversation limit 30, generator and outage
+policy remain unchanged.
+
+All 962 cached model requests, outcomes and counters replay unchanged; fresh
+GET matches the current server history. Archives, exact source/policy checks and
+final state enablement passed independent review and post-apply verification.
+126 runtime tests / 73 subtests pass. The same service resumed with no new start,
+repeated submission or allowance. Completion and semantic quality remain separate
+checks; this adjustment supplies no quality score.
+[Recovery evidence](task2-recovery-plan.md).
+
 ## October 9: budget continuation
 
 Operational change, not a new simulator comparison. Recovery advanced v5 to 403
