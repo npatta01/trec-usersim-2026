@@ -1,5 +1,33 @@
 # TREC UserSim research notes
 
+## October 9: second budget continuation and delayed-reply audit
+
+v5 reached 799 submitted turns: 114 normal conversation endings, 35 administrative
+server-error closures and 1,528 successful model calls. Actual model cost was
+$0.599974420; cumulative reservations were $5.998019400. The next draft was absent
+and the $6 reservation guard halted before another request. Under the user's
+instruction to increase budget and finish, an independently reviewed migration
+raised only this run's reservation cap to $12. The same run resumed with its
+1,000-turn guard, 30-turn conversation guard, 48/25%/3 outage limits and unchanged
+generator/editor. No new organizer start or allowance was used.
+
+Dry-run and apply each replayed all 1,528 cached generation requests and confirmed
+exact current history with a fresh GET. Old manifest, frozen source, policy,
+halted state and error are archived privately in `migration-before-budget-12/`.
+Configuration, source, policy and state hashes passed post-apply verification;
+enabling the state was the final write. Migration made no POST.
+
+One original timeout at request 745 received a delayed reply during the grace
+period. It was reconciled as a normal continuation, with no operational close,
+repost or invented original POST receipt. A separate read-only audit helper
+checks its request, transport proof, archived in-flight marker, server history,
+prior/resulting state, counters and model accounting. Independent review caught
+and corrected an orphan-result inventory gap; six synthetic tests and primary
+verification of the real event pass. The completion and future continuation
+audits require exact paired evidence. This is integrity evidence, not a global
+quality or human-realism score. Await explicit HTTP428, then audit the full run.
+No official Task 2 run has started. [Recovery plan](task2-recovery-plan.md).
+
 ## October 9: recover an explicitly unavailable organizer agent
 
 v5 subsequently paused at request 650 on HTTP503 explicitly identifying an

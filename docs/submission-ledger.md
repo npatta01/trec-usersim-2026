@@ -39,7 +39,7 @@ Resuming the same run did not start another run or resend accepted predictions.
 
 | Oct 7 | Task 2 debug | `np-labs-luna-task2-debug-20261007-v3` | halted: 0 completed, 0 operational skips; 3 checkpointed turns | 0.002196115 |
 | Oct 8 | Task 2 debug | `np-labs-luna-task2-debug-v4` | halted: 3 completed, 0 operational skips; 17 checkpointed turns | 0.014966260 |
-| Oct 8–9 | Task 2 debug | `np-labs-luna-task2-debug-v5` | In progress at audited 652-turn restart: 92 normal endings, 26 administrative server-error closures; frozen limits $6 / 1,000 turns / 48 absolute closures | 0.489702915 at restart |
+| Oct 8–9 | Task 2 debug | `np-labs-luna-task2-debug-v5` | In progress at audited 799-turn restart: 114 normal endings, 35 administrative server-error closures; frozen limits $12 / 1,000 turns / 48 absolute closures | 0.599974420 at restart |
 
 There is exactly **one official submission**, for Task 1. The two Task 1 debug runs each
 contain 64 predictions, but should not be added to the 62 official predictions as
@@ -98,7 +98,9 @@ historical runs use the current file layout.
 ## Decisions and next action
 
 Task 1 is submitted; do not restart its completed run or spend another allowance
-without a new decision. Task 2 v5 continues after reviewed timeout, budget, turn-limit and absolute-closure-limit and classified-agent-availability migrations.
+without a new decision. Task 2 v5 continues after reviewed timeout, budget, turn-limit and absolute-closure-limit and classified-agent-availability migrations. Its second budget
+continuation at 799 changes only the reservation cap to $12. The delayed reply at
+745 has separately verified GET-derived evidence and no fabricated POST receipt.
 The original pending request, observations, intent, closing receipt and script
 are retained. The original message was not resent and no POST response invented.
 A completed, reviewed debug run gates one authorized
