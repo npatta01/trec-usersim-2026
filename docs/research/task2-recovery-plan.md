@@ -94,6 +94,22 @@ diff checks pass. Bare pytest still fails collection of two unchanged organizer
 test modules importing the removed `PersonaDefinition`, as previously observed
 on the base. No claim that the legacy organizer suite passes.
 
+Migration was independently reviewed, then applied without organizer/model POSTs.
+Replay verified all 634 model requests, 46 natural terminal conversations,
+11 operational closures, current history and consecutive-skip count 0. A fresh
+GET verified the exact persisted original turn. Old pending/error files are
+archived byte-for-byte in private `migration-before-timeout-v2/`, alongside old
+manifest, frozen source, state, policy, session and reviewed migration script.
+New manifest, policy, proof and archive hashes passed post-apply verification.
+
+The same `trec-usersim-task2-debug-v5-recovery.service` resumed at 15:26 UTC,
+October 9, and created its first exact persisted-turn observation. It is waiting
+read-only for the 30-minute grace; no close at 0328 has been sent yet. The saved
+state remains halted at 327 until reconciliation completes. Future errors use
+the new policy without requiring a status prompt. Task 2 debug5 / official4
+remain; no new allowance, no official start. Inspect service and private state
+before treating this dated snapshot as current completion evidence.
+
 ## Latest live evidence
 
 v5 reached 28 completed conversations and seven verified backend-error closures,

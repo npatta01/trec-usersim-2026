@@ -236,3 +236,30 @@ behavior are unchanged. Same recovery service runs, with skip limit 12 unchanged
 Private `recovery/0288-timeout-*` records preserve the original request, observations,
 intent, closing result, script and verification provenance. Cost at restart was
 $0.219581060 in 558 model calls. No new allowance and no official Task 2 start.
+
+## v5 automatic-timeout fix and same-run resume
+
+The old runtime halted again at request0327 after46 completed conversations and
+11 operational closures. Cost: $0.245687720 in634 successful model calls;
+reservation: $2.479191700 under the unchanged $3 ceiling. Original pending request
+and error were preserved; no original response receipt was invented.
+
+An independently reviewed generic timeout controller and explicit migration
+replaced repeated manual recovery. All634 cached model requests reproduced exactly;
+receipt replay confirmed terminal counts, current history and consecutive skips0.
+Fresh GET confirmed the exact persisted original turn. The old manifest, source,
+policy, state, pending/error bytes and migration provenance are archived privately
+in `migration-before-timeout-v2/`; new freeze and proof hashes were verified.
+
+Same v5 recovery service resumed at15:26 UTC on October9, entering read-only
+timeout reconciliation. Its first durable observation starts a30-minute grace;
+no operational close0328 had been sent at this snapshot. State remains halted
+at327 until a delayed reply or verified closure is committed. Future classified
+original timeouts use this path automatically; uncertain closes still halt.
+
+Policy v2: max24 operational skips, max25% of terminal conversations with a
+denominator floor8, max3 consecutive skips. Full runtime tests121 /64 subtests;
+optimized focused tests34 /14 subtests. No generator or style-policy change.
+Fresh preflight still shows Task2 debug5/official4 and Task1 debug8/official3.
+No new allowance and no official Task2 start. Read live state and service before
+making a newer status claim.

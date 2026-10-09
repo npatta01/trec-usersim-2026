@@ -9,9 +9,13 @@ The correction adds automatic exact-timeout reconciliation to the recovery
 wrapper: wait for a delayed reply, then allow one verified operational close
 after 30 minutes of observed persistence. Unknown requests and closing uncertainty
 still halt. Policy v2 adds absolute, fraction and consecutive-outage bounds.
-Independent implementation review and explicit frozen-checkpoint migration
-precede same-run resume. No new debug allowance or official Task 2 start is part
-of this correction. See the [recovery plan](task2-recovery-plan.md).
+Independent review cleared the implementation and migration. All 634 saved model
+requests replayed unchanged; terminal counts and current history matched exactly.
+The original checkpoint/source/policy/pending/error are archived. The same service
+resumed and entered read-only timeout reconciliation at 15:26 UTC, October 9;
+the checkpoint remains at 327 while waiting. Task 2 debug allowances remain 5,
+official 4. No new run was started. Full runtime verification: 121 tests / 64
+subtests pass. See the [recovery plan](task2-recovery-plan.md).
 
 The paragraphs below preserve the earlier checkpoints and manual recovery scope.
 

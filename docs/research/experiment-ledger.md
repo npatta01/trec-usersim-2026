@@ -25,6 +25,13 @@ crash boundary; verified receipt replay now clears only an exact matching marker
 This is software verification, not a new semantic-quality experiment. See the
 [recovery plan](task2-recovery-plan.md) for verification and current status.
 
+Follow-up review cleared the corrected code and the separate legacy migration.
+121 runtime tests / 64 subtests pass; 34 focused tests / 14 subtests pass under
+optimized Python. All 634 saved model requests replayed unchanged. The original
+frozen source and checkpoint evidence were archived before installing v2.
+Same-run service resumed into read-only timeout reconciliation at 15:26 UTC,
+October 9. No new debug allowance or official start; no close yet at that snapshot.
+
 This checkout records the Task 2 PR work. Earlier private experiment outputs and
 local-only research records are not published by this PR.
 
