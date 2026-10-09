@@ -31,8 +31,8 @@ that close cannot trigger another automatic close.
 
 No recovery for malformed model output, bad response schemas, unclassified
 in-flight requests, model uncertainty, authentication/quota failures or mismatched
-server history. No blind repost. A failed close halts. Policy v2 permits at most
-24 operational skips, at most 25% of terminal conversations, and at most three
+server history. No blind repost. A failed close halts. Policy v2 defaults to at most
+24 operational skips (the selected v5 limit is now 48), at most 25% of terminal conversations, and at most three
 consecutive skips. The fraction denominator has a floor of eight conversations,
 allowing at most two early skips while preserving the outage circuit. Existing
 per-conversation, total-turn and model-spend limits also apply. These limits are
@@ -113,6 +113,31 @@ remain; no new allowance, no official start. Inspect service and private state
 before treating this dated snapshot as current completion evidence.
 
 ## Latest live evidence
+
+### October 9 absolute closure limit and same-run continuation
+
+At request 635, v5 had a saved HTTP500 with 90 normal endings, 24 administrative
+closures, 1,224 model calls and $0.482075295 actual cost. The absolute guard alone
+blocked one more recovery; fraction and consecutive-outage guards had headroom.
+The reviewed positive-integer `--max-operational-skips` selector keeps default 24
+and freezes its selected value. Passing a different flag alone is refused.
+Non-default official use additionally requires a quality-review artifact bound
+to the exact selected policy hash.
+
+Full runtime verification: 130 tests / 79 subtests pass; selected-policy optimized
+verification: 9 tests / 15 subtests pass. The migration replayed all saved
+requests/outcomes and checked fresh server history, complete source coverage,
+failed-turn/close pairing and archived evidence. Only recovery-selector source
+and absolute policy24 ->48 changed; generator/run configuration, state and
+original error were retained. No POST occurred during migration. Policy is the
+final enabling write. Archive: private `migration-before-skip-limit-48/`.
+
+Post-apply hash/configuration checks passed. The same service restarted with
+`--cap-usd 6 --max-total-turns 1000 --max-operational-skips 48`. One distinct close
+at 636 returned HTTP200/new scenario and advanced the run to 637. It used no
+model call and did not replay the original turn. Keep 25%/floor8 and three
+consecutive-error circuits active. No new allowance or official start; await
+explicit HTTP428 and the separately reviewed full completion audit.
 
 ### October 9 total-turn pause and continuation
 

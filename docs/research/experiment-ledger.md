@@ -1,5 +1,22 @@
 # Experiment ledger for the Task 2 integration
 
+## October 9: absolute recovery-limit continuation
+
+Engineering change only; no new simulator hypothesis or model experiment.
+At request 635, HTTP500 and the 24-closure guard paused v5: 90 normal endings,
+1,224 model calls, $0.482075295 actual cost. A reviewed frozen selector and
+checkpoint migration permit 48 absolute closures for this same run while
+preserving the 25% and three-consecutive-error circuits and all generation inputs.
+130 runtime tests / 79 subtests pass; 9 selected-policy tests / 15 subtests pass
+under optimized Python. Exact historical replay and fresh GET passed. The policy
+write was last; original state/error/source/policy are archived privately.
+
+At restart, one distinct close at 636 returned HTTP200 and advanced to 637:
+90 normal endings, 25 administrative server-error closures. No original turn
+was resent, no model call was used for the close and no new run allowance was
+consumed. Debug is still in progress; no official Task 2 start or quality score.
+[Continuation evidence](task2-recovery-plan.md).
+
 Organizer submissions and remaining allowances are tracked separately in the
 [submission ledger](../submission-ledger.md). Model-only experiments below do not
 consume an organizer run allowance.

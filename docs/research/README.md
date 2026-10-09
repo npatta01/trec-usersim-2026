@@ -1,5 +1,28 @@
 # TREC UserSim research notes
 
+## October 9: continue the same debug run past the absolute closure guard
+
+v5 reached a saved HTTP500 at request 635 with 90 normal conversation endings,
+24 administrative server-error closures and $0.482075295 actual model cost.
+Only the absolute closure guard blocked recovery. An independently reviewed
+migration raised this run's frozen absolute limit to 48, retaining the 25%
+fraction guard, three-consecutive-error guard, $6 reservation cap, 1,000-turn
+limit and 30-turn conversation limit. Generator and editor requests are unchanged.
+
+All 1,224 cached model requests and historical outcomes replayed exactly, and
+fresh GET confirmed the failed message was persisted unanswered. Migration made
+no POST. Old source, policy, state and error are archived privately. The state
+and original failure stayed unchanged; the new policy was the final enabling
+write. The resumed wrapper then sent one distinct administrative close at 636,
+received HTTP200/new scenario and advanced to 637: 90 normal endings and 25
+administrative closures. No original message was resent or model call used for
+the close. No new debug allowance or official Task 2 start.
+
+130 runtime tests / 79 subtests pass; independent source review found no remaining
+blocker. This is an engineering continuation checkpoint, not API completion or
+a human-realism score. Continue until explicit HTTP428, then audit all retained
+requests and outputs. [Recovery plan](task2-recovery-plan.md).
+
 ## October 9: same-run continuation beyond the turn guard
 
 v5 paused cleanly at 500 submitted turns: 72 normally completed conversations,

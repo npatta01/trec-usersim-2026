@@ -21,6 +21,7 @@ python -m venv .venv
 
 Verification for this PR: all 130 included runtime tests and 79 subtests pass.
 The 39 focused budget/model/recovery tests and 19 subtests also pass under optimized Python.
+The selected-policy CLI and gate checks pass 9 tests / 15 subtests under optimized Python.
 The unchanged legacy simulator suite
 cannot collect two modules because they import the removed `PersonaDefinition`;
 the same error reproduces on the remote base (`45de4e1`).

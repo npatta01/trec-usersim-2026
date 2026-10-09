@@ -39,7 +39,7 @@ Resuming the same run did not start another run or resend accepted predictions.
 
 | Oct 7 | Task 2 debug | `np-labs-luna-task2-debug-20261007-v3` | halted: 0 completed, 0 operational skips; 3 checkpointed turns | 0.002196115 |
 | Oct 8 | Task 2 debug | `np-labs-luna-task2-debug-v4` | halted: 3 completed, 0 operational skips; 17 checkpointed turns | 0.014966260 |
-| Oct 8–9 | Task 2 debug | `np-labs-luna-task2-debug-v5` | resumed after second verified timeout closure: 40 completed, 11 operational skips; 290 checkpointed turns at restart | 0.219581060 at restart |
+| Oct 8–9 | Task 2 debug | `np-labs-luna-task2-debug-v5` | In progress at audited 637-turn restart: 90 normal endings, 25 administrative server-error closures; frozen limits $6 / 1,000 turns / 48 absolute closures | 0.482075295 at restart |
 
 There is exactly **one official submission**, for Task 1. The two Task 1 debug runs each
 contain 64 predictions, but should not be added to the 62 official predictions as
@@ -98,7 +98,7 @@ historical runs use the current file layout.
 ## Decisions and next action
 
 Task 1 is submitted; do not restart its completed run or spend another allowance
-without a new decision. Task 2 v5 resumed after a verified one-off timeout close.
+without a new decision. Task 2 v5 continues after reviewed timeout, budget, turn-limit and absolute-closure-limit migrations.
 The original pending request, observations, intent, closing receipt and script
 are retained. The original message was not resent and no POST response invented.
 A completed, reviewed debug run gates one authorized

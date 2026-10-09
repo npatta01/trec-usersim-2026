@@ -200,7 +200,7 @@ whole run without sending an artificial user-stop message. Protocol or transport
 errors preserve the last validated progress and private evidence with
 `status="halted"`. The recovery wrapper reconciles only the narrow observed
 backend-error and classified-original-timeout cases described above. It permits
-at most 24 skips, at most 25% of terminal conversations with a denominator floor 8,
+a default 24 absolute skips, at most 25% of terminal conversations with a denominator floor 8,
 and at most 3 consecutive operational skips. A close timeout never enters that
 automatic path again.
 
@@ -215,6 +215,12 @@ total-turn allowance to 1,000, preserving all 962 cached model requests and
 saved outcomes. The old configuration/source/state are archived, server history
 is checked before migration, and state enablement is last. Per-conversation,
 budget and outage bounds remain active; this does not change modeled stopping.
+
+The frozen `--max-operational-skips` selector changes only the absolute recovery
+bound. At v5's exact 24-closure pause, a reviewed migration selected 48 while
+preserving the 25% and three-consecutive-error circuits, generator and all other
+run limits. Old source/policy/state/error are archived; policy is written last.
+This permits further administrative recovery, not additional modeled patience.
 
 A saved error receipt is replayed locally and fails again without resending. A
 pending marker blocks resume even if a receipt also exists: that crash boundary
