@@ -11,8 +11,11 @@ end; select a $6 total reservation ceiling for this same debug run.
 The CLI now exposes a frozen, validated `--cap-usd` option; its default stays $3.
 All 775 saved model requests replay unchanged, the current draft is cached, and
 fresh GET exactly matches the saved history. 124 runtime tests / 69 subtests pass.
-Explicit archive/migration and independent review precede resume. No new debug
-allowance or official start. [Recovery plan](task2-recovery-plan.md).
+Independent review cleared the explicit archive/migration, including its
+interruption boundary. Post-apply hashes passed; same v5 service restarted with
+`--cap-usd 6`. No outcome count advanced during migration and no saved draft was
+regenerated. No new debug allowance or official start.
+[Recovery plan](task2-recovery-plan.md).
 
 ## October 9: verified backend-error recovery
 

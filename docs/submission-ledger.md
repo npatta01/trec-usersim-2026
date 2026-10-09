@@ -263,3 +263,28 @@ optimized focused tests 34 / 14 subtests. No generator or style-policy change.
 Fresh preflight still shows Task 2 debug 5 / official 4 and Task 1 debug 8 / official 3.
 No new allowance and no official Task 2 start. Read live state and service before
 making a newer status claim.
+
+## v5 budget increase and same-run continuation
+
+Automatic recovery at 0327 succeeded. The run advanced to 403 turns, 58 completed
+conversations and 16 operational closures, then hit the $3 cumulative reservation
+ceiling after saving draft 0403 and before editor 0403. Actual cost: $0.293755280;
+reservations: $2.998644; 775 successful model calls. Neither API had an uncertain
+request, and organizer 0403 had not been sent.
+
+The user authorized increasing budget and continuing until the end. Total
+reservation ceiling is now $6 for the same v5 run. The CLI flag defaults to $3
+for other runs; configuration changes remain blocked without explicit migration.
+No generator, model, provider, editor, stopping or recovery-policy change.
+
+All 775 saved model requests and confirmed outcomes replayed exactly; fresh GET
+matched the entire current server history. Independent review cleared the CLI
+and migration after correcting the final enabling-write order. 124 runtime tests
+/ 69 subtests pass; 39 focused tests / 19 subtests also pass under optimized Python.
+Original manifest/state/error/source are archived in private
+`migration-before-budget-6/`; reviewed script and hash-bound migration evidence
+are preserved. Post-apply archive/configuration/state checks passed.
+Same recovery service restarted with `--cap-usd 6`, retaining draft 0403 for reuse.
+No outcome was advanced by migration; no new debug allowance or official start.
+Monitor the same service until explicit organizer completion, preserving future
+request/response receipts and recovery guards.

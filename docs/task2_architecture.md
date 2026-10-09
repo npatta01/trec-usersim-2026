@@ -194,7 +194,7 @@ repair a server-side partial turn.
 | Classified original ReadTimeout with exact persisted unanswered turn | Wait for a delayed reply; after 30 minutes and a fresh check, allow one distinct close within outage bounds |
 | Other errors, mismatched IDs, invalid history, uncertain transport | Halt for inspection |
 
-The limits ($3 reservation, 500 total researcher turns, 30 per conversation) are
+The default limits ($3 reservation, 500 total researcher turns, 30 per conversation) are
 operational safeguards. Hitting one persists `status="halted"` and stops the
 whole run without sending an artificial user-stop message. Protocol or transport
 errors preserve the last validated progress and private evidence with
@@ -203,6 +203,12 @@ backend-error and classified-original-timeout cases described above. It permits
 at most 24 skips, at most 25% of terminal conversations with a denominator floor 8,
 and at most 3 consecutive operational skips. A close timeout never enters that
 automatic path again.
+
+The recovery CLI exposes a finite positive `--cap-usd` override that is frozen
+in the run manifest. On October 9 the user authorized raising v5's reservation
+ceiling to $6 after a budget halt; an audited migration preserved its original
+checkpoint/source, replayed 775 cached model requests, and retained the current
+draft. Passing a larger flag alone cannot bypass an existing frozen budget.
 
 A saved error receipt is replayed locally and fails again without resending. A
 pending marker blocks resume even if a receipt also exists: that crash boundary

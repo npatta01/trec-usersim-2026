@@ -16,8 +16,9 @@ run. No generator, style, provider or recovery-policy change.
 A finite positive `--cap-usd` option preserves the $3 default and frozen-manifest
 checks. Full runtime 124 tests / 69 subtests pass; optimized focused 39 / 19 pass.
 The migration dry run replayed all 775 cached model requests and verified exact
-current server history, without POSTs. Independent review and explicit archive
-precede same-run resume; the cached draft will be reused once.
+current server history, without POSTs. Independent review cleared the corrected
+final-write boundary. Applied archive/refreeze/configuration verification passed;
+same-run service restarted with the cached draft retained. No new allowance.
 
 ## October 9: automatic original-timeout recovery
 

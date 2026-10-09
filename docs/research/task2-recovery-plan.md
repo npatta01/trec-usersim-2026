@@ -5,7 +5,7 @@
 User authorizes recovering conversations blocked by backend failures in the existing debug
 run, then trying one official Task 2 run if debug verifies this procedure.
 Same Luna generator, full history and editor; recovery is a transport policy,
-not a researcher behavior. The original $3 reservation ceiling is being raised
+not a researcher behavior. The original $3 reservation ceiling was raised
 to $6 under the user's October 9 instruction to increase budget and continue
 through the end. This changes only the selected run's budget, not its generator.
 No new debug allowance is required to resume v5. No external message is sent.
@@ -136,7 +136,13 @@ cap, invalid input before credentials, and a budget pause after draft followed
 by same-run completion with one cached draft and one editor. Full runtime:
 124 tests / 69 subtests pass. Focused optimized checks: 39 tests / 19 subtests pass.
 Dry-run migration reproduced all 775 model requests and a fresh GET matched the
-server history exactly; no POST. Independent review precedes apply/resume.
+server history exactly; no POST. Independent review cleared the corrected
+migration: the old state stays halted until new configuration and migration
+evidence are durable, with state enablement committed last. The original
+manifest, state, error and frozen source are archived privately in
+`migration-before-budget-6/`. Post-apply archive/evidence/configuration hashes
+passed; only cap 3 -> 6 and halted -> running changed. No outcome count advanced.
+Same v5 service restarted with `--cap-usd 6`, preserving draft 0403 for reuse.
 
 ### Earlier recovery checkpoints
 
