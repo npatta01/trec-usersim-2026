@@ -9,10 +9,15 @@ Task2 official4. No official Task2 run yet. Generator and editor unchanged.
 107 tests / 60 subtests pass; independent review cleared the recovery implementation.
 The original v5 manifest, source and checkpoint were archived before migration.
 Saved receipts were replayed and compared with a read-only server session.
-The recovery wrapper resumed v5 and confirmed a third operational close with
-HTTP200/new empty scenario. It is running; ten conversations completed naturally
-and three were closed for backend failures. These closes send `is_final=true`
-as the researcher, but are not modeled researcher satisfaction or abandonment.
+The recovery wrapper reached 28 completed conversations and seven operational
+closes before a response timeout at request 0198. Cost is $0.147200385 in 384
+model calls; 198 submitted turns have checkpointed outcomes. Read-only session
+reconciliation confirmed that the timed-out message is saved without a reply.
+Its in-flight marker is retained because the POST response was not received;
+the known-500/502 recovery policy does not automatically close uncertain calls.
+The run is halted, not complete. No official Task 2 run has started.
+Operational closes send `is_final=true` as the researcher, but are not modeled
+researcher satisfaction or abandonment. Quota remains debug five / official four.
 
 
 [Submission ledger](../submission-ledger.md): every organizer run, quota used,

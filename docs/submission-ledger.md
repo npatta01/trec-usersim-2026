@@ -39,7 +39,7 @@ Resuming the same run did not start another run or resend accepted predictions.
 
 | Oct 7 | Task 2 debug | `np-labs-luna-task2-debug-20261007-v3` | halted: 0 completed, 0 operational skips; 3 checkpointed turns | 0.002196115 |
 | Oct 8 | Task 2 debug | `np-labs-luna-task2-debug-v4` | halted: 3 completed, 0 operational skips; 17 checkpointed turns | 0.014966260 |
-| Oct 8–9 | Task 2 debug | `np-labs-luna-task2-debug-v5` | resumed: 10 completed, 3 operational skips; 82 checkpointed turns at recovery launch | 0.061133500 at recovery launch |
+| Oct 8–9 | Task 2 debug | `np-labs-luna-task2-debug-v5` | halted on response timeout: 28 completed, 7 operational skips; 198 checkpointed turns plus one unresolved POST | 0.147200385 |
 
 There is exactly **one official submission**, for Task 1. The two Task 1 debug runs each
 contain 64 predictions, but should not be added to the 62 official predictions as
@@ -98,8 +98,10 @@ historical runs use the current file layout.
 ## Decisions and next action
 
 Task 1 is submitted; do not restart its completed run or spend another allowance
-without a new decision. Task 2 v5 is resuming under the user-authorized verified
-backend-error closure policy. A completed, reviewed debug run gates one authorized
+without a new decision. Task 2 v5 is halted on a response timeout. A read-only
+session check confirms the failed message is saved without its reply, but the
+POST outcome remains unconfirmed and the in-flight marker is preserved.
+A completed, reviewed debug run gates one authorized
 official Task 2 run. Never blindly resend a persisted failed message.
 See the [recovery plan](research/task2-recovery-plan.md).
 
@@ -190,3 +192,17 @@ pre/post-skip-502 checkpoints preserve this recovery. No automatic future skip.
 Existing v5 organizer description predates operational recovery; it cannot be
 retroactively changed. Skips are fully recorded in this ledger and private
 recovery-policy/receipts. Fresh recovery runs disclose skips at start.
+
+## v5 recovery-wrapper progress and timeout
+
+The reviewed wrapper advanced v5 to 28 completed conversations and seven
+separately recorded operational closes. It halted on a ReadTimeout for request
+0198, after 198 checkpointed outcomes. The original pending request and all
+receipts are retained. GET debug/session returned HTTP200 with matching scenario,
+matching conversation and the exact persisted user turn, but no assistant reply.
+This differs from a received HTTP500/502: the client has no final POST response.
+No request was resent and no closing message was sent for this timeout.
+Private `recovery/0198-timeout-session.json` and `0198-timeout-budget.json` preserve
+the observation. Budget check still shows Task2 debug5/official4 and Task1
+debug8/official3. Model cost is $0.147200385 in 384 calls. Official Task2 remains
+gated on completed debug evidence and conversation review.

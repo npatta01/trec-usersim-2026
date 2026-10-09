@@ -49,3 +49,12 @@ Existing v5 started before recovery was enabled, so its organizer description
 cannot retroactively disclose skips. The local policy, recovery receipts and
 ledger disclose this limitation. Fresh recovery-enabled debug and official run
 descriptions disclose operational closures. No generator change.
+
+## Latest live evidence
+
+v5 reached 28 completed conversations and seven verified backend-error closures,
+then halted on a response timeout at request 0198. GET session confirms the
+request was persisted without its reply, but no final POST response is available.
+The pending marker is retained; no blind resend or timeout-driven close occurred.
+This timeout remains outside the automatic known-500/502 recovery policy.
+Five debug and four official allowances remain. No official Task 2 start.
