@@ -19,7 +19,7 @@ subtests pass. See the [recovery plan](task2-recovery-plan.md).
 
 The paragraphs below preserve the earlier checkpoints and manual recovery scope.
 
-Current snapshot: v5 resumed at request 290 with 40 completed conversations and
+Earlier snapshot: v5 resumed at request 290 with 40 completed conversations and
 11 operational closes; recorded model cost $0.219581060. A second timeout at 0288
 remained unanswered after 118 minutes. The same reviewed one-off procedure closed
 it once at 0289, with HTTP200 confirming a new empty scenario. No original
