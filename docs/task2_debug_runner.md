@@ -19,7 +19,7 @@ python -m venv .venv
 .venv/bin/python -m pytest simulator/tests
 ```
 
-Verification for this PR: all 126 included runtime tests and 73 subtests pass.
+Verification for this PR: all 130 included runtime tests and 79 subtests pass.
 The 39 focused budget/model/recovery tests and 19 subtests also pass under optimized Python.
 The unchanged legacy simulator suite
 cannot collect two modules because they import the removed `PersonaDefinition`;
@@ -117,9 +117,21 @@ service is stopped. Archive the old manifest, source and state, replay saved
 requests and outcomes, verify the current server history, and enable the
 checkpoint last. This changes an operational guard, not the researcher's stop
 decision. Per-conversation, spend and outage limits continue to apply.
+`--max-operational-skips COUNT` selects the absolute backend-error closure
+guard, with default 24 and positive-integer validation before credentials.
+The selected value is frozen in `recovery-policy.json` and used by both saved
+HTTP500/502 and original-timeout recovery. Fraction (25%, denominator floor 8)
+and consecutive-error (3) circuits stay fixed. A different CLI value alone
+cannot change an existing policy. A reviewed migration must preserve the
+original failed request, archive source/configuration/state/error evidence,
+freeze the reviewed selector, and write the selected policy last. It does not
+change the researcher's stop decision or turn generation.
 `--mode official` selects strictly official routes and requires an authorized
 official run plus `--debug-evidence-dir` and `--debug-review-file` verifying
 completed, reviewed debug evidence; it never adopts a debug run or directory.
+An official non-default closure guard must match the completed debug policy;
+the quality-review artifact must also contain its exact
+`recovery_policy_sha256`. An integrity audit alone is not quality approval.
 
 ```mermaid
 flowchart TD

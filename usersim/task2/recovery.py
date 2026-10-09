@@ -65,7 +65,7 @@ class Task2OfficialRunner(Task2DebugRunner):
         super().__init__(out, **kwargs)
 
 
-def verify_official_gate(debug_dir, review_file):
+def verify_official_gate(debug_dir, review_file, *, max_skips=POLICY["max_skips"]):
     """Require completed debug evidence and a review tied to exact final state."""
     if debug_dir is None or review_file is None:
         raise RuntimeError(
@@ -126,8 +126,12 @@ def verify_official_gate(debug_dir, review_file):
         policy = json.loads((debug_dir / "recovery-policy.json").read_text())
     except (OSError, ValueError) as exc:
         raise RuntimeError("Debug recovery policy missing") from exc
-    if policy != {**POLICY, "mode": "debug"}:
+    if policy != {**POLICY, "max_skips": max_skips, "mode": "debug"}:
         raise RuntimeError("Debug did not verify the selected recovery policy")
+    if max_skips != POLICY["max_skips"] and review.get(
+        "recovery_policy_sha256"
+    ) != digest(policy):
+        raise RuntimeError("Debug review is not bound to the selected recovery policy")
     if review.get("manifest_sha256") != digest(manifest) or review.get(
         "completion_receipt_sha256"
     ) != digest(final):
@@ -284,7 +288,9 @@ def recover_backend_error(runner, get_session, *, max_skips=24):
     return recovered
 
 
-def run_with_recovery(runner, get_session, *, now=None, wait=None):
+def run_with_recovery(
+    runner, get_session, *, max_skips=POLICY["max_skips"], now=None, wait=None
+):
     def recover_current():
         state = runner._load_state()
         index = state["total_user_turns"]
@@ -293,9 +299,9 @@ def run_with_recovery(runner, get_session, *, now=None, wait=None):
         )
         if runner.pending_path.exists() or timeout_proof.exists():
             return recover_timeout(
-                runner, get_session, max_skips=POLICY["max_skips"], now=now, wait=wait
+                runner, get_session, max_skips=max_skips, now=now, wait=wait
             )
-        return recover_backend_error(runner, get_session, max_skips=POLICY["max_skips"])
+        return recover_backend_error(runner, get_session, max_skips=max_skips)
 
     state = runner._load_state()
     if state["status"] == "halted":
@@ -328,6 +334,12 @@ def main(argv=None):
         default=MAX_TOTAL_TURNS,
         help="Authorized total user-turn guard (default: %(default)s)",
     )
+    parser.add_argument(
+        "--max-operational-skips",
+        type=int,
+        default=POLICY["max_skips"],
+        help="Authorized absolute backend-error closure guard (default: %(default)s)",
+    )
     parser.add_argument("--debug-evidence-dir", type=Path)
     parser.add_argument("--debug-review-file", type=Path)
     args = parser.parse_args(argv)
@@ -337,9 +349,15 @@ def main(argv=None):
         parser.error("--cap-usd must be finite and positive")
     if args.max_total_turns <= 0:
         parser.error("--max-total-turns must be a positive integer")
+    if args.max_operational_skips <= 0:
+        parser.error("--max-operational-skips must be a positive integer")
     gate = None
     if args.mode == "official":
-        gate = verify_official_gate(args.debug_evidence_dir, args.debug_review_file)
+        gate = verify_official_gate(
+            args.debug_evidence_dir,
+            args.debug_review_file,
+            max_skips=args.max_operational_skips,
+        )
     os.umask(0o077)
     out = args.output_dir
     out.mkdir(parents=True, exist_ok=True)
@@ -366,7 +384,7 @@ def main(argv=None):
             max_total_turns=args.max_total_turns,
             **options,
         )
-        policy = {**POLICY, "mode": mode}
+        policy = {**POLICY, "max_skips": args.max_operational_skips, "mode": mode}
         if gate is not None:
             policy["debug_gate"] = gate
         policy_path = out / "recovery-policy.json"
@@ -393,7 +411,9 @@ def main(argv=None):
                 require_available=not (out / "organizer/start.json").exists(),
             )
             atomic(out / "recovery-budget-before.json", budget)
-            result = run_with_recovery(runner, get_session)
+            result = run_with_recovery(
+                runner, get_session, max_skips=args.max_operational_skips
+            )
             atomic(
                 out / "recovery-budget-after.json",
                 _preflight(session, mode=mode, require_available=False),

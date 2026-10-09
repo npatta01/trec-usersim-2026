@@ -319,6 +319,26 @@ class RecoveryTests(unittest.TestCase):
             f = p / "review.json"
             f.write_text(json.dumps(review))
             self.assertEqual(verify_official_gate(p, f)["debug_run_id"], "debug-r")
+            selected_policy = {**POLICY, "max_skips": 48, "mode": "debug"}
+            (p / "recovery-policy.json").write_text(json.dumps(selected_policy))
+            with self.assertRaises(RuntimeError):
+                verify_official_gate(p, f)
+            with self.assertRaisesRegex(RuntimeError, "review is not bound"):
+                verify_official_gate(p, f, max_skips=48)
+            review["recovery_policy_sha256"] = digest(selected_policy)
+            f.write_text(json.dumps(review))
+            self.assertEqual(
+                verify_official_gate(p, f, max_skips=48)["debug_run_id"], "debug-r"
+            )
+            review["recovery_policy_sha256"] = "wrong"
+            f.write_text(json.dumps(review))
+            with self.assertRaisesRegex(RuntimeError, "review is not bound"):
+                verify_official_gate(p, f, max_skips=48)
+            del review["recovery_policy_sha256"]
+            f.write_text(json.dumps(review))
+            (p / "recovery-policy.json").write_text(
+                json.dumps({**POLICY, "mode": "debug"})
+            )
             (p / "recovery-policy.json").unlink()
             with self.assertRaises(RuntimeError):
                 verify_official_gate(p, f)
