@@ -2,6 +2,7 @@
 
 import copy
 import json
+import re
 from datetime import datetime
 
 from usersim.checkpoints import atomic, digest
@@ -13,6 +14,37 @@ OPERATIONAL_POLICY = {
     "fraction_warmup_conversations": 8,
     "max_consecutive_skips": 3,
 }
+
+
+def is_recoverable_backend_receipt(receipt):
+    """Recognize observed backend failures; generic availability errors stay blocked."""
+    if receipt.get("status") in {500, 502}:
+        return True
+    if receipt.get("status") != 503:
+        return False
+    body = receipt.get("body")
+    utterance = receipt.get("payload", {}).get("user_utterance", {})
+    conversation_id = utterance.get("conversation_id")
+    if (
+        not isinstance(body, dict)
+        or not isinstance(conversation_id, str)
+        or not conversation_id
+    ):
+        return False
+    detail = body.get("detail")
+    prefix = f"Error occurred while generating agent response for session {conversation_id}: "
+    if not isinstance(detail, str) or not detail.startswith(prefix):
+        return False
+    try:
+        error = json.loads(detail[len(prefix) :])
+    except ValueError:
+        return False
+    message = error.get("detail") if isinstance(error, dict) else None
+    return (
+        isinstance(message, str)
+        and re.fullmatch(r"Agent '[^'\r\n]+' is currently unavailable\.", message)
+        is not None
+    )
 
 
 def _advance(state, result, *, is_final, skipped):
@@ -84,7 +116,7 @@ def _verify_raw_prefix(runner, index, remote_messages, conversation_id):
             ) != receipt.get("server_session_sha256"):
                 raise RuntimeError("Invalid delayed-reply reconciliation event")
             origin = receipt.get("origin")
-            if origin not in {"ReadTimeout", "HTTP500", "HTTP502"}:
+            if origin not in {"ReadTimeout", "HTTP500", "HTTP502", "HTTP503"}:
                 raise RuntimeError("Unsupported delayed-reply source")
             source = runner.organizer_dir / (
                 f"transport-error-{path.name}" if origin == "ReadTimeout" else path.name
@@ -107,8 +139,10 @@ def _verify_raw_prefix(runner, index, remote_messages, conversation_id):
                     or proof.get("checkpoint_name") != path.stem
                 ):
                     raise RuntimeError("Delayed-reply transport proof mismatch")
-            elif proof.get("status") != int(origin[4:]) or not same_json(
-                proof.get("payload"), receipt.get("payload")
+            elif (
+                proof.get("status") != int(origin[4:])
+                or not is_recoverable_backend_receipt(proof)
+                or not same_json(proof.get("payload"), receipt.get("payload"))
             ):
                 raise RuntimeError("Delayed-reply HTTP proof mismatch")
             original = runner.organizer_dir / path.name

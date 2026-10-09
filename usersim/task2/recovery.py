@@ -31,6 +31,7 @@ from .reconciliation import (
     check_skip_bounds,
     persist_reply_event,
     OPERATIONAL_POLICY,
+    is_recoverable_backend_receipt,
 )
 from .timeout import TIMEOUT_POLICY, recover_timeout
 from .protocol import (
@@ -41,12 +42,15 @@ from .protocol import (
     validate_continue_response,
 )
 
-BACKEND_ERRORS = {500, 502}
 DEBUG_RECOVERY_DESCRIPTION = "Debug Task 2 Luna full-history simulation with style editor; verified backend failures may be closed operationally and recorded separately as skipped conversations."
 POLICY = {
     "policy": "verified_persisted_turn_operational_close_v2",
     **OPERATIONAL_POLICY,
     "timeout": TIMEOUT_POLICY,
+    "backend_errors": {
+        "http_statuses": [500, 502],
+        "http503": "agent_unavailable_bound_to_conversation",
+    },
 }
 
 
@@ -179,7 +183,10 @@ def recover_backend_error(runner, get_session, *, max_skips=24):
     if not failed_path.exists():
         raise RuntimeError("No backend failure receipt at current turn")
     failed = json.loads(failed_path.read_text())
-    if failed["status"] not in BACKEND_ERRORS or failed["path"] != runner.continue_path:
+    if (
+        not is_recoverable_backend_receipt(failed)
+        or failed["path"] != runner.continue_path
+    ):
         raise RuntimeError("Only saved backend failures can be recovered")
     payload = failed["payload"]
     if (
