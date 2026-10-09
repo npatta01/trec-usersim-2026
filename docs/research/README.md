@@ -2,6 +2,13 @@
 
 ## October 9: verified backend-error recovery
 
+Current snapshot: v5 resumed at request 290 with 40 completed conversations and
+11 operational closes; recorded model cost $0.219581060. A second timeout at 0288
+remained unanswered after 118 minutes. The same reviewed one-off procedure closed
+it once at 0289, with HTTP200 confirming a new empty scenario. No original
+request was resent. Source, prompts, editor and automatic 500/502 policy remain
+unchanged. The frozen operational skip limit is 12. No official Task 2 start.
+
 User authorizes continuing debug with explicit operational closes after verified
 backend failures, then one official Task 2 run if debug verifies the approach.
 [Recovery plan](task2-recovery-plan.md). Five Task 2 debug allowances remain;

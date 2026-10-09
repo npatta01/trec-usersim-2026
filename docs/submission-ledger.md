@@ -39,7 +39,7 @@ Resuming the same run did not start another run or resend accepted predictions.
 
 | Oct 7 | Task 2 debug | `np-labs-luna-task2-debug-20261007-v3` | halted: 0 completed, 0 operational skips; 3 checkpointed turns | 0.002196115 |
 | Oct 8 | Task 2 debug | `np-labs-luna-task2-debug-v4` | halted: 3 completed, 0 operational skips; 17 checkpointed turns | 0.014966260 |
-| Oct 8–9 | Task 2 debug | `np-labs-luna-task2-debug-v5` | resumed after verified timeout closure: 28 completed, 8 operational skips; 200 checkpointed turns at restart | 0.147200385 at restart |
+| Oct 8–9 | Task 2 debug | `np-labs-luna-task2-debug-v5` | resumed after second verified timeout closure: 40 completed, 11 operational skips; 290 checkpointed turns at restart | 0.219581060 at restart |
 
 There is exactly **one official submission**, for Task 1. The two Task 1 debug runs each
 contain 64 predictions, but should not be added to the 62 official predictions as
@@ -221,3 +221,18 @@ Private `recovery/0198-timeout-*` artifacts retain observations, original pendin
 request, intent, exact closing payload/receipt linkage, result, reviewed script
 and review hash. No response receipt was fabricated for the original timed-out
 POST. Official Task 2 remains unstarted.
+
+## v5 second timeout closure and resume
+
+The resumed run reached 40 completed conversations and 10 operational closes,
+then timed out at 0288. GET session confirmed the exact persisted unanswered
+message after 118 minutes. Reused the independently reviewed one-off procedure
+with only the request index, original request hash and artifact filenames changed.
+Offline reconciliation and three mismatch controls passed; a fresh GET preceded
+the single distinct final close at 0289. HTTP200 confirmed a new empty scenario.
+State resumed at 290 with 40 completed and 11 operational closes. No original
+request was resent; no missing POST receipt invented. Source and generation
+behavior are unchanged. Same recovery service runs, with skip limit 12 unchanged.
+Private `recovery/0288-timeout-*` records preserve the original request, observations,
+intent, closing result, script and verification provenance. Cost at restart was
+$0.219581060 in 558 model calls. No new allowance and no official Task 2 start.

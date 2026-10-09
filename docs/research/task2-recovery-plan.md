@@ -62,3 +62,11 @@ HTTP200 confirmed advancement; v5 resumed at 200 with 28 completed and 8 skips.
 The original message was not resent and no POST response fabricated. This manual
 exception remains outside the automatic known-500/502 recovery policy.
 Five debug and four official allowances remain. No official Task 2 start.
+
+A second timeout at 0288 was still unanswered after 118 minutes. The same reviewed
+procedure, changed only for the index/hash/artifact names, passed offline checks
+and a fresh exact-prefix session check. One final close at 0289 returned HTTP200
+with a new empty scenario. v5 resumed at 290 with 40 completed and 11 operational
+closes; $0.219581060 in 558 model calls at restart. Automatic recovery scope and
+the frozen 12-skip bound remain unchanged. No original request resent, no new
+allowance and no official Task 2 start.
