@@ -1,11 +1,31 @@
 # TREC UserSim research notes
 
+## October 9: stop debug and submit one baseline
+
+v5 is intentionally paused at a clean boundary: 886 saved turns, 129 normal
+endings, 38 server-error closures and one unfinished conversation. Actual cost
+$0.664036040; no request/error is pending. A reviewed prefix audit reproduces
+all 1,696 model calls and 848 generated submission pairs and matches fresh server
+history. Debug is **not complete** and no HTTP428 is claimed.
+
+Independent selective review supports a candid baseline submission, with
+knowledge leakage, polished/weakly differentiated persona style and excessive
+persistence recorded as limitations. The generator and editor stay unchanged.
+A separately reviewed operator launcher binds the paused evidence and review
+before official access, retaining default 24/25%/3 outage limits; the ordinary CLI
+completion gates stay intact. Ten operator-launch tests and independent source
+review pass. Official run `np-labs-luna-style-task2-official-20261009-v1` started
+with HTTP200; a fresh quota check confirms three official Task 2 allowances remain.
+Monitor this same run through explicit HTTP428 and final audit. Keep v5 paused. See [readiness evidence and limits](task2-recovery-plan.md) and the
+[submission ledger](../submission-ledger.md). This supersedes the older next
+actions below to continue debug until HTTP428.
+
 ## Coverage terminology
 
 The training export has 64 human conversation records. Official Task 1 has 62
 turn-prediction cases over 10 goals; official Task 2 has 57 end-to-end conversations
 over 11 goals, according to the [organizer guidelines](https://trec.usersim.ai/guidelines).
-Our running Task 2 debug uses development scenario-agent combinations; its
+Our paused Task 2 debug uses development scenario-agent combinations; its
 observed larger conversation count is separate from those official test pools.
 See the [submission ledger](../submission-ledger.md) for exact count definitions.
 
@@ -304,7 +324,7 @@ Third Task 2 debug attempt halted on HTTP500 generating the fourth agent reply.
 Three successful exchanges; GET debug/session confirms seven messages ending
 in the fourth saved researcher message. Zero completed conversations. Service
 failed and local state reconciled to halted; no repost or new run. GET budget
-confirms Task 2 debug7, official4; Task1 debug8, official3. Organizer outage
+confirms Task 2 debug7, official4; Task 1 debug8, official 3. Organizer outage
 announcement did not establish resolution for this attempt. Private receipts
 include session_status_check.json and budget_status_check.json.
 

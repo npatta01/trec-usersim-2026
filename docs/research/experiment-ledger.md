@@ -1,5 +1,25 @@
 # Experiment ledger for the Task 2 integration
 
+## October 9: intentional debug pause and baseline-readiness review
+
+Operator decision, no new generator experiment. User chose to stop debug and
+proceed toward one official baseline. v5 paused safely at 886 turns: 129 normal
+endings, 38 administrative closures, one unfinished conversation; cost $0.664036040.
+All848 generated submission pairs and 1,696 model requests replay; fresh server
+history matches. No pending request, error or completion claim.
+
+Independent review: four purposive conversations / 32 researcher turns, including
+late eleven- and seven-turn histories; primary inspected 56 turns in eight cases.
+Baseline readiness approved with explicit knowledge/persona/persistence limits,
+not a global realism score. The private operator launch gate preserves the runtime
+and official default 24 outage limit; ordinary completed-debug CLI stays unchanged.
+Ten launch tests include a complete synthetic official loop, a restart that
+makes no new POST, evidence/ID/snapshot tampering and failure-recording checks.
+Independent source review cleared exact launcher before use. One official run
+started with HTTP200; remaining official Task 2 quota 3 confirmed by GET. No official
+completion claim yet.
+[Canonical readiness evidence](task2-recovery-plan.md).
+
 ## October 9: budget and audit continuation; no simulator change
 
 v5 reached 799 submitted turns: 114 normal conversation endings, 35 administrative

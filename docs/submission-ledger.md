@@ -20,7 +20,7 @@ usage, separate from the organizer's run quota.
 | Supplied official training export | 64 | Human conversation records available for development |
 | Task 1 official test pool | 62 over 10 goals | Turn-prediction cases; our completed official run submitted 62 predictions |
 | Task 2 official test pool | 57 over 11 goals | Official end-to-end conversations, as defined by the organizers |
-| Current Task 2 debug pool | Still in progress | Development scenario-agent conversations; final coverage is confirmed by HTTP428 |
+| Current Task 2 debug prefix | 129 normal endings + 38 error closures + 1 unfinished = 168 opened | Intentionally paused development run; not the full debug pool or an official run |
 
 The [organizer guidelines](https://trec.usersim.ai/guidelines) explicitly separate
 the two official test pools. The reported 57-conversation official Task 2 run
@@ -29,8 +29,8 @@ debug prefix at 835 saved turns found 158 conversation IDs across 53 exact
 scenario records: 52 records appeared three times and one appeared twice.
 Those are scenario-agent conversations, not 158 original human training logs,
 158 participants or 158 organizer allowances. This snapshot is not the final
-debug pool size. Only one v5 debug run is being continued. No official Task 2
-run has started.
+debug pool size. Only one v5 debug run was being continued; it is now intentionally paused. One official Task 2
+run has started with HTTP200 and is still in progress.
 
 ## Allowances
 
@@ -38,11 +38,11 @@ run has started.
 |---|---:|---:|---:|
 | Task 1 official | 4 | 1 | **3** |
 | Task 1 debug | 10 | 2 | **8** |
-| Task 2 official | 4 | 0 | **4** |
+| Task 2 official | 4 | 1 | **3** |
 | Task 2 debug | 10 | 5 | **5** |
 
 Initial counts were verified before the first debug run. Latest saved HTTP200
-`/budget/check` agrees with this table (`task2-debug-luna-v5/recovery-launch-budget.json`). Debug and official allowances are separate,
+`/budget/check` agrees with this table (`task2-official-luna-20261009-v1/budget-after-start.json`). Debug and official allowances are separate,
 and each task has its own allowance. A halted run still uses an allowance.
 Resuming the same run did not start another run or resend accepted predictions.
 
@@ -58,9 +58,11 @@ Resuming the same run did not start another run or resend accepted predictions.
 
 | Oct 7 | Task 2 debug | `np-labs-luna-task2-debug-20261007-v3` | halted: 0 completed, 0 operational skips; 3 checkpointed turns | 0.002196115 |
 | Oct 8 | Task 2 debug | `np-labs-luna-task2-debug-v4` | halted: 3 completed, 0 operational skips; 17 checkpointed turns | 0.014966260 |
-| Oct 8–9 | Task 2 debug | `np-labs-luna-task2-debug-v5` | In progress at audited 799-turn restart: 114 normal endings, 35 administrative server-error closures; frozen limits $12 / 1,000 turns / 48 absolute closures | 0.599974420 at restart |
+| Oct 8–9 | Task 2 debug | `np-labs-luna-task2-debug-v5` | **Intentionally paused:** 886 saved turns, 129 normal endings, 38 administrative closures, 1 unfinished conversation; audited prefix, no HTTP428 | 0.664036040 |
+| Oct 9 | Task 2 official | `np-labs-luna-style-task2-official-20261009-v1` | **In progress:** HTTP200 start, first exchange saved; Luna full history plus style edit, default 24/25%/3 outage policy | Pending final accounting |
 
-There is exactly **one official submission**, for Task 1. The two Task 1 debug runs each
+There are exactly **two official runs started**: Task 1 is complete, Task 2 is
+still in progress. The two Task 1 debug runs each
 contain 64 predictions, but should not be added to the 62 official predictions as
 one 190-example official evaluation or treated as 190 independent examples.
 Model-only editor comparisons, synthetic probes and offline replays are not
@@ -97,6 +99,8 @@ contents. Let `RUNS=/home/npatta01/data/trec-usersim-runs` and
 | Task 1 official | `$RUNS/task1-official-fidelity-20261006-v1/` |
 | First Task 2 debug | `$OLD/task2-debug-luna/` |
 | Second Task 2 debug | `$RUNS/task2-debug-luna-20261006-v2/` |
+| Current paused Task 2 debug | `$RUNS/task2-debug-luna-v5/` |
+| Task 2 official | `$RUNS/task2-official-luna-20261009-v1/` |
 
 In the official directory:
 
@@ -116,14 +120,17 @@ historical runs use the current file layout.
 
 ## Decisions and next action
 
-Task 1 is submitted; do not restart its completed run or spend another allowance
-without a new decision. Task 2 v5 continues after reviewed timeout, budget, turn-limit and absolute-closure-limit and classified-agent-availability migrations. Its second budget
-continuation at 799 changes only the reservation cap to $12. The delayed reply at
-745 has separately verified GET-derived evidence and no fabricated POST receipt.
-The original pending request, observations, intent, closing receipt and script
-are retained. The original message was not resent and no POST response invented.
-A completed, reviewed debug run gates one authorized
-official Task 2 run. Never blindly resend a persisted failed message.
+Task 1 is submitted. The user chose to pause Task 2 v5 and proceed toward one
+official baseline. The exact 886-turn prefix, pause boundary and current server
+history pass read-only audit. Independent selective review approves baseline
+readiness with explicit persona/knowledge/persistence limitations. A separately
+reviewed private operator launcher binds that evidence; the ordinary CLI's
+completed-debug requirement remains unchanged. Keep v5 paused. Independent source
+review cleared the private operator launcher and 10 synthetic tests pass. One
+official run has started with HTTP200, using default 24/25%/3 recovery limits, $6 cumulative
+model reservations, 1,000 total turns and 30 turns per conversation. Preserve every
+input, model call, submitted message and response privately; require explicit
+HTTP428 and a final audit. Never blindly resend a persisted failed message.
 See the [recovery plan](research/task2-recovery-plan.md).
 
 Update this ledger whenever an organizer run starts, halts, resumes or completes.
@@ -147,7 +154,7 @@ Third Task 2 debug attempt halted on HTTP500 generating the fourth agent reply.
 Three successful exchanges; GET debug/session confirms seven messages ending
 in the fourth saved researcher message. Zero completed conversations. Service
 failed and local state reconciled to halted; no repost or new run. GET budget
-confirms Task 2 debug7, official4; Task1 debug8, official3. Organizer outage
+confirms Task 2 debug7, official4; Task 1 debug8, official 3. Organizer outage
 announcement did not establish resolution for this attempt. Private receipts
 include session_status_check.json and budget_status_check.json.
 
@@ -224,8 +231,8 @@ matching conversation and the exact persisted user turn, but no assistant reply.
 This differs from a received HTTP500/502: the client has no final POST response.
 No request was resent and no closing message was sent for this timeout.
 Private `recovery/0198-timeout-session.json` and `0198-timeout-budget.json` preserve
-the observation. Budget check still shows Task 2 debug5/official4 and Task1
-debug8/official3. Model cost is $0.147200385 in 384 calls. Official Task 2 remains
+the observation. Budget check still shows Task 2 debug 5/official4 and Task 1
+debug8/official 3. Model cost is $0.147200385 in 384 calls. Official Task 2 remains
 gated on completed debug evidence and conversation review.
 
 ## v5 manual timeout closure and resume

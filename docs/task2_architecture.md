@@ -1,5 +1,25 @@
 # Task 2: how our researcher simulator works
 
+## Current operator decision — October 9
+
+v5 is intentionally paused with an audited prefix:886 turns, 129 normal endings,
+38 server-error closures and one unfinished conversation. No request is pending.
+No HTTP428/debug-completion claim is made. The ordinary official CLI keeps its
+completed-debug gate. For the user's decision to stop debug and send a baseline,
+a separate private launcher binds the paused evidence and quality review before
+credentials/POSTs, retaining the tested runtime and official default 24 outage
+limit. See [readiness and limitations](research/task2-recovery-plan.md).
+
+```mermaid
+flowchart LR
+    D[Debug v5: safely paused] --> A[Audit saved requests and server history]
+    A --> Q[Review conversation quality and limitations]
+    Q --> G[Freeze exact readiness evidence]
+    G --> O[One official Task 2 baseline run]
+    O --> F[HTTP428 plus final receipt audit]
+```
+
+
 We generate the **researcher’s side** of a conversation. The organizer supplies
 the dataset-search assistant. These are two separate systems.
 

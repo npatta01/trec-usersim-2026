@@ -1,5 +1,52 @@
 # Task 2 backend-error recovery plan
 
+## October 9: debug paused by choice; official baseline readiness
+
+The user chose to stop debug and proceed toward one official Task 2 baseline.
+v5 is intentionally paused at a clean boundary: **886 saved turns, 129 normal
+researcher endings, 38 separately recorded server-error closures, and one
+unfinished conversation**. Actual model cost is $0.664036040 across 1,696 model
+calls; $6.629295600 is cumulative reservation accounting, not dollars spent.
+No organizer/model request or error is pending. The service's failed state is
+from deliberate operator termination after proving a safe pause, not a new
+server failure. No researcher stop message was sent to pause that conversation.
+
+A source-reviewed, read-only prefix audit reproduces every one of the 848
+generated submission pairs, verifies all retained original/closing/delayed-reply
+evidence and matches a fresh server GET. It explicitly records **no HTTP428 and
+no debug completion claim**. The pause intent, original running state, source
+snapshot and receipt are retained privately. Seven pause tests and two focused
+proof tests pass; the successful live pause validates the actual process boundary.
+
+Independent conversation review covers four purposive cases / 32 researcher
+messages, including eleven- and seven-turn histories. Primary review also
+inspected all researcher replies in eight purposive cases / 56 messages. The
+review supports a candid baseline submission while recording knowledge leakage,
+weak differentiation of Basic-English personas, polished wording and excessive
+persistence. It supplies no whole-run realism rate or competitive-quality claim.
+
+The normal official CLI still requires completed debug. This operator decision
+uses a separate, reviewed private launcher that binds the exact intentionally
+paused state, manifest, audit, pause and quality decision before credentials or
+POSTs. It copies and freezes its evidence. The generator, full history and editor
+remain unchanged. Official recovery retains default 24 absolute / 25% / 3 consecutive
+closures; it does not inherit debug's 48 override. The selected official guards
+are $6 cumulative model reservations, 1,000 total turns and 30 per conversation.
+
+Ten operator-launch tests pass, including end-to-end completion, no-POST completed
+replay, source/evidence/snapshot/ID tampering, temp-write residue and preservation
+of the original launch failure if recording also fails. Independent review
+cleared exact launcher SHA 4fbd7b3c before use. The private operator launcher and
+its evidence are frozen alongside the unchanged runtime; they are not a new
+ordinary CLI mode.
+
+Official run `np-labs-luna-style-task2-official-20261009-v1` started with HTTP200.
+The first exchange is saved and the same run is continuing. Fresh GET confirms
+Task 2 official 3, debug 5 remain. No official completion claim yet: require explicit
+HTTP428 plus a separate final integrity audit. Keep v5 paused. This decision
+supersedes the older instructions below to continue debug until completion.
+
+
 ## Objective and authorization
 
 User authorizes recovering conversations blocked by backend failures in the existing debug
@@ -110,7 +157,7 @@ The same `trec-usersim-task2-debug-v5-recovery.service` resumed at 15:26 UTC,
 October 9, and created its first exact persisted-turn observation. It is waiting
 read-only for the 30-minute grace; no close at 0328 has been sent yet. The saved
 state remains halted at 327 until reconciliation completes. Future errors use
-the new policy without requiring a status prompt. Task 2 debug5 / official4
+the new policy without requiring a status prompt. Task 2 debug 5 / official4
 remain; no new allowance, no official start. Inspect service and private state
 before treating this dated snapshot as current completion evidence.
 

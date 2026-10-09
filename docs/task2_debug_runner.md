@@ -1,5 +1,16 @@
 # Checkpointed Task 2 debug runner
 
+## Current operator decision — October 9
+
+v5 is intentionally paused with an audited prefix:886 turns, 129 normal endings,
+38 server-error closures and one unfinished conversation. No request is pending.
+No HTTP428/debug-completion claim is made. The ordinary official CLI keeps its
+completed-debug gate. For the user's decision to stop debug and send a baseline,
+a separate private launcher binds the paused evidence and quality review before
+credentials/POSTs, retaining the tested runtime and official default 24 outage
+limit. See [readiness and limitations](research/task2-recovery-plan.md).
+
+
 The runner simulates the researcher through complete organizer conversations.
 It sends the supplied persona, goal, and full available history to GPT-6 Luna,
 then applies one style edit that preserves the generated boolean stop decision.
