@@ -1,5 +1,29 @@
 # TREC UserSim research notes
 
+## October 9: recover an explicitly unavailable organizer agent
+
+v5 subsequently paused at request 650 on HTTP503 explicitly identifying an
+unavailable organizer agent. Fresh read-only session evidence confirmed the
+exact failed message was persisted unanswered. This differs from a generic503:
+the classifier requires the matching conversation ID and the nested structured
+`Agent '<name>' is currently unavailable.` message. All existing integrity,
+prefix, uncertain-request and outage guards still apply.
+
+Synthetic tests first reproduced the unsupported recovery, then verified one
+close, restart replay, delayed-reply proof and rejection of unrelated503/504.
+135 runtime tests / 86 subtests pass. Independent review cleared code and migration after
+adding explicit old/new classifier source pins. All 1,252 cached model requests
+and historical outcomes replayed exactly before mutation. Old source/policy,
+state and error are archived in private `migration-before-agent-unavailable/`;
+state/error stayed unchanged, with the new classification policy written last.
+
+One distinct close at 651 returned HTTP200/new scenario, advancing v5 to 652:
+92 normal endings, 26 administrative closures and $0.489702915 actual model cost.
+No original message was resent or model call used for the close. The same debug
+continues with $6 / 1,000 turns / 48 absolute closures; 25% and three-consecutive
+error circuits remain active. No new allowance or official start. Await HTTP428
+and the full completion audit. [Recovery plan](task2-recovery-plan.md).
+
 ## October 9: continue the same debug run past the absolute closure guard
 
 v5 reached a saved HTTP500 at request 635 with 90 normal conversation endings,

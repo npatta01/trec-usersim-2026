@@ -13,7 +13,8 @@ No new debug allowance is required to resume v5. No external message is sent.
 ## Design
 
 Recovery reads persisted failed request and current server session before writes.
-For 500/502, if the exact failed user message is persisted after the exact
+For 500/502 or an exactly classified conversation-bound503 agent-unavailable
+response, if the exact failed user message is persisted after the exact
 local prefix and no reply exists, send one distinct is_final operational close.
 Keep original failure and close receipts. A new empty scenario or explicit run
 completion confirms success; then advance request index past both messages and
@@ -57,7 +58,7 @@ Recovery verifies all available raw message fields, including stop flag and
 timestamp; UTC Z and +00:00 spellings are compared as the same instant. Both
 per-conversation and total frozen bounds apply to operational close messages.
 The standalone debug runner still halts on errors; the explicit recovery wrapper
-handles saved 500/502 and classified original ReadTimeouts. The official CLI requires
+handles saved 500/502, narrowly classified503 and original ReadTimeouts. The official CLI requires
 completed debug evidence, an explicit organizer completion receipt and a review
 artifact bound to the exact final state before credentials or API access.
 
@@ -113,6 +114,33 @@ remain; no new allowance, no official start. Inspect service and private state
 before treating this dated snapshot as current completion evidence.
 
 ## Latest live evidence
+
+### October 9 explicit agent-unavailable response
+
+At request 650 the organizer returned HTTP503 with a nested structured message that the
+configured agent was unavailable. Primary read-only evidence confirmed exact
+persistence without a reply. A shared classifier accepts this response only
+when the outer session ID matches the failed payload and the inner JSON detail
+full-matches `Agent '<nonempty single-line name>' is currently unavailable.`.
+Generic503/504, mismatched IDs, malformed details and quota errors remain blocked.
+Delayed HTTP503 reply events must revalidate that same original classified proof.
+The accepted backend subset is now explicit in the frozen recovery policy.
+
+135 runtime tests / 86 subtests pass; the five new tests and seven negative subcases also pass
+under optimized Python. Independent review identified missing classifier source
+pins in future cap/turn migration scripts; corrected before use. Code and all
+migration/audit sources were then cleared. No generator or stopping change.
+
+Dry-run and apply replayed 1,252 cached model requests, full organizer outcomes,
+current history and counters; fresh GET exactly matched the persisted unanswered
+turn. Both old and new recovery/reconciliation hashes are pinned. Original
+manifest, frozen source, policy, state and error are archived in private
+`migration-before-agent-unavailable/`. Configuration/state/error were retained;
+only the reviewed classification sources and policy changed, policy written last.
+Migration made no POST. Post-apply hashes passed. Same-run close at 651 returned HTTP200,
+advanced to 652 and used no model call or original replay. Snapshot: 92 normal
+endings, 26 administrative closures, $0.489702915 actual cost; no new allowance or
+official start. Continue with the existing 48/25%/3 limits until explicit HTTP428.
 
 ### October 9 absolute closure limit and same-run continuation
 

@@ -19,7 +19,7 @@ python -m venv .venv
 .venv/bin/python -m pytest simulator/tests
 ```
 
-Verification for this PR: all 130 included runtime tests and 79 subtests pass.
+Verification for this PR: all 135 included runtime tests and 86 subtests pass.
 The 39 focused budget/model/recovery tests and 19 subtests also pass under optimized Python.
 The selected-policy CLI and gate checks pass 9 tests / 15 subtests under optimized Python.
 The unchanged legacy simulator suite
@@ -50,7 +50,8 @@ HTTP200 consumes a verified incremental assistant reply, full history, or a
 strictly validated new empty scenario; HTTP201 starts a new empty scenario.
 HTTP428 is completion only with explicit completion text. HTTP500 and timeouts
 stop the default runner. The explicit recovery wrapper below can reconcile
-observed HTTP500/502 failures and durably classified original ReadTimeouts;
+observed HTTP500/502 failures, exactly classified conversation-bound503
+agent-unavailable responses and durably classified original ReadTimeouts;
 unknown outcomes and uncertain closing requests still halt.
 
 ## Authenticated execution
@@ -95,7 +96,7 @@ realism or official evaluation performance.
 ## Verified backend-error closure
 
 The opt-in `scripts/run_task2_recovery.py --run --mode debug --run-id ID
---output-dir DIR` reconciles saved 500/502 responses with GET session.
+--output-dir DIR` reconciles saved 500/502 or narrowly classified503 responses with GET session.
 A persisted unanswered turn may be followed by one operational final message,
 then advancement must be confirmed. This is counted as a skip, not researcher
 satisfaction. Delayed replies are reconciled without reposting. Unknown outcomes
@@ -152,3 +153,13 @@ flowchart TD
   E -->|Error or uncertain outcome| H
   K --> G
 ```
+
+### Explicit organizer-agent unavailability
+
+Only the observed503 structure is recoverable: the outer error names the failed
+payload conversation, and nested JSON states `Agent '<name>' is currently
+unavailable.`. Generic503,504, malformed details and quota errors halt. Fresh
+session verification and all recovery guards still apply. The classification is
+frozen in policy, and delayed-reply proofs revalidate it. Five new synthetic
+tests cover the full loop, restart replay, exact-prefix mismatch, delayed proof
+and seven rejected availability variants; all pass under optimized Python.

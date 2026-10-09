@@ -1,5 +1,22 @@
 # Experiment ledger for the Task 2 integration
 
+## October 9: classified agent availability recovery
+
+Engineering correction only. A new HTTP503 at650 identified an unavailable
+organizer agent; exact read-only persistence checks passed. Recovery previously
+rejected all503s. The new shared classifier permits only the structured,
+conversation-bound agent-unavailable response, preserving all outage and uncertain
+request guards. Generic503/504 still halt. A frozen policy key discloses the
+accepted subset; delayed-reply evidence must revalidate original classification.
+
+135 runtime tests / 86 subtests pass, including fail-first coverage and one-close/crash/delayed
+reply/negative controls. Independent review cleared corrected source pins and
+migration. All 1,252 cached generation requests replayed unchanged. A distinct
+close at 651 returned HTTP200/new scenario and advanced to 652: 92 normal endings,
+26 administrative closures, $0.489702915 actual cost. No original repost, model
+call for the close, new allowance or official start. Continue the same debug;
+this is no claim of simulator quality. [Recovery evidence](task2-recovery-plan.md).
+
 ## October 9: absolute recovery-limit continuation
 
 Engineering change only; no new simulator hypothesis or model experiment.

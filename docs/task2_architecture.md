@@ -24,7 +24,7 @@ flowchart TD
     F --> C
     E -->|Next scenario| B
     E -->|Run finished| G[Save completion]
-    E -->|Saved HTTP500 or HTTP502| R[Verify exact server session]
+    E -->|Saved classified backend error| R[Verify exact server session]
     E -->|Classified original ReadTimeout| W[Poll for delayed reply]
     W -->|Matching reply| F
     W -->|Exact unanswered turn for 30 minutes| R
@@ -190,7 +190,7 @@ repair a server-side partial turn.
 | 200 + valid assistant reply | Append the exchange and generate the next researcher turn |
 | 201 or strictly validated 200 + new empty scenario | Record the ending and reset persona, goal, and history |
 | 428 + explicit run-finished message | Mark the entire run complete |
-| Saved 500/502 with exact persisted unanswered turn | Recovery wrapper sends one distinct final message, verifies advancement, and records a skip |
+| Saved 500/502 or exactly classified conversation-bound503 with persisted unanswered turn | Recovery wrapper sends one distinct final message, verifies advancement, and records a skip |
 | Classified original ReadTimeout with exact persisted unanswered turn | Wait for a delayed reply; after 30 minutes and a fresh check, allow one distinct close within outage bounds |
 | Other errors, mismatched IDs, invalid history, uncertain transport | Halt for inspection |
 
@@ -221,6 +221,13 @@ bound. At v5's exact 24-closure pause, a reviewed migration selected 48 while
 preserving the 25% and three-consecutive-error circuits, generator and all other
 run limits. Old source/policy/state/error are archived; policy is written last.
 This permits further administrative recovery, not additional modeled patience.
+
+The backend classifier also recognizes the observed503 only when its structured
+agent-unavailable message names the same conversation as the failed request.
+Generic503/504 and other unclassified responses halt. The accepted subset is
+frozen in policy; GET-derived delayed replies revalidate the original proof.
+An audited source/policy migration at650 preserved all generation requests and
+limits. The one distinct close returned HTTP200; original request was not resent.
 
 A saved error receipt is replayed locally and fails again without resending. A
 pending marker blocks resume even if a receipt also exists: that crash boundary
