@@ -56,5 +56,9 @@ v5 reached 28 completed conversations and seven verified backend-error closures,
 then halted on a response timeout at request 0198. GET session confirms the
 request was persisted without its reply, but no final POST response is available.
 The pending marker is retained; no blind resend or timeout-driven close occurred.
-This timeout remains outside the automatic known-500/502 recovery policy.
+After repeated exact observations more than 45 minutes later, a reviewed one-off
+recovery archived the original pending request and sent one distinct final close.
+HTTP200 confirmed advancement; v5 resumed at 200 with 28 completed and 8 skips.
+The original message was not resent and no POST response fabricated. This manual
+exception remains outside the automatic known-500/502 recovery policy.
 Five debug and four official allowances remain. No official Task 2 start.

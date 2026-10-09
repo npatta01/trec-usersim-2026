@@ -4,18 +4,21 @@
 
 User authorizes continuing debug with explicit operational closes after verified
 backend failures, then one official Task 2 run if debug verifies the approach.
-[Recovery plan](task2-recovery-plan.md). Five Task2 debug allowances remain;
-Task2 official4. No official Task2 run yet. Generator and editor unchanged.
+[Recovery plan](task2-recovery-plan.md). Five Task 2 debug allowances remain;
+Task 2 official4. No official Task 2 run yet. Generator and editor unchanged.
 107 tests / 60 subtests pass; independent review cleared the recovery implementation.
 The original v5 manifest, source and checkpoint were archived before migration.
 Saved receipts were replayed and compared with a read-only server session.
 The recovery wrapper reached 28 completed conversations and seven operational
-closes before a response timeout at request 0198. Cost is $0.147200385 in 384
-model calls; 198 submitted turns have checkpointed outcomes. Read-only session
-reconciliation confirmed that the timed-out message is saved without a reply.
-Its in-flight marker is retained because the POST response was not received;
-the known-500/502 recovery policy does not automatically close uncertain calls.
-The run is halted, not complete. No official Task 2 run has started.
+closes before a response timeout at request 0198. Two read-only observations
+confirmed the exact saved message was still unanswered after 45 minutes.
+An independently reviewed one-off recovery archived the original pending request
+and sent a distinct final close at 0199. HTTP200 confirmed a new empty scenario.
+v5 has resumed at 200: 28 completed conversations and eight operational closes,
+with $0.147200385 in 384 model calls at restart. No original message was resent
+and no missing POST response was fabricated. The automatic policy remains limited
+to known HTTP500/502; this timeout recovery is recorded as a manual exception.
+No official Task 2 run has started.
 Operational closes send `is_final=true` as the researcher, but are not modeled
 researcher satisfaction or abandonment. Quota remains debug five / official four.
 
@@ -156,7 +159,7 @@ Third Task 2 debug attempt halted on HTTP500 generating the fourth agent reply.
 Three successful exchanges; GET debug/session confirms seven messages ending
 in the fourth saved researcher message. Zero completed conversations. Service
 failed and local state reconciled to halted; no repost or new run. GET budget
-confirms Task2 debug7, official4; Task1 debug8, official3. Organizer outage
+confirms Task 2 debug7, official4; Task1 debug8, official3. Organizer outage
 announcement did not establish resolution for this attempt. Private receipts
 include session_status_check.json and budget_status_check.json.
 
@@ -167,7 +170,7 @@ and 16 organizer calls. See [audit](task2-debug-third-attempt.md). No live retri
 ## Fourth Task 2 debug attempt
 
 User explicitly authorized another endpoint check. Run: `np-labs-luna-task2-debug-v4`.
-Same unchanged Task2 simulator (source c6525aa), sequential requests, $3 reservation
+Same unchanged Task 2 simulator (source c6525aa), sequential requests, $3 reservation
 ceiling, halt on server failure. No official submission and no retry of old turns.
 Persistent service: `trec-usersim-task2-debug-v4.service`.
 Private receipts: `/home/npatta01/data/trec-usersim-runs/task2-debug-luna-v4/`.

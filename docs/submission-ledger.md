@@ -39,7 +39,7 @@ Resuming the same run did not start another run or resend accepted predictions.
 
 | Oct 7 | Task 2 debug | `np-labs-luna-task2-debug-20261007-v3` | halted: 0 completed, 0 operational skips; 3 checkpointed turns | 0.002196115 |
 | Oct 8 | Task 2 debug | `np-labs-luna-task2-debug-v4` | halted: 3 completed, 0 operational skips; 17 checkpointed turns | 0.014966260 |
-| Oct 8–9 | Task 2 debug | `np-labs-luna-task2-debug-v5` | halted on response timeout: 28 completed, 7 operational skips; 198 checkpointed turns plus one unresolved POST | 0.147200385 |
+| Oct 8–9 | Task 2 debug | `np-labs-luna-task2-debug-v5` | resumed after verified timeout closure: 28 completed, 8 operational skips; 200 checkpointed turns at restart | 0.147200385 at restart |
 
 There is exactly **one official submission**, for Task 1. The two Task 1 debug runs each
 contain 64 predictions, but should not be added to the 62 official predictions as
@@ -98,9 +98,9 @@ historical runs use the current file layout.
 ## Decisions and next action
 
 Task 1 is submitted; do not restart its completed run or spend another allowance
-without a new decision. Task 2 v5 is halted on a response timeout. A read-only
-session check confirms the failed message is saved without its reply, but the
-POST outcome remains unconfirmed and the in-flight marker is preserved.
+without a new decision. Task 2 v5 resumed after a verified one-off timeout close.
+The original pending request, observations, intent, closing receipt and script
+are retained. The original message was not resent and no POST response invented.
 A completed, reviewed debug run gates one authorized
 official Task 2 run. Never blindly resend a persisted failed message.
 See the [recovery plan](research/task2-recovery-plan.md).
@@ -114,11 +114,11 @@ out of this public-shareable summary.
 
 Run `np-labs-luna-task2-debug-20261007-v3` started after organizer outage-resolution
 notice and explicit user authorization. Start and first continue returned HTTP200;
-one exchange confirmed, run still active. Before-start budget: Task2 debug8.
+one exchange confirmed, run still active. Before-start budget: Task 2 debug8.
 Expected remaining7 after this start; post-start quota not independently checked yet.
-This section supersedes the older Task2 debug count while this run is active.
+This section supersedes the older Task 2 debug count while this run is active.
 Receipts: `/home/npatta01/data/trec-usersim-runs/task2-debug-luna-20261007-v3/`.
-See [handoff](research/task2-debug-third-attempt.md). No official Task2 run.
+See [handoff](research/task2-debug-third-attempt.md). No official Task 2 run.
 
 ### October 7 status reconciliation
 
@@ -126,14 +126,14 @@ Third Task 2 debug attempt halted on HTTP500 generating the fourth agent reply.
 Three successful exchanges; GET debug/session confirms seven messages ending
 in the fourth saved researcher message. Zero completed conversations. Service
 failed and local state reconciled to halted; no repost or new run. GET budget
-confirms Task2 debug7, official4; Task1 debug8, official3. Organizer outage
+confirms Task 2 debug7, official4; Task1 debug8, official3. Organizer outage
 announcement did not establish resolution for this attempt. Private receipts
 include session_status_check.json and budget_status_check.json.
 
 ## Fourth Task 2 debug attempt
 
 User explicitly authorized another endpoint check. Run: `np-labs-luna-task2-debug-v4`.
-Same unchanged Task2 simulator (source c6525aa), sequential requests, $3 reservation
+Same unchanged Task 2 simulator (source c6525aa), sequential requests, $3 reservation
 ceiling, halt on server failure. No official submission and no retry of old turns.
 Persistent service: `trec-usersim-task2-debug-v4.service`.
 Private receipts: `/home/npatta01/data/trec-usersim-runs/task2-debug-luna-v4/`.
@@ -203,6 +203,21 @@ matching conversation and the exact persisted user turn, but no assistant reply.
 This differs from a received HTTP500/502: the client has no final POST response.
 No request was resent and no closing message was sent for this timeout.
 Private `recovery/0198-timeout-session.json` and `0198-timeout-budget.json` preserve
-the observation. Budget check still shows Task2 debug5/official4 and Task1
-debug8/official3. Model cost is $0.147200385 in 384 calls. Official Task2 remains
+the observation. Budget check still shows Task 2 debug5/official4 and Task1
+debug8/official3. Model cost is $0.147200385 in 384 calls. Official Task 2 remains
 gated on completed debug evidence and conversation review.
+
+## v5 manual timeout closure and resume
+
+Fresh GET session, following two earlier observations, confirmed the exact
+unanswered request 0198 after more than 45 minutes. A reviewed one-off recovery
+archived the original in-flight marker and state, verified all raw message fields
+and the unchanged source, then sent one distinct final message at 0199. HTTP200
+confirmed a new empty scenario. State advanced to 200 with 28 completed and 8 skips;
+no new debug run or model call was needed for closure. Same recovery service was
+restarted. The automatic 500/502 policy is unchanged; this is a manual timeout
+exception, not evidence that arbitrary uncertain requests can be retried.
+Private `recovery/0198-timeout-*` artifacts retain observations, original pending
+request, intent, exact closing payload/receipt linkage, result, reviewed script
+and review hash. No response receipt was fabricated for the original timed-out
+POST. Official Task 2 remains unstarted.
