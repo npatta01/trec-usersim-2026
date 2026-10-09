@@ -19,8 +19,8 @@ python -m venv .venv
 .venv/bin/python -m pytest simulator/tests
 ```
 
-Verification for this PR: all 60 included runtime tests pass; the 35 protocol
-tests also pass under optimized Python. The unchanged legacy simulator suite
+Verification for this PR: all 107 included runtime tests and 60 subtests pass.
+The unchanged legacy simulator suite
 cannot collect two modules because they import the removed `PersonaDefinition`;
 the same error reproduces on the remote base (`45de4e1`).
 
@@ -41,10 +41,12 @@ invocation below. See [code layout](../experiments/README.md) for provenance.
   injected transports, and recovery guards.
 - `scripts/run_task2_debug.py`: thin CLI wrapper; `tests/` contains offline tests.
 
-The only organizer write routes allowed are `/task2/debug/start` and
-`/task2/debug/continue`. HTTP200 consumes a verified incremental assistant reply
-or full history; HTTP201 starts a new empty scenario. HTTP428 is completion only
-with explicit completion text. HTTP500 and timeouts stop the runner.
+The default runner permits only `/task2/debug/start` and `/task2/debug/continue`.
+HTTP200 consumes a verified incremental assistant reply, full history, or a
+strictly validated new empty scenario; HTTP201 starts a new empty scenario.
+HTTP428 is completion only with explicit completion text. HTTP500 and timeouts
+stop the default runner. The explicit recovery wrapper below can reconcile
+observed HTTP500/502 failures; uncertain outcomes still halt.
 
 ## Authenticated execution
 
@@ -84,3 +86,30 @@ The PR contains source, synthetic tests, and aggregate findings only. Official
 training transcripts, model outputs, credentials, and private API receipts are
 not included. Completing a debug conversation will still not establish human
 realism or official evaluation performance.
+
+## Verified backend-error closure
+
+The opt-in `scripts/run_task2_recovery.py --run --mode debug --run-id ID
+--output-dir DIR` reconciles saved 500/502 responses with GET session.
+A persisted unanswered turn may be followed by one operational final message,
+then advancement must be confirmed. This is counted as a skip, not researcher
+satisfaction. Delayed replies are reconciled without reposting. Unknown outcomes
+and failed closing requests halt. The recovery policy is frozen separately.
+`--mode official` selects strictly official routes and requires an authorized
+official run plus `--debug-evidence-dir` and `--debug-review-file` verifying
+completed, reviewed debug evidence; it never adopts a debug run or directory.
+
+```mermaid
+flowchart TD
+  R[Submit researcher turn] --> A{Response}
+  A -->|Reply| N[Next researcher turn]
+  A -->|New scenario| G[Reset conversation]
+  A -->|Explicit completion| C[Run complete]
+  A -->|Recorded backend error| S[Read server session]
+  S -->|Delayed reply matches history| N
+  S -->|Exact unanswered saved turn| E[One operational close]
+  S -->|Mismatch or unknown| H[Halt for reconciliation]
+  E -->|New scenario confirmed| K[Record skip separately]
+  E -->|Error or uncertain outcome| H
+  K --> G
+```

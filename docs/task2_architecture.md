@@ -24,12 +24,24 @@ flowchart TD
     F --> C
     E -->|Next scenario| B
     E -->|Run finished| G[Save completion]
-    E -->|Error or uncertain outcome| H[Halt and preserve evidence]
+    E -->|Saved HTTP500 or HTTP502| R[Verify exact server session]
+    R -->|Delayed matching reply| F
+    R -->|Persisted turn without reply| K[Send one operational final message]
+    K -->|New scenario confirmed| J[Record error-driven closure separately]
+    J --> B
+    R -->|Mismatch or uncertainty| H[Halt and preserve evidence]
+    K -->|Closing request fails| H
+    E -->|Other error or uncertain outcome| H
 ```
 
 Each new scenario supplies a new persona and goal. The history resets completely.
 Within a conversation we retain all available messages. We do not compact or
 summarize them in the current baseline.
+
+An operational close sends `is_final=true` from the researcher to end a
+conversation blocked by an observed backend error. It does not erase that
+conversation or represent a natural researcher decision. We count these as
+skips separately from completed conversations and model-generated stops.
 
 ## What happens inside one researcher turn?
 
@@ -69,6 +81,7 @@ conversation-memory API or automatic compaction behind this diagram.
 ```text
 scripts/                 Thin command-line entry points
   run_task2_debug.py
+  run_task2_recovery.py   Explicit debug/official mode and recovery policy
 usersim/                 Reusable code; no experiment imports
   prompts.py             Persona/history and style-editor prompts
   requests.py            Model payload and response validation
@@ -79,6 +92,7 @@ usersim/                 Reusable code; no experiment imports
     protocol.py          Organizer response and transition validation
     model.py             Model receipts and spending safeguards
     debug.py             Run lifecycle and injected transports
+    recovery.py          Exact-session reconciliation and operational closure
 experiments/             Historical replays and unselected variants
 tests/                   Offline tests and synthetic parity fixtures
 simulator/               Original organizer implementation
@@ -86,7 +100,8 @@ simulator/               Original organizer implementation
 
 ```mermaid
 flowchart TD
-    CLI[scripts/run_task2_debug.py] --> R[task2.debug: run lifecycle]
+    CLI[scripts/run_task2_recovery.py] --> W[task2.recovery: verified recovery]
+    W --> R[task2.debug: run lifecycle]
     R --> V[task2.protocol: validate organizer transitions]
     R --> C[task2.core: conversations and turns]
     R --> G[task2.generator: draft then style edit]
@@ -96,7 +111,7 @@ flowchart TD
     K --> MC[Private model receipts]
     K --> O[OpenRouter: OpenAI-only Luna]
     R --> T[Injected organizer transport]
-    T --> A[Organizer debug API]
+    T --> A[Explicit debug or official organizer routes]
     R --> S[Private organizer receipts and state]
 ```
 
@@ -107,6 +122,7 @@ flowchart TD
 | Save/reuse model results and reserve spend | `usersim/task2/model.py` | Researcher personality or when to stop |
 | Validate incoming history and transitions | `usersim/task2/protocol.py` | Network calls or persistence |
 | Advance the run and coordinate transports | `usersim/task2/debug.py` | Whether a recommendation is good |
+| Reconcile saved backend failures and close blocked conversations | `usersim/task2/recovery.py` | Whether the researcher naturally wants to stop |
 
 The runner owns the checkpointed model and injects its call function into the
 generator. Prompt construction is pure: it no longer imports experiment runners,
@@ -148,15 +164,17 @@ repair a server-side partial turn.
 | Response | Action |
 |---|---|
 | 200 + valid assistant reply | Append the exchange and generate the next researcher turn |
-| 201 + new empty scenario | Record the ending and reset persona, goal, and history |
-| 428 + explicit run-finished message | Mark the entire debug run complete |
+| 201 or strictly validated 200 + new empty scenario | Record the ending and reset persona, goal, and history |
+| 428 + explicit run-finished message | Mark the entire run complete |
+| Saved 500/502 with exact persisted unanswered turn | Recovery wrapper sends one distinct final message, verifies advancement, and records a skip |
 | Other errors, mismatched IDs, invalid history, uncertain transport | Halt for inspection |
 
 The limits ($3 reservation, 500 total researcher turns, 30 per conversation) are
 operational safeguards. Hitting one persists `status="halted"` and stops the
 whole run without sending an artificial user-stop message. Protocol or transport
-errors instead exit the process, preserving the last validated state and private
-error evidence; that state can still say `running`.
+errors preserve the last validated progress and private evidence with
+`status="halted"`. The recovery wrapper reconciles only the narrow observed
+backend-error case described above.
 
 A saved error receipt is replayed locally and fails again without resending. A
 pending marker blocks resume even if a receipt also exists: that crash boundary
@@ -167,13 +185,14 @@ remain intact until recovery is explicitly resolved.
 
 ## What is demonstrated, and what is still open?
 
-Synthetic tests cover the lifecycle (including 201/428 transitions not yet
-observed in our live run), resets, stop propagation, budget guards and
-safe receipt replay. The first live attempt reached three complete exchanges,
-then the organizer saved our fourth message and failed to generate its reply.
-We have **not completed a live Task 2 conversation**, and no official submission
-has been made. Persona realism, natural voice, and semantic editor fidelity still
-need behavioral evaluation; passing software tests does not establish them.
+Synthetic tests cover the lifecycle, resets, stop propagation, budget guards,
+safe receipt replay, metadata mismatches and official-route isolation. On October 9,
+v5 had completed ten live conversations and confirmed three operational closes;
+the resumed debug run was still running. No official Task 2 submission had started.
+Official launch requires completed debug evidence and a conversation review bound
+to the final state, completion receipt, frozen code and recovery policy.
+Persona realism, natural voice, and semantic editor fidelity still need behavioral
+evaluation; passing software tests does not establish them.
 
 See the [runner guide](task2_debug_runner.md) for commands and the
 [recovery handoff](research/task2-debug-handoff.md) for the actual run status.

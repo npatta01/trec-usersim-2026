@@ -119,6 +119,8 @@ def default_source_files() -> list[Path]:
             "usersim/task2/core.py",
             "usersim/task2/generator.py",
             "usersim/task2/model.py",
+            "usersim/task2/recovery.py",
+            "scripts/run_task2_recovery.py",
             "simulator/src/scenario.py",
         )
     ]
@@ -132,6 +134,10 @@ class Task2DebugRunner:
     request and returns the same pair.  This injection boundary keeps the
     protocol and resume tests entirely offline.
     """
+
+    start_path = "/task2/debug/start"
+    continue_path = "/task2/debug/continue"
+    allowed_routes = DEBUG_ROUTES
 
     def __init__(
         self,
@@ -208,7 +214,7 @@ class Task2DebugRunner:
         _write_json(self.state_path, state)
 
     def _organizer_call(self, name: str, path: str, payload: dict) -> tuple[int, Any]:
-        if path not in DEBUG_ROUTES:
+        if path not in self.allowed_routes:
             raise ValueError("Task 2 runner permits debug routes only")
         if not name or "/" in name:
             raise ValueError("Invalid organizer checkpoint name")
@@ -283,6 +289,17 @@ class Task2DebugRunner:
     def _store_model_totals(self, state: dict) -> None:
         state.update(self.model.totals())
 
+    def record_failure(self) -> None:
+        """Refresh local status without changing accepted progress or retry guards."""
+        if not self.state_path.exists():
+            return
+        state = self._load_state()
+        if state["status"] != "complete":
+            state["status"] = "halted"
+            state["halt_reason"] = "runner_error_requires_reconciliation"
+        self._store_model_totals(state)
+        self._save_state(state)
+
     def _config(self) -> dict:
         return {
             "run_id": self.run_id,
@@ -294,7 +311,7 @@ class Task2DebugRunner:
             "max_total_turns": self.max_total_turns,
             "max_conversation_turns": self.max_conversation_turns,
             "style_postedit": self.style_postedit,
-            "routes": sorted(DEBUG_ROUTES),
+            "routes": sorted(self.allowed_routes),
         }
 
     def freeze(self) -> dict:
@@ -325,7 +342,7 @@ class Task2DebugRunner:
                 "team_id": self.team_id,
             }
             status, body = self._organizer_call(
-                "start", "/task2/debug/start", start_payload
+                "start", self.start_path, start_payload
             )
             item = validate_start_response(status, body)
             state["current"] = {"item": item, "turns": 0}
@@ -363,7 +380,7 @@ class Task2DebugRunner:
                 timestamp=utc_timestamp(),
             )
             name = f"continue-{state['total_user_turns']:04d}"
-            status, body = self._organizer_call(name, "/task2/debug/continue", payload)
+            status, body = self._organizer_call(name, self.continue_path, payload)
             result = validate_continue_response(status, body, current, payload)
             state["total_user_turns"] += 1
             if result["kind"] == "complete":
@@ -457,7 +474,9 @@ class _RunLock:
             self.handle = None
 
 
-def _preflight(session, *, require_available=True):
+def _preflight(session, *, require_available=True, mode="debug"):
+    if mode not in {"debug", "run"}:
+        raise ValueError("Invalid organizer mode")
     def get(path):
         response = session.get(BASE + path, timeout=60, allow_redirects=False)
         if response.status_code != 200:
@@ -474,7 +493,7 @@ def _preflight(session, *, require_available=True):
         raise RuntimeError("Organizer credential is not for the NP Labs team")
     budget = get("/budget/check")
     document = budget.get("response", budget) if isinstance(budget, dict) else {}
-    remaining = document.get("debug", {}).get(TASK_NAME, {}).get("remaining")
+    remaining = document.get(mode, {}).get(TASK_NAME, {}).get("remaining")
     if not isinstance(remaining, int) or (require_available and remaining <= 0):
         raise RuntimeError("No Task 2 debug runs remain according to organizer budget")
     return budget
@@ -549,6 +568,12 @@ def main(argv=None):
                 flush=True,
             )
         except Exception as exc:
+            # Reporting must never replace the original exception or clear an
+            # uncertain request marker. Receipts remain the recovery authority.
+            try:
+                runner.record_failure()
+            except Exception:
+                pass
             _write_json(
                 out / "error.json",
                 {

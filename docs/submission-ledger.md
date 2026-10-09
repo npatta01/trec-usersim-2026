@@ -1,6 +1,6 @@
 # Submission ledger
 
-Last reconciled: October 6, 2026. This is the canonical inventory of organizer
+Last reconciled: October 9, 2026. This is the canonical inventory of organizer
 runs. It is separate from the [experiment ledger](research/experiment-ledger.md),
 which also records model-only comparisons that consume no organizer allowance.
 
@@ -20,10 +20,10 @@ usage, separate from the organizer's run quota.
 | Task 1 official | 4 | 1 | **3** |
 | Task 1 debug | 10 | 2 | **8** |
 | Task 2 official | 4 | 0 | **4** |
-| Task 2 debug | 10 | 2 | **8** |
+| Task 2 debug | 10 | 5 | **5** |
 
 Initial counts were verified before the first debug run. Latest saved HTTP200
-`/budget/check` agrees with this table (`task2-debug-luna-20261006-v2/budget_after_500.json`). Debug and official allowances are separate,
+`/budget/check` agrees with this table (`task2-debug-luna-v5/recovery-launch-budget.json`). Debug and official allowances are separate,
 and each task has its own allowance. A halted run still uses an allowance.
 Resuming the same run did not start another run or resend accepted predictions.
 
@@ -36,6 +36,10 @@ Resuming the same run did not start another run or resend accepted predictions.
 | Oct 6 | Task 1 official | `np-labs-luna-fidelity-task1-official-20261006-v1` | **Complete: 62 predictions across 10 goals**; Luna plus narrow fidelity editor | 0.029373225 |
 | Oct 6 | Task 2 debug | `np-labs-luna-task2-debug-20261006-v1` | **Halted:** 4 researcher messages saved, 3 assistant replies, 0 complete conversations; organizer HTTP500 | 0.004248240 |
 | Oct 6 | Task 2 debug | `np-labs-luna-task2-debug-20261006-v2` | **Halted:** 5 researcher messages saved, 4 assistant replies, 0 complete conversations; organizer HTTP500 | 0.005123280 |
+
+| Oct 7 | Task 2 debug | `np-labs-luna-task2-debug-20261007-v3` | halted: 0 completed, 0 operational skips; 3 checkpointed turns | 0.002196115 |
+| Oct 8 | Task 2 debug | `np-labs-luna-task2-debug-v4` | halted: 3 completed, 0 operational skips; 17 checkpointed turns | 0.014966260 |
+| Oct 8–9 | Task 2 debug | `np-labs-luna-task2-debug-v5` | resumed: 10 completed, 3 operational skips; 82 checkpointed turns at recovery launch | 0.061133500 at recovery launch |
 
 There is exactly **one official submission**, for Task 1. The two Task 1 debug runs each
 contain 64 predictions, but should not be added to the 62 official predictions as
@@ -94,11 +98,95 @@ historical runs use the current file layout.
 ## Decisions and next action
 
 Task 1 is submitted; do not restart its completed run or spend another allowance
-without a new decision. Task 2 remains halted; do not blindly resend its persisted
-fourth or fifth message. See [Task 1 completion/recovery](research/task1-live-validation.md)
-and [Task 2 second-attempt evidence](research/task2-debug-second-attempt.md).
+without a new decision. Task 2 v5 is resuming under the user-authorized verified
+backend-error closure policy. A completed, reviewed debug run gates one authorized
+official Task 2 run. Never blindly resend a persisted failed message.
+See the [recovery plan](research/task2-recovery-plan.md).
 
 Update this ledger whenever an organizer run starts, halts, resumes or completes.
 Record a new quota snapshot after the transition; distinguish predictions, model
 calls, whole conversations and run allowances. Keep private transcripts and keys
 out of this public-shareable summary.
+
+## October 7 active Task 2 debug attempt
+
+Run `np-labs-luna-task2-debug-20261007-v3` started after organizer outage-resolution
+notice and explicit user authorization. Start and first continue returned HTTP200;
+one exchange confirmed, run still active. Before-start budget: Task2 debug8.
+Expected remaining7 after this start; post-start quota not independently checked yet.
+This section supersedes the older Task2 debug count while this run is active.
+Receipts: `/home/npatta01/data/trec-usersim-runs/task2-debug-luna-20261007-v3/`.
+See [handoff](research/task2-debug-third-attempt.md). No official Task2 run.
+
+### October 7 status reconciliation
+
+Third Task 2 debug attempt halted on HTTP500 generating the fourth agent reply.
+Three successful exchanges; GET debug/session confirms seven messages ending
+in the fourth saved researcher message. Zero completed conversations. Service
+failed and local state reconciled to halted; no repost or new run. GET budget
+confirms Task2 debug7, official4; Task1 debug8, official3. Organizer outage
+announcement did not establish resolution for this attempt. Private receipts
+include session_status_check.json and budget_status_check.json.
+
+## Fourth Task 2 debug attempt
+
+User explicitly authorized another endpoint check. Run: `np-labs-luna-task2-debug-v4`.
+Same unchanged Task2 simulator (source c6525aa), sequential requests, $3 reservation
+ceiling, halt on server failure. No official submission and no retry of old turns.
+Persistent service: `trec-usersim-task2-debug-v4.service`.
+Private receipts: `/home/npatta01/data/trec-usersim-runs/task2-debug-luna-v4/`.
+Status: launched; check receipts and service before claiming completion or quota.
+Latest mailbox search found no newer general repair instructions beyond the
+previous outage notice; a newer reply grants a different team replacement access,
+which does not authorize use of that team's credentials.
+
+## v4 checkpoint migration and same-run resume
+
+91 tests / 50 subtests pass after the transition and failure-status fixes.
+Archived original manifest, frozen source, state and error in private
+`migration-before-transition-fix/`. Replayed all five receipts; live GET matches
+the new empty scenario exactly. State: one completed conversation, five user
+turns, ten model calls, $0.004555995. Read-only budget confirms six debug
+allowances remain. Same v4 service restarted; no new run or closing-message
+resend. Generator/editor/model configuration unchanged. On later failures the
+CLI now marks state halted and refreshes costs without clearing retry guards.
+Check private state/receipts for current progress.
+
+## Fifth Task 2 debug attempt — October 8
+
+User explicitly authorized another debug allowance after read-only recovery
+check found v4 still ending with the persisted unanswered user message.
+Started `np-labs-luna-task2-debug-v5` with the tested HTTP200 transition fix and
+failure-status accounting; generator/model/style policy unchanged. Sequential
+requests, $3 reservation ceiling, stop on errors. No official submission.
+Private artifacts: `/home/npatta01/data/trec-usersim-runs/task2-debug-luna-v5/`.
+Service: `trec-usersim-task2-debug-v5.service`. Inspect live state for progress.
+v4 remains halted with three completed conversations; no saved turn was resent.
+
+## v5 user-authorized skip and same-run resume
+
+Read-only reconciliation confirmed the fourth conversation ended with the
+already-persisted failed user turn. User explicitly authorized trying a skip.
+Sent one distinct operational closing message with is_final=true, checkpointed
+as continue-0021; no failed message resend. HTTP200 confirmed a new empty
+scenario. State preserves three completed conversations and separately records
+one skipped conversation, one accepted error turn and one operational close.
+The closing text is not counted as a natural researcher stop. Next request index
+is22 to avoid reusing failed-turn model receipts. Original state, intent, server
+response and before/after budget are saved privately. Five debug allowances
+remain: no new allowance consumed. Same v5 service resumed; no automatic skip
+policy enabled. If another failure occurs, halt and reconcile again.
+
+## v5 resume after HTTP502
+
+User requested resuming. Read-only session confirmed the failed turn saved with
+no agent reply. Applied the previously successful explicit closing procedure;
+continue-0065 returned HTTP200/new empty scenario. Nine completed conversations,
+two separately recorded operational skips. No failed message resent. Source and
+model policy unchanged; same service restarted at next index66. Five debug
+allowances remain, verified after close. Private skip-502-intent/result and
+pre/post-skip-502 checkpoints preserve this recovery. No automatic future skip.
+
+Existing v5 organizer description predates operational recovery; it cannot be
+retroactively changed. Skips are fully recorded in this ledger and private
+recovery-policy/receipts. Fresh recovery runs disclose skips at start.

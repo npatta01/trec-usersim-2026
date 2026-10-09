@@ -167,6 +167,19 @@ def validate_continue_response(
 
     if not isinstance(body, dict):
         raise ValueError("Organizer response must be a JSON object")
+    # Live service can return HTTP200 (not documented HTTP201) when it
+    # advances to a new empty scenario. Require positive transition evidence;
+    # a null reply on the same conversation is never permission to advance.
+    if (
+        status == 200
+        and body.get("conversation_id") != current["conversation_id"]
+        and "utterance" in body
+        and body["utterance"] is None
+    ):
+        item = normalize_item(body, allow_missing_history=True)
+        if item["chat_messages"]:
+            raise ValueError("New conversation unexpectedly contains history")
+        return {"kind": "new_conversation", "item": item}
     has_history = "chat_messages" in body
     has_utterance = "utterance" in body
     utterance = None

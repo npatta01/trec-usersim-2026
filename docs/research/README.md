@@ -1,5 +1,20 @@
 # TREC UserSim research notes
 
+## October 9: verified backend-error recovery
+
+User authorizes continuing debug with explicit operational closes after verified
+backend failures, then one official Task 2 run if debug verifies the approach.
+[Recovery plan](task2-recovery-plan.md). Five Task2 debug allowances remain;
+Task2 official4. No official Task2 run yet. Generator and editor unchanged.
+107 tests / 60 subtests pass; independent review cleared the recovery implementation.
+The original v5 manifest, source and checkpoint were archived before migration.
+Saved receipts were replayed and compared with a read-only server session.
+The recovery wrapper resumed v5 and confirmed a third operational close with
+HTTP200/new empty scenario. It is running; ten conversations completed naturally
+and three were closed for backend failures. These closes send `is_final=true`
+as the researcher, but are not modeled researcher satisfaction or abandonment.
+
+
 [Submission ledger](../submission-ledger.md): every organizer run, quota used,
 status, model cost and private input/output artifact locations.
 
@@ -123,3 +138,88 @@ For persona tests, change one attribute while keeping the goal and history fixed
 ## Verification of this documentation change
 
 Primary sources were rechecked on October 3; the scope and reading depth are recorded in the refresh. Local Markdown links, whitespace, documentation-only scope, and accidental credential/host-path inclusion were checked before the research commit. No simulator tests or experiments were run for this documentation change.
+
+## October 7 post-outage debug check
+
+A newly authorized Task 2 debug attempt is running after the organizer reported
+the internal outage resolved. See [live handoff](task2-debug-third-attempt.md).
+Older halted runs remain preserved; no official Task 2 submission.
+
+### October 7 status reconciliation
+
+Third Task 2 debug attempt halted on HTTP500 generating the fourth agent reply.
+Three successful exchanges; GET debug/session confirms seven messages ending
+in the fourth saved researcher message. Zero completed conversations. Service
+failed and local state reconciled to halted; no repost or new run. GET budget
+confirms Task2 debug7, official4; Task1 debug8, official3. Organizer outage
+announcement did not establish resolution for this attempt. Private receipts
+include session_status_check.json and budget_status_check.json.
+
+Offline client audit: all 13 Task 2 continue payloads matched the organizer
+serializer and passed schema validation; full three-run replay matched 26 model
+and 16 organizer calls. See [audit](task2-debug-third-attempt.md). No live retries.
+
+## Fourth Task 2 debug attempt
+
+User explicitly authorized another endpoint check. Run: `np-labs-luna-task2-debug-v4`.
+Same unchanged Task2 simulator (source c6525aa), sequential requests, $3 reservation
+ceiling, halt on server failure. No official submission and no retry of old turns.
+Persistent service: `trec-usersim-task2-debug-v4.service`.
+Private receipts: `/home/npatta01/data/trec-usersim-runs/task2-debug-luna-v4/`.
+Status: launched; check receipts and service before claiming completion or quota.
+Latest mailbox search found no newer general repair instructions beyond the
+previous outage notice; a newer reply grants a different team replacement access,
+which does not authorize use of that team's credentials.
+
+## Integration audit before further API writes
+
+The observed HTTP200/new-scenario transition is fixed and replayed offline.
+See [coverage matrix and remaining gates](task2-integration-audit.md). No live
+run resumed; frozen-checkpoint migration and read-only reconciliation remain.
+
+## v4 checkpoint migration and same-run resume
+
+91 tests / 50 subtests pass after the transition and failure-status fixes.
+Archived original manifest, frozen source, state and error in private
+`migration-before-transition-fix/`. Replayed all five receipts; live GET matches
+the new empty scenario exactly. State: one completed conversation, five user
+turns, ten model calls, $0.004555995. Read-only budget confirms six debug
+allowances remain. Same v4 service restarted; no new run or closing-message
+resend. Generator/editor/model configuration unchanged. On later failures the
+CLI now marks state halted and refreshes costs without clearing retry guards.
+Check private state/receipts for current progress.
+
+## Fifth Task 2 debug attempt — October 8
+
+User explicitly authorized another debug allowance after read-only recovery
+check found v4 still ending with the persisted unanswered user message.
+Started `np-labs-luna-task2-debug-v5` with the tested HTTP200 transition fix and
+failure-status accounting; generator/model/style policy unchanged. Sequential
+requests, $3 reservation ceiling, stop on errors. No official submission.
+Private artifacts: `/home/npatta01/data/trec-usersim-runs/task2-debug-luna-v5/`.
+Service: `trec-usersim-task2-debug-v5.service`. Inspect live state for progress.
+v4 remains halted with three completed conversations; no saved turn was resent.
+
+## v5 user-authorized skip and same-run resume
+
+Read-only reconciliation confirmed the fourth conversation ended with the
+already-persisted failed user turn. User explicitly authorized trying a skip.
+Sent one distinct operational closing message with is_final=true, checkpointed
+as continue-0021; no failed message resend. HTTP200 confirmed a new empty
+scenario. State preserves three completed conversations and separately records
+one skipped conversation, one accepted error turn and one operational close.
+The closing text is not counted as a natural researcher stop. Next request index
+is22 to avoid reusing failed-turn model receipts. Original state, intent, server
+response and before/after budget are saved privately. Five debug allowances
+remain: no new allowance consumed. Same v5 service resumed; no automatic skip
+policy enabled. If another failure occurs, halt and reconcile again.
+
+## v5 resume after HTTP502
+
+User requested resuming. Read-only session confirmed the failed turn saved with
+no agent reply. Applied the previously successful explicit closing procedure;
+continue-0065 returned HTTP200/new empty scenario. Nine completed conversations,
+two separately recorded operational skips. No failed message resent. Source and
+model policy unchanged; same service restarted at next index66. Five debug
+allowances remain, verified after close. Private skip-502-intent/result and
+pre/post-skip-502 checkpoints preserve this recovery. No automatic future skip.

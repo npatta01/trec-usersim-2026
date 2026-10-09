@@ -473,6 +473,7 @@ class ReceiptTests(unittest.TestCase):
 
     def test_201_and_428_receipts_replay_once_after_state_write_crash(self):
         cases = (
+            (200, {"conversation_id": "c2", "scenario": scenario("other"), "utterance": None}, "halted"),
             (201, start_body("c2", "other"), "halted"),
             (428, {"detail": "Run completed"}, "complete"),
         )
