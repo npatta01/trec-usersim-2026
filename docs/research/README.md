@@ -1,5 +1,14 @@
 # TREC UserSim research notes
 
+## Coverage terminology
+
+The training export has 64 human conversation records. Official Task 1 has 62
+turn-prediction cases over 10 goals; official Task 2 has 57 end-to-end conversations
+over 11 goals, according to the [organizer guidelines](https://trec.usersim.ai/guidelines).
+Our running Task 2 debug uses development scenario-agent combinations; its
+observed larger conversation count is separate from those official test pools.
+See the [submission ledger](../submission-ledger.md) for exact count definitions.
+
 ## October 9: second budget continuation and delayed-reply audit
 
 v5 reached 799 submitted turns: 114 normal conversation endings, 35 administrative

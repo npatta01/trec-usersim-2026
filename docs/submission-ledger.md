@@ -13,6 +13,25 @@ Two model calls per prediction (draft and editor) produced 124 model calls; thos
 are not 124 organizer runs either. Dollar costs below are reported model API
 usage, separate from the organizer's run quota.
 
+## Training, debug and official coverage are different counts
+
+| Collection / run | Count | Meaning |
+|---|---:|---|
+| Supplied official training export | 64 | Human conversation records available for development |
+| Task 1 official test pool | 62 over 10 goals | Turn-prediction cases; our completed official run submitted 62 predictions |
+| Task 2 official test pool | 57 over 11 goals | Official end-to-end conversations, as defined by the organizers |
+| Current Task 2 debug pool | Still in progress | Development scenario-agent conversations; final coverage is confirmed by HTTP428 |
+
+The [organizer guidelines](https://trec.usersim.ai/guidelines) explicitly separate
+the two official test pools. The reported 57-conversation official Task 2 run
+is therefore compatible with our larger debug run. Read-only inspection of our
+debug prefix at 835 saved turns found 158 conversation IDs across 53 exact
+scenario records: 52 records appeared three times and one appeared twice.
+Those are scenario-agent conversations, not 158 original human training logs,
+158 participants or 158 organizer allowances. This snapshot is not the final
+debug pool size. Only one v5 debug run is being continued. No official Task 2
+run has started.
+
 ## Allowances
 
 | Task / mode | Initially available | Runs started | Remaining |
