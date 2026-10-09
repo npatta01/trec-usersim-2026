@@ -60,6 +60,12 @@ class BudgetCliTests(unittest.TestCase):
                 6.0,
             )
             self.assertEqual(
+                json.loads((out / "manifest.json").read_text())["config"][
+                    "max_total_turns"
+                ],
+                500,
+            )
+            self.assertEqual(
                 json.loads((out / "state.json").read_text())["status"], "complete"
             )
             self.assertEqual(posts, ["/task2/debug/start", "/task2/debug/continue"])

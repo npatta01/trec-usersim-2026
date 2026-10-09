@@ -19,7 +19,7 @@ python -m venv .venv
 .venv/bin/python -m pytest simulator/tests
 ```
 
-Verification for this PR: all 124 included runtime tests and 69 subtests pass.
+Verification for this PR: all 126 included runtime tests and 73 subtests pass.
 The 39 focused budget/model/recovery tests and 19 subtests also pass under optimized Python.
 The unchanged legacy simulator suite
 cannot collect two modules because they import the removed `PersonaDefinition`;
@@ -110,6 +110,13 @@ The recovery CLI accepts `--cap-usd AMOUNT` for an explicitly authorized total
 reservation ceiling; its default remains $3. Invalid amounts are rejected before
 credential access. Changing a frozen run still requires an audited checkpoint
 migration; passing a higher flag alone cannot bypass its manifest.
+The recovery CLI also accepts `--max-total-turns COUNT`, a positive integer
+validated before credentials. The default remains 500. A frozen run rejects a
+different count; changing it requires an explicitly audited migration while the
+service is stopped. Archive the old manifest, source and state, replay saved
+requests and outcomes, verify the current server history, and enable the
+checkpoint last. This changes an operational guard, not the researcher's stop
+decision. Per-conversation, spend and outage limits continue to apply.
 `--mode official` selects strictly official routes and requires an authorized
 official run plus `--debug-evidence-dir` and `--debug-review-file` verifying
 completed, reviewed debug evidence; it never adopts a debug run or directory.

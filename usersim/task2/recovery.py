@@ -14,6 +14,7 @@ from usersim.checkpoints import atomic, digest
 from .debug import (
     BASE,
     CAP_USD,
+    MAX_TOTAL_TURNS,
     TEAM_ID,
     Task2DebugRunner,
     _RunLock,
@@ -321,6 +322,12 @@ def main(argv=None):
         default=CAP_USD,
         help="Authorized total model-reservation ceiling (default: %(default)s)",
     )
+    parser.add_argument(
+        "--max-total-turns",
+        type=int,
+        default=MAX_TOTAL_TURNS,
+        help="Authorized total user-turn guard (default: %(default)s)",
+    )
     parser.add_argument("--debug-evidence-dir", type=Path)
     parser.add_argument("--debug-review-file", type=Path)
     args = parser.parse_args(argv)
@@ -328,6 +335,8 @@ def main(argv=None):
         parser.error("Explicit --run is required")
     if not math.isfinite(args.cap_usd) or args.cap_usd <= 0:
         parser.error("--cap-usd must be finite and positive")
+    if args.max_total_turns <= 0:
+        parser.error("--max-total-turns must be a positive integer")
     gate = None
     if args.mode == "official":
         gate = verify_official_gate(args.debug_evidence_dir, args.debug_review_file)
@@ -354,6 +363,7 @@ def main(argv=None):
             organizer_post=post,
             model_post=model_post,
             cap_usd=args.cap_usd,
+            max_total_turns=args.max_total_turns,
             **options,
         )
         policy = {**POLICY, "mode": mode}
