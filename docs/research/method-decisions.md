@@ -21,6 +21,9 @@ were unblinded. We report preferences and failure examples as limited evidence,
 not general realism rates. A correct speaker can still be too polished, forget
 an objection, invent knowledge or adopt a dubious assistant claim.
 
+<details>
+<summary>Open the controlled comparisons and decisions</summary>
+
 | Hypothesis / comparison | Observed result | Decision and limits |
 |---|---|---|
 | Role mapping and explicit researcher instruction resolve assistant-style continuation | Tiny and real-case checks exposed wrong-speaker generation; corrected roles/instruction enabled plausible researcher output, but errors remained | Keep researcher → model `assistant` and explicit role framing. Transport alone was not shown to be the cause; no claim that larger models cannot help. |
@@ -42,6 +45,8 @@ an objection, invent knowledge or adopt a dubious assistant claim.
 | Transfer TalkPlay/Spotify user-generation ideas | 32-call comparison on 4 early/late contexts with repeated draws: selective editing and same-call private progress assessment did not show recurring voice gains | Adaptations were tested, not reproductions of those pipelines. Do not import forced continuation, fixed session lengths or future planned human turns. |
 | Stronger hosted model fixes voice with unchanged history | Luna versus GPT-6 Sol: 8 raw drafts each on 4 contexts; mostly ties after context-aware review, all continued | Keep Luna. Raw drafts only; Sol + editor and full sessions were not tested. No claim Sol is generally inferior. |
 | Narrowly repair unsupported performed-action claims in Task 1 | V2 tested 64 development drafts + 8 synthetic probes, then repeats; local action repair worked on tested targets without broad goal hardening | Selected explicitly for official Task 1. Broad V1 was rejected; V2 does not repair every waiver or solve persona realism. See [full fidelity study](task1-fidelity-fix.md). |
+
+</details>
 
 The local full Qwen3-8B development generation covered all 266 next-message
 targets. Completion without empty outputs or stray thinking markers is an output
