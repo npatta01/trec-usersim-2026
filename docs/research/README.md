@@ -20,6 +20,14 @@ Monitor this same run through explicit HTTP428 and final audit. Keep v5 paused. 
 [submission ledger](../submission-ledger.md). This supersedes the older next
 actions below to continue debug until HTTP428.
 
+Latest monitored checkpoint: **43 of 57 processed**, comprising 38 normal endings
+and five administrative closures; 208 checkpointed turns and 408 saved model
+calls costing $0.137539640. A timeout at 188 exhausted the unchanged grace;
+one distinct close at 189 returned HTTP200/new conversation. A bounded read-only
+check rebuilt its two cached requests and verified the closure evidence, without
+claiming a full-prefix audit. A later timeout at 208 is now awaiting a delayed
+reply. No original message was reposted and no additional official run was started.
+
 A separate, independently reviewed background watcher waits for successful
 official service exit, then runs the pinned read-only completion audit. Seventy-four
 audit controls and four watcher controls pass. It replays all cached requests and
@@ -46,7 +54,7 @@ review caught a missing original-error receipt digest in the final report;
 the replacement audit now binds that receipt too, with status/body mutation
 controls. The reviewed v5 watcher replaces earlier watchers; it cannot restart or modify the run.
 
-An original ReadTimeout is currently in the unchanged 30-minute grace. The final
+The current original ReadTimeout is in the unchanged 30-minute grace. The final
 checker now also supports a proven grace-period closure if one is necessary:
 ordered transport/observation/closing timestamps, exact unanswered history,
 archived original, intent, separate closing receipt and reconstructed state.

@@ -46,6 +46,16 @@ Task 2 official 3, debug 5 remain. No official completion claim yet: require exp
 HTTP428 plus a separate final integrity audit. Keep v5 paused. This decision
 supersedes the older instructions below to continue debug until completion.
 
+Latest monitored checkpoint: **43 of 57 processed**, with 38 normal endings and
+five administrative closures. There are 208 checkpointed turns and 408 saved
+model calls costing $0.137539640. Three earlier original timeouts received delayed
+replies without reposting. Original timeout 188 exhausted the full grace; its
+distinct close at 189 returned HTTP200/new conversation. A bounded real-event
+check rebuilt its two cached model requests and verified the timeout closure
+with the cleared auditor; it is not independent full-prefix replay or completion.
+Timeout 208 is now in the same grace policy. The runtime, generator, editor,
+configuration and official allowance count are unchanged.
+
 The official service and a separate completion-audit watcher now run durably in
 the background with `Restart=no`. The watcher requires a successful official
 service exit and complete state before invoking the exact reviewed GET-only

@@ -1,5 +1,34 @@
 # Experiment ledger for the Task 2 integration
 
+## October 9: official monitoring and recovery verification
+
+Operator verification only; the selected generator, editor, model and runtime
+remain frozen. One official Task 2 run is in progress. Its latest verified
+checkpoint has 38 normal endings and five administrative closures:
+43 of 57 conversations processed, 208 checkpointed turns, 408 model calls and
+$0.137539640 actual model cost. The current unanswered request is in the existing
+30-minute grace period; no completion claim or additional official start.
+
+Timeout 188 exhausted that full grace; one distinct close at 189 returned
+HTTP200/new conversation. A bounded real-event check reproduced its two cached
+generation requests and verified its retained closure evidence, with no new
+model or organizer request. It is not an independent full-prefix replay.
+The later timeout at 208 is now awaiting a delayed reply under the same policy.
+
+Three earlier delayed replies were reconciled without resubmitting their original
+requests. The completion checker now verifies normal receipts, continuing delayed
+replies, backend-error closures and strictly proven timeout closures after the
+grace period. All 74 synthetic audit checks and four watcher controls passed;
+independent review cleared the exact checker and watcher before installation.
+The checker distinguishes normal endings from administrative closures and will
+replay cached requests, then obtain fresh read-only server confirmation only
+after the run finishes. Local timestamps and retained evidence are not independent
+network attestation. Unbound or uncertain recovery evidence fails closed.
+
+These checks establish integration integrity, not realism or an official score.
+[Current recovery evidence](task2-recovery-plan.md) and
+[submission ledger](../submission-ledger.md) remain canonical for run accounting.
+
 ## October 9: intentional debug pause and baseline-readiness review
 
 Operator decision, no new generator experiment. User chose to stop debug and

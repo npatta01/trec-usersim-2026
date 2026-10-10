@@ -58,7 +58,7 @@ Resuming the same run did not start another run or resend accepted predictions.
 | Oct 7 | Task 2 debug | `np-labs-luna-task2-debug-20261007-v3` | halted: 0 completed, 0 operational skips; 3 checkpointed turns | 0.002196115 |
 | Oct 8 | Task 2 debug | `np-labs-luna-task2-debug-v4` | halted: 3 completed, 0 operational skips; 17 checkpointed turns | 0.014966260 |
 | Oct 8–9 | Task 2 debug | `np-labs-luna-task2-debug-v5` | **Intentionally paused:** 886 saved turns, 129 normal endings, 38 administrative closures, 1 unfinished conversation; audited prefix, no HTTP428 | 0.664036040 |
-| Oct 9 | Task 2 official | `np-labs-luna-style-task2-official-20261009-v1` | **In progress:** HTTP200 start, first exchange saved; Luna full history plus style edit, default 24/25%/3 outage policy | Pending final accounting |
+| Oct 9 | Task 2 official | `np-labs-luna-style-task2-official-20261009-v1` | **In progress:** 43/57 processed, 38 normal endings and 5 administrative closures; 208 checkpointed turns; later timeout awaiting delayed reply | Pending final accounting |
 
 There are exactly **two official runs started**: Task 1 is complete, Task 2 is
 still in progress. The two Task 1 debug runs each
@@ -83,6 +83,14 @@ The new checker retains a full 30-minute grace and validates ordered recorded
 timestamps; it does not change live recovery. Unbound archived diagnostics and unrecognized recovery
 variants require a separate review. No completion or
 whole-run quality claim is made while it runs.
+
+At the latest monitored checkpoint, all 408 saved model receipts sum to
+$0.137539640 actual cost; $1.510881600 is reservation accounting, not spending.
+Three delayed replies were recovered without reposting. Timeout 188 exhausted
+the full grace and its distinct close at 189 returned HTTP200/new conversation;
+a bounded cached-request and closure check passes. Timeout 208 is currently
+waiting under the same policy. These are observations from the same official run,
+not additional starts or allowances. Final totals require the completion audit.
 
 ## Exact inputs and outputs are retained privately
 
