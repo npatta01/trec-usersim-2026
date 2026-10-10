@@ -1,5 +1,32 @@
 # Experiment ledger for the Task 2 integration
 
+## October 9: reassess the timeout waiting limit
+
+The user questioned the 30-minute wait. Local transport timestamps and saved
+reply-file times show the three recovered replies were detected approximately
+31, 62 and 92 seconds after the 180-second POST timeout. The two subsequent
+unanswered requests produced no reply during the full 30-minute grace and were
+closed distinctly. This supports a short delayed-reply wait; it does not establish
+that 30 minutes is needed or that five minutes will always suffice.
+
+Proposed operator change: 300-second first-observation grace, retaining exact
+history checks, one distinct close, no original repost and existing outage limits.
+Independent recovery review assessed the source-bound amendment and audit
+requirements. The proposal is not applied; the current official run retains its
+frozen 1,800-second policy. No model or organizer calls were made for this timing
+inspection. Local file times are approximate observation evidence, not independent
+network attestation or a simulator-quality result.
+
+Reviewer recommendation: 300 seconds is reasonable for future timeout indices,
+but retain the currently pending timeout's frozen policy. A change requires a
+clean no-inflight boundary, explicit versioned selector, archived source/policy
+lineage, per-event policy bindings, a dual-policy completion audit and a reviewed
+replacement watcher. Three recovered replies do not establish the latency tail.
+A constant edit would erase which policy governed earlier observations, so the
+reviewed plan excludes it. Given ten remaining conversations, finishing under
+the current policy may be more proportionate than a migration; the shorter option
+remains a proposal.
+
 ## October 9: official monitoring and recovery verification
 
 Operator verification only; the selected generator, editor, model and runtime
