@@ -21,7 +21,7 @@ Monitor this same run through explicit HTTP428 and final audit. Keep v5 paused. 
 actions below to continue debug until HTTP428.
 
 A separate, independently reviewed background watcher waits for successful
-official service exit, then runs the pinned read-only completion audit. Fifty-four
+official service exit, then runs the pinned read-only completion audit. Seventy-four
 audit controls and four watcher controls pass. It replays all cached requests and
 submissions, requires 57 unique conversations and explicit final HTTP428, and
 checks fresh organizer status, team summary and quota. It sends no POST or model
@@ -44,7 +44,18 @@ researcher-stop counter. Mixed synthetic checks cover delayed replies before
 and after closures, consecutive closures and a closing HTTP428. Independent
 review caught a missing original-error receipt digest in the final report;
 the replacement audit now binds that receipt too, with status/body mutation
-controls. The reviewed v4 watcher replaces v3; it cannot restart or modify the run.
+controls. The reviewed v5 watcher replaces earlier watchers; it cannot restart or modify the run.
+
+An original ReadTimeout is currently in the unchanged 30-minute grace. The final
+checker now also supports a proven grace-period closure if one is necessary:
+ordered transport/observation/closing timestamps, exact unanswered history,
+archived original, intent, separate closing receipt and reconstructed state.
+Twenty synthetic controls include early-close rejection, fully rebound invalid
+timestamps and an interruption after a durable closing receipt with no repeated
+POST on resume. An optional confirmed closing-pending archive is verified and
+hashed. Unbound archived error diagnostics require separate review. This proves
+local evidence consistency against the frozen runtime, not independent network
+timing. The live generator, editor, runtime and waiting policy remain unchanged.
 
 ## Coverage terminology
 

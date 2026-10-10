@@ -53,7 +53,7 @@ auditor. The auditor acquires the official run lock, verifies frozen runtime and
 readiness evidence, reproduces every saved model request and submitted text/stop
 flag, and requires 57 unique conversations plus final HTTP428. Fresh run status,
 team summary and budget are saved privately and hash-bound to the report.
-Fifty-four audit controls and four watcher controls pass;
+Seventy-four audit controls and four watcher controls pass;
 independent source review cleared the exact latest audit and watcher. Monitoring
 observed consecutive original ReadTimeouts at indices 20 and 21. Both recovered
 delayed GET replies without a repost or close. The final checker binds transport
@@ -73,7 +73,18 @@ cases include delayed replies before/after closures and a terminal closing HTTP4
 Independent review caught an omitted original-error receipt digest; status/body
 mutation controls now prove that receipt is bound in the saved report.
 
-The replacement watcher is `trec-usersim-task2-official-completion-audit-v4`;
+An original timeout is now in the unchanged grace-period wait. The reviewed
+completion audit also prepares for a distinct timeout closure if necessary.
+It verifies aware `posted <= classified <= first_seen <= closed` timestamps and
+the full 1,800-second first-observation grace, plus exact unanswered raw history,
+original archive, transport classification, intent, closing receipt and state.
+Twenty additional synthetic controls cover mixed/terminal closes, fully rebound
+bad timestamps and an interruption after durable close receipt but before pending
+removal. A matching confirmed closing-pending archive is verified and hash-bound.
+Unbound archived error diagnostics remain a separate-review boundary. Timing
+uses retained local timestamps and frozen final-GET logic, not network attestation.
+
+The replacement watcher is `trec-usersim-task2-official-completion-audit-v5`;
 the older watcher services are stopped. The official runtime remains unchanged.
 Incomplete service, source drift or unrecognized recovery variants
 halt confirmation for a separate review. These checks measure submission integrity,

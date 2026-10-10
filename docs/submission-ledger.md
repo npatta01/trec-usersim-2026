@@ -76,8 +76,11 @@ from POST receipts. Monitoring observed consecutive delayed replies recovered
 without resends, and a separately verified HTTP502 administrative closure. The
 independently reviewed replacement audit verifies original/closing receipts,
 exact server history, intent, limits and counters; normal endings and error
-closures are reported separately. Fifty-four audit tests and four watcher
-controls pass, including mixed delayed/closure paths. Unrecognized recovery
+closures are reported separately. Seventy-four audit tests and four watcher
+controls pass, including mixed delayed/closure paths, grace-period closure
+proofs and confirmed receipt-before-pending-removal replay without another POST.
+The new checker retains a full 30-minute grace and validates ordered recorded
+timestamps; it does not change live recovery. Unbound archived diagnostics and unrecognized recovery
 variants require a separate review. No completion or
 whole-run quality claim is made while it runs.
 
