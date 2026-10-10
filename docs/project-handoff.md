@@ -4,6 +4,13 @@
 No further submission is needed for this baseline; this document does not
 authorize another run. Next: review organizer evaluation when available.
 
+Submission deadline check, October 10: the organizers extended the deadline to
+**October 9, 2026 (Anywhere on Earth)** in their
+[October 7 announcement](https://groups.google.com/d/msgid/trec-usersim/1b15da6d-1d40-4124-9698-a89a4ea9e746n%40googlegroups.com).
+That window ended October 10 at 12:00 UTC / 08:00 Eastern. The public track page
+still lists the superseded October 7 date. The separate notebook-paper deadline
+and format are not yet verified; see the [paper checklist](paper/README.md).
+
 The [thread-independent continuation guide](continuity.md) records the reading
 path, retained user requirements, private readers and credential locations.
 The project should be resumable from these files without the original chat.

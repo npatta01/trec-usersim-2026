@@ -50,6 +50,11 @@ Review organizer evaluation when available. No further run is needed to finish
 this baseline; keep debug v5 paused and preserve private inputs/outputs,
 receipts, frozen source and reconciliation evidence.
 
+The [organizer's deadline extension](https://groups.google.com/d/msgid/trec-usersim/1b15da6d-1d40-4124-9698-a89a4ea9e746n%40googlegroups.com)
+was verified October 10: runs were due October 9, 2026 (Anywhere on Earth),
+ending October 10 at 08:00 Eastern. The run deadline has passed; the separate
+notebook-paper date and requirements remain unverified.
+
 The [paper preparation map](../paper/README.md) records the writing plan and
 missing official scores/venue/author information. All available run and detailed
 development artifacts and rendered readers are preserved in a
