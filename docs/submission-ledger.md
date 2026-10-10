@@ -72,9 +72,13 @@ Official Task 2 continues in a background service. A separate reviewed watcher
 will confirm successful completion by replaying retained inputs/outputs and
 checking fresh organizer status after explicit final HTTP428. Its current audit
 also verifies proven delayed ReadTimeout replies, retaining GET evidence separately
-from POST receipts. Monitoring observed two consecutive delayed replies, both
-recovered without a resend or administrative closure. Operational closures and
-other recovery variants require a separate audit review. No completion or
+from POST receipts. Monitoring observed consecutive delayed replies recovered
+without resends, and a separately verified HTTP502 administrative closure. The
+independently reviewed replacement audit verifies original/closing receipts,
+exact server history, intent, limits and counters; normal endings and error
+closures are reported separately. Fifty-four audit tests and four watcher
+controls pass, including mixed delayed/closure paths. Unrecognized recovery
+variants require a separate review. No completion or
 whole-run quality claim is made while it runs.
 
 ## Exact inputs and outputs are retained privately

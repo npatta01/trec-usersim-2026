@@ -53,7 +53,7 @@ auditor. The auditor acquires the official run lock, verifies frozen runtime and
 readiness evidence, reproduces every saved model request and submitted text/stop
 flag, and requires 57 unique conversations plus final HTTP428. Fresh run status,
 team summary and budget are saved privately and hash-bound to the report.
-Twelve normal-run controls, ten delayed-reply tests and four watcher tests pass;
+Fifty-four audit controls and four watcher controls pass;
 independent source review cleared the exact latest audit and watcher. Monitoring
 observed consecutive original ReadTimeouts at indices 20 and 21. Both recovered
 delayed GET replies without a repost or close. The final checker binds transport
@@ -62,9 +62,20 @@ raw history and model accounting; it forbids an invented original POST receipt.
 Consecutive-timeout tests caught and closed an empty optional observation proof
 bypass. Present observation proofs must be nonempty and fully verified.
 
-The replacement watcher is `trec-usersim-task2-official-completion-audit-v3`;
+One live HTTP502 was verified against the persisted unanswered user turn, then
+closed by a separate administrative message. The original was not reposted.
+The final audit now reconstructs these recognized backend closures, including
+original and closing receipts, exact GET history, intent, guard limits and
+state/model counters. It reports normal completions and error closures separately;
+remote processed coverage includes both. Twenty-seven backend controls and five
+mixed/terminal controls join the twelve normal and ten delayed controls. Mixed
+cases include delayed replies before/after closures and a terminal closing HTTP428.
+Independent review caught an omitted original-error receipt digest; status/body
+mutation controls now prove that receipt is bound in the saved report.
+
+The replacement watcher is `trec-usersim-task2-official-completion-audit-v4`;
 the older watcher services are stopped. The official runtime remains unchanged.
-Incomplete service, source drift, operational closures or other recovery variants
+Incomplete service, source drift or unrecognized recovery variants
 halt confirmation for a separate review. These checks measure submission integrity,
 not realism.
 

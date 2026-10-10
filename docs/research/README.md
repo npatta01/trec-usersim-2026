@@ -21,12 +21,15 @@ Monitor this same run through explicit HTTP428 and final audit. Keep v5 paused. 
 actions below to continue debug until HTTP428.
 
 A separate, independently reviewed background watcher waits for successful
-official service exit, then runs the pinned read-only completion audit. Twelve
-normal-run controls, ten delayed-reply tests and four watcher tests pass. It replays all cached requests and
+official service exit, then runs the pinned read-only completion audit. Fifty-four
+audit controls and four watcher controls pass. It replays all cached requests and
 submissions, requires 57 unique conversations and explicit final HTTP428, and
 checks fresh organizer status, team summary and quota. It sends no POST or model
 request. Proven ReadTimeout replies recovered through GET are audited separately
-from POST receipts; operational closures or other recovery variants still halt
+from POST receipts. Verified backend-error closures are replayed against exact
+server history, separate closing intent, both original and closing receipts,
+frozen outage limits and reconstructed counters. Normal completions and
+administrative closures remain separate; unrecognized recovery variants halt
 confirmation for a separate review. No completion or quality score is manufactured.
 
 Active monitoring observed two consecutive original request timeouts. Both
@@ -34,6 +37,14 @@ recovered delayed replies without a repost or administrative closure; the same
 official run continued. A matching synthetic consecutive-timeout test exposed
 an empty optional observation proof bypass, now rejected by the reviewed final
 checker. Generator, editor, runtime and frozen recovery policy are unchanged.
+
+Monitoring also verified a backend HTTP502 followed by one distinct administrative
+close. The original message was not resent, and the close used no model call or
+researcher-stop counter. Mixed synthetic checks cover delayed replies before
+and after closures, consecutive closures and a closing HTTP428. Independent
+review caught a missing original-error receipt digest in the final report;
+the replacement audit now binds that receipt too, with status/body mutation
+controls. The reviewed v4 watcher replaces v3; it cannot restart or modify the run.
 
 ## Coverage terminology
 
