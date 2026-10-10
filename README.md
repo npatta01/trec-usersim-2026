@@ -3,9 +3,30 @@
 > [!NOTE]
 > This repository contains a baseline implementation to get started with developing your own user simulator for **TREC UserSim**. More details about the shared task can be found on the [official website](https://trec.usersim.ai/) and in the [guidelines](https://trec.usersim.ai/guidelines). The code integrates the API of the TREC UserSim platform and provides examples for user simulators with simple response strategies.
 
+## Our researcher simulators
+
+Both official baselines are complete: **Task 1 submitted 62 predictions; Task 2
+processed 57 conversations**, with 49 normal endings and eight administrative
+closures. Completion and saved-request audits passed; no competition score or
+whole-run realism rating is claimed.
+
+Start with the [project handoff](docs/project-handoff.md) and
+[documentation map](docs/README.md). The [submission ledger](docs/submission-ledger.md)
+records runs, costs, remaining allowances and private input/output locations.
+The [visual architecture](docs/task2_architecture.md) explains the researcher role,
+draft/editor calls, conversation resets and recovery. For setup and offline
+checks, see the [Task 1 runner](docs/task1_runner.md) and
+[Task 2 execution guide](docs/task2_debug_runner.md).
+
+Runtime code lives in `usersim/`, offline tests in `tests/`, historical studies in
+`experiments/`, and thin launchers in `scripts/`. Debug v5 remains intentionally
+paused; these guides do not authorize another organizer run.
+
+The baseline instructions below describe the original organizer implementation.
+
 ## Project research
 
-See the [research notes](docs/research/README.md) for the current approach comparison, source refresh, historical advisor notes, and next experiments. No competitive approach has been validated yet.
+See the [research notes](docs/research/README.md), [official-data evidence](docs/research/official-data-evidence.md) and [method decisions](docs/research/method-decisions.md) for data coverage, tested alternatives, exclusions and remaining hypotheses. The selected baseline is implemented and submitted; competitive performance is not yet known.
 
 ### Contents
 
@@ -73,7 +94,10 @@ The table below provides short descriptions of how the baseline simulator is imp
 
 ## Examples
 
-Below, examples for completing a run (comprising multiple conversations/scenarios) based on [`complete_run.py`](./simulator/examples/complete_run.py) are provided.
+These organizer-starter examples execute real runs. They are separate from the
+selected Luna runners and offline checks; do not execute them to inspect an
+existing submission. They use [`complete_run.py`](./simulator/examples/complete_run.py)
+to complete a run comprising multiple scenarios.
 
 > [!NOTE]
 > These examples will make use of a simulator with predefined utterances and demonstrate how to complete an entire run submission. If you want to user the other example implementation with a LLM-based `ResponseStrategy`, make sure you have access to an LLM and update the variables `LLM_MODEL` and `LLM_API_BASE` in `.env` accordingly. Alternatively, implement your own `ResponseStrategy` in [response_strategies.py](simulator/src/response_strategies.py).

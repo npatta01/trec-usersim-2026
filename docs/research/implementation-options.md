@@ -1,8 +1,22 @@
-# Possible UserSim implementations
+# Current implementation — October 10
+
+See the [implemented architecture](../task2_architecture.md) and
+[current handoff](../project-handoff.md). Both official baselines are complete.
+Task 1 explicitly selected Luna plus narrow fidelity editing; Task 2 selected
+Luna plus style editing and an explicit stop flag. Full available utterance text
+is retained. Compaction, planning and retrieval remain unselected.
+
+The [official export has been inspected](official-data-evidence.md): 64
+conversations, 10 goals and 266 researcher-message targets, with no positive
+researcher-stop labels or verified participant IDs. The supplementary collection
+is separate. The [method decisions](method-decisions.md) distinguish tested
+variants, rejected approaches and candidates needing more evidence.
+
+# Historical implementation proposals — October 3
 
 These diagrams explain candidate implementations for the approaches in our [research summary](README.md). They are proposals, not a claim that these components exist or outperform one another. Source evidence and limitations are in the [October 3 refresh](2026-10-03-research-refresh.md).
 
-**Read the [data inspection](2026-10-03-data-inspection.md) before choosing a design.** Official training logs have not been inspected. The supplementary collection has only 16 participants, malformed turn boundaries, interviewer-imposed endings, and no per-turn state labels. Its persona intervention changes the assistant. The training, stopping-calibration, and state-controller diagrams therefore describe conditional possibilities, not methods currently supported by our data.
+The proposals below were written after the [supplementary inspection](2026-10-03-data-inspection.md), before the official export was supplied. That collection had only 16 participants, malformed turn boundaries, interviewer-imposed endings, and no per-turn state labels; its persona intervention changes the assistant. These diagrams remain conditional proposals, not the implemented runtime. Read the current [official-data assessment](official-data-evidence.md) before considering training, stopping calibration or state control.
 
 The central idea is to reuse one conversation runner and swap the component that generates the human's next message. This makes comparisons easier to interpret. Each diagram includes a text explanation so it remains understandable without Mermaid rendering.
 
@@ -27,7 +41,7 @@ flowchart TD
 
 **Task 1:** rebuild from each supplied prefix; previous predictions must not become evidence for the next prediction. **Task 2:** retain only the current session's history and optional memory; reset when the conversation changes. A user stop flag ends a session, not necessarily the entire run. The assistant or platform may also end the session.
 
-**Concrete interface gap:** the current [ResponseStrategy](../../simulator/src/response_strategies.py) returns only a string. A possible replacement returns a decision such as `UserDecision(text, is_final)`. The existing [continue_conversation](../../simulator/src/user_simulator.py) already accepts `is_final`, but the run loop currently hardcodes it to false. This document proposes the interface; it does not implement it. Generation failures must follow an error/retry path rather than become simulated human messages.
+**Historical starter interface gap:** the original [ResponseStrategy](../../simulator/src/response_strategies.py) returns only a string. A possible replacement returns a decision such as `UserDecision(text, is_final)`. The existing [continue_conversation](../../simulator/src/user_simulator.py) already accepts `is_final`, but the run loop currently hardcodes it to false. The diagrams below propose alternatives. The implemented `usersim/task2/` runtime now returns validated text/stop decisions; it does not change the original starter interface. Generation failures must follow an error/retry path rather than become simulated human messages.
 
 ## Option A — Direct prompting
 
