@@ -71,8 +71,11 @@ runs unless listed here with start evidence.
 Official Task 2 continues in a background service. A separate reviewed watcher
 will confirm successful completion by replaying retained inputs/outputs and
 checking fresh organizer status after explicit final HTTP428. Its current audit
-requires a normal run with no operational recovery; recovery evidence requires a
-separate review. No completion or whole-run quality claim is made while it runs.
+also verifies proven delayed ReadTimeout replies, retaining GET evidence separately
+from POST receipts. Monitoring observed two consecutive delayed replies, both
+recovered without a resend or administrative closure. Operational closures and
+other recovery variants require a separate audit review. No completion or
+whole-run quality claim is made while it runs.
 
 ## Exact inputs and outputs are retained privately
 

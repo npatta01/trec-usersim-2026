@@ -22,11 +22,18 @@ actions below to continue debug until HTTP428.
 
 A separate, independently reviewed background watcher waits for successful
 official service exit, then runs the pinned read-only completion audit. Twelve
-audit tests and four watcher tests pass. It replays all cached requests and
+normal-run controls, ten delayed-reply tests and four watcher tests pass. It replays all cached requests and
 submissions, requires 57 unique conversations and explicit final HTTP428, and
 checks fresh organizer status, team summary and quota. It sends no POST or model
-request. Recovery evidence makes this normal-run audit halt for a separate review;
-it does not manufacture a completion or quality score.
+request. Proven ReadTimeout replies recovered through GET are audited separately
+from POST receipts; operational closures or other recovery variants still halt
+confirmation for a separate review. No completion or quality score is manufactured.
+
+Active monitoring observed two consecutive original request timeouts. Both
+recovered delayed replies without a repost or administrative closure; the same
+official run continued. A matching synthetic consecutive-timeout test exposed
+an empty optional observation proof bypass, now rejected by the reviewed final
+checker. Generator, editor, runtime and frozen recovery policy are unchanged.
 
 ## Coverage terminology
 
