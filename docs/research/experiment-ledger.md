@@ -4,16 +4,17 @@
 
 Operator verification only; the selected generator, editor, model and runtime
 remain frozen. One official Task 2 run is in progress. Its latest verified
-checkpoint has 38 normal endings and five administrative closures:
-43 of 57 conversations processed, 208 checkpointed turns, 408 model calls and
-$0.137539640 actual model cost. The current unanswered request is in the existing
+checkpoint has 40 normal endings and seven administrative closures:
+47 of 57 conversations processed, 226 checkpointed turns, 440 model calls and
+$0.146237160 actual model cost. The current unanswered request is in the existing
 30-minute grace period; no completion claim or additional official start.
 
-Timeout 188 exhausted that full grace; one distinct close at 189 returned
-HTTP200/new conversation. A bounded real-event check reproduced its two cached
-generation requests and verified its retained closure evidence, with no new
-model or organizer request. It is not an independent full-prefix replay.
-The later timeout at 208 is now awaiting a delayed reply under the same policy.
+Timeouts 188 and 208 exhausted that full grace; their distinct closes at 189 and
+209 each returned HTTP200/new conversation. Bounded real-event checks reproduced
+both pairs of cached generation requests and verified their retained closure
+evidence, with no new model or organizer request. These are not independent
+full-prefix replay. HTTP502 at 211 also advanced through a distinct close at 212.
+Timeout 226 is now awaiting a delayed reply under the same policy.
 
 Three earlier delayed replies were reconciled without resubmitting their original
 requests. The completion checker now verifies normal receipts, continuing delayed

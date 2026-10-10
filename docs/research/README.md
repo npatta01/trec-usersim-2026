@@ -20,13 +20,15 @@ Monitor this same run through explicit HTTP428 and final audit. Keep v5 paused. 
 [submission ledger](../submission-ledger.md). This supersedes the older next
 actions below to continue debug until HTTP428.
 
-Latest monitored checkpoint: **43 of 57 processed**, comprising 38 normal endings
-and five administrative closures; 208 checkpointed turns and 408 saved model
-calls costing $0.137539640. A timeout at 188 exhausted the unchanged grace;
-one distinct close at 189 returned HTTP200/new conversation. A bounded read-only
-check rebuilt its two cached requests and verified the closure evidence, without
-claiming a full-prefix audit. A later timeout at 208 is now awaiting a delayed
-reply. No original message was reposted and no additional official run was started.
+Latest monitored checkpoint: **47 of 57 processed**, comprising 40 normal endings
+and seven administrative closures; 226 checkpointed turns and 440 saved model
+calls costing $0.146237160. Original timeouts at 188 and 208 exhausted the unchanged
+grace; their distinct closes at 189 and 209 returned HTTP200/new conversations.
+Bounded read-only checks rebuilt both pairs of cached requests and verified the
+closure evidence, without claiming full-prefix replay. A later HTTP502 at 211
+also advanced through one distinct close at 212. Timeout 226 is now awaiting a
+delayed reply. No original message was reposted and no additional official run
+was started.
 
 A separate, independently reviewed background watcher waits for successful
 official service exit, then runs the pinned read-only completion audit. Seventy-four
