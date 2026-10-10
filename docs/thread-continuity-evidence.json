@@ -1,0 +1,41 @@
+{
+  "bytes": 2905467,
+  "checksum_file_sha256": "bc894e791da29358e3bea9b3510a0ab573d2b0d040027874fc2aef47409a5c2a",
+  "components": [
+    {
+      "bytes": 2259,
+      "component": "continuity-provenance",
+      "files": 2,
+      "inventory_sha256": "7f37333b3a368dd97e4d16439fd80b7ca808cffd8c0a12d5412efbc3dcfcd381"
+    },
+    {
+      "bytes": 2028487,
+      "component": "current-run-reader",
+      "files": 1,
+      "inventory_sha256": "7849964e2fdef0312ce2bf466297b92c8570cc1072dee29b38dc8f7cb2841140"
+    },
+    {
+      "bytes": 796082,
+      "component": "historical-debug-reader",
+      "files": 1,
+      "inventory_sha256": "71831a54531396ba9dea6aa8568e4cb9552559d80439b520bcef5685f1011af5"
+    },
+    {
+      "bytes": 78639,
+      "component": "synthetic-reader",
+      "files": 1,
+      "inventory_sha256": "c9b8325eef23a3d6c5e8b9b3a42e1779a51188cc0fed30c223536829664b6fda"
+    }
+  ],
+  "credentials_included": false,
+  "excluded_files": 0,
+  "files": 5,
+  "manifest_sha256": "e8cd0320c6c908ebbd2ced1621840ffa30fbe0e895a503b17fe1edb003432546",
+  "off_host_backup": false,
+  "opaque_encrypted_fields": 0,
+  "original_sources_checked": true,
+  "schema_version": 1,
+  "snapshot_utc": "2026-10-10T12:11:22.046706+00:00",
+  "status": "verified",
+  "transcripts_private": true
+}

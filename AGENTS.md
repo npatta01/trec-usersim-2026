@@ -6,6 +6,10 @@ Before changing simulator behavior or proposing experiments, read:
 
 Start with the [current project handoff](docs/project-handoff.md) and [official-data evidence](docs/research/official-data-evidence.md). The [October 3 supplementary inspection](docs/research/2026-10-03-data-inspection.md) is historical evidence about a separate collection. Do not substitute it for official training or assume proposed architectures were validated.
 
+For a fresh thread or archived original chat, use [Continue without the original chat](docs/continuity.md) for durable source/evidence locations, decisions, credentials paths and next actions.
+
+Useful source and documentation belong in this repository. Exact data, run/development records and rendered readers are preserved in the [private GitHub evidence release](docs/artifacts.md), with verified download/restore receipts. Local evidence directories are caches, not the only copy; keep the companion repository private even if this source repository becomes public.
+
 1. [Research status and next experiments](docs/research/README.md) — canonical objective, candidate approaches, decisions, data gaps, and next action.
 2. [Implemented architecture](docs/task2_architecture.md) and [method decisions](docs/research/method-decisions.md) — selected behavior, comparisons and limits. [Possible implementations](docs/research/implementation-options.md) preserves historical proposals.
 3. [October 3 research refresh](docs/research/2026-10-03-research-refresh.md) — primary sources, corrected versions, reading depth, and limitations.

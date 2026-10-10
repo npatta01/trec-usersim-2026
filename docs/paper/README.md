@@ -20,7 +20,7 @@ required by this paper plan. Debug v5 remains intentionally paused.
 | Actual submissions | [Submission ledger](../submission-ledger.md), [machine-readable run index](../../submissions/manifest.json) | Exactly two official runs and seven debug runs, with coverage, receipt costs and status |
 | Transport and recovery | [Recovery guide](../research/task2-recovery-plan.md), private receipts/reconciliations and official integrity audits | Completion and request/output integrity; administrative closures separated from natural stops |
 | Figures and worked example | [Existing figures](../task2_architecture.md), [illustrative viewer](../examples/run-viewer.html), [private reader instructions](../run_viewer.md) | Architecture diagrams and an explicitly invented example; private real-run inspection without publishing transcripts |
-| Preserved evidence | [Archive index](evidence-manifest.json), [preservation instructions](preservation.md) | Checksum-bound local snapshot of data, runs, notes, historical scripts and source/environment provenance |
+| Preserved evidence | [Private GitHub release and restore](../artifacts.md), [archive index](evidence-manifest.json), [preservation instructions](preservation.md) | Data, runs, notes, historical scripts, source/environment provenance and rendered readers; 7,408 files verified after a fresh download |
 
 The manuscript should use `openai/gpt-6-luna` as the exact requested model ID.
 Both official runs used OpenRouter, an OpenAI-only route without provider
@@ -71,8 +71,9 @@ behavior matches real researchers.
 - [ ] If reporting realism preferences quantitatively, document the review
   sample, rubric, reviewer identities/independence, blinding and uncertainty.
   Existing small or unblinded screens should retain those limitations.
-- [ ] Arrange an authorized private off-host backup. This archive and the
-  originals are on the same machine; that is preservation, not disaster recovery.
+- [x] Preserve the evidence off-host in the [private GitHub release](../artifacts.md).
+  Fresh download, GitHub asset digests, standalone restore and all 7,408 file
+  hashes passed. Credentials remain separate from this research backup.
 
 The [NIST participation guide](https://trec.nist.gov/howto.html) describes a
 notebook followed by a proceedings revision, and distinguishes participant-only

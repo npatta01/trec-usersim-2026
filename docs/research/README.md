@@ -52,9 +52,10 @@ receipts, frozen source and reconciliation evidence.
 
 The [paper preparation map](../paper/README.md) records the writing plan and
 missing official scores/venue/author information. All available run and detailed
-development artifacts are now in a verified ignored archive inside the stable
-local repo; [preservation instructions](../paper/preservation.md) explain its
-scope and same-host backup limitation.
+development artifacts and rendered readers are preserved in a
+[private GitHub evidence release](../artifacts.md), verified by a fresh download
+and standalone restore. [Preservation instructions](../paper/preservation.md)
+explain the immutable snapshots and evidence limits; local copies are caches.
 
 For future research, use matched hard cases and successful controls, evaluate
 knowledge attribution and voice separately, and include repeated draws and

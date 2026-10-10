@@ -1,9 +1,10 @@
 # Private paper evidence preservation
 
 Snapshot created October 10, 2026. **All available artifacts from the nine
-recorded organizer runs are now inside the stable local repository directory.**
-They are intentionally ignored by git and absent from GitHub. Public git contains
-the [run manifest](../../submissions/manifest.json), aggregate evidence hashes,
+recorded organizer runs are preserved in a separate private GitHub release.**
+The [artifact guide](../artifacts.md) links the release and tested restore steps.
+Ignored local copies are caches. Public git contains the
+[run manifest](../../submissions/manifest.json), aggregate evidence hashes,
 method descriptions and offline preservation tools.
 
 ## Location and contents
@@ -88,11 +89,32 @@ or copied for this task. Codex session histories are not part of the snapshot.
 
 `/data/private-evidence/` is excluded in the PR's `.gitignore` and the common
 local git exclude file, protecting the older stable checkout before merge.
-Never use `git add -f` on this archive. Keeping exact participant/model records
-locally does not authorize pushing them to GitHub or including them in a public
-paper. Any future examples need the appropriate publication rights.
+Never use `git add -f` on this archive. The user authorized private GitHub release
+preservation on October 10. Keep the companion repository private even if the
+main source repo becomes public. This archival access does not establish rights
+to publish participant examples in a paper.
 
-This is a single-machine snapshot, **not an off-host backup**. The immutable
-archive should remain intact while run state and later results evolve. A future
-authorized encrypted/private backup and future organizer score reports should
-be indexed separately, without overwriting this evidence.
+The immutable local snapshot was subsequently bundled with the continuity
+addendum and current source, uploaded, freshly downloaded and verified without
+the original paths. The [remote custody receipt](../private-artifact-release.json)
+records 7,408 verified evidence files. Creation-time indexes retain
+`off_host_backup: false` as historical facts; the later receipt records the
+verified off-host copy. Preserve these snapshots and release assets unchanged.
+Index future score reports and evidence in a new dated release.
+
+## Thread-archival addendum
+
+The original snapshot remains unchanged. A separate ignored
+`2026-10-10-thread-continuity/` directory under the same stable evidence root
+preserves the current official run reader, historical debug reader, synthetic
+walkthrough and task-scoped verification notes: five files / 2,905,467 bytes.
+Its [public index](../thread-continuity-evidence.json) binds their hashes; the
+[continuation guide](../continuity.md) records the relevant project decisions,
+locations and next steps without copying raw chat or keys.
+
+Verify it offline with the same tool:
+
+```bash
+python scripts/archive_paper_evidence.py verify \
+  /home/npatta01/data/competitions/trec-usersim-2026/data/private-evidence/2026-10-10-thread-continuity
+```
