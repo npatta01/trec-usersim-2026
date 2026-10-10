@@ -55,7 +55,6 @@ Resuming the same run did not start another run or resend accepted predictions.
 | Oct 6 | Task 1 official | `np-labs-luna-fidelity-task1-official-20261006-v1` | **Complete: 62 predictions across 10 goals**; Luna plus narrow fidelity editor | 0.029373225 |
 | Oct 6 | Task 2 debug | `np-labs-luna-task2-debug-20261006-v1` | **Halted:** 4 researcher messages saved, 3 assistant replies, 0 complete conversations; organizer HTTP500 | 0.004248240 |
 | Oct 6 | Task 2 debug | `np-labs-luna-task2-debug-20261006-v2` | **Halted:** 5 researcher messages saved, 4 assistant replies, 0 complete conversations; organizer HTTP500 | 0.005123280 |
-
 | Oct 7 | Task 2 debug | `np-labs-luna-task2-debug-20261007-v3` | halted: 0 completed, 0 operational skips; 3 checkpointed turns | 0.002196115 |
 | Oct 8 | Task 2 debug | `np-labs-luna-task2-debug-v4` | halted: 3 completed, 0 operational skips; 17 checkpointed turns | 0.014966260 |
 | Oct 8–9 | Task 2 debug | `np-labs-luna-task2-debug-v5` | **Intentionally paused:** 886 saved turns, 129 normal endings, 38 administrative closures, 1 unfinished conversation; audited prefix, no HTTP428 | 0.664036040 |
@@ -69,9 +68,15 @@ Model-only editor comparisons, synthetic probes and offline replays are not
 additional organizer submissions. Run-name proposals in historical notes are not
 runs unless listed here with start evidence.
 
+Official Task 2 continues in a background service. A separate reviewed watcher
+will confirm successful completion by replaying retained inputs/outputs and
+checking fresh organizer status after explicit final HTTP428. Its current audit
+requires a normal run with no operational recovery; recovery evidence requires a
+separate review. No completion or whole-run quality claim is made while it runs.
+
 ## Exact inputs and outputs are retained privately
 
-For the official run, all 62 cases and 124 model-call receipts were audited again
+For the completed Task 1 official run, all 62 cases and 124 model-call receipts were audited again
 when this ledger was added. Each case retains:
 
 - Organizer input: persona, goal and complete supplied conversation prefix.
@@ -102,7 +107,7 @@ contents. Let `RUNS=/home/npatta01/data/trec-usersim-runs` and
 | Current paused Task 2 debug | `$RUNS/task2-debug-luna-v5/` |
 | Task 2 official | `$RUNS/task2-official-luna-20261009-v1/` |
 
-In the official directory:
+In the Task 1 official directory:
 
 | File pattern | Contents |
 |---|---|

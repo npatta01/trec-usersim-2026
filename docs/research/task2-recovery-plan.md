@@ -46,6 +46,17 @@ Task 2 official 3, debug 5 remain. No official completion claim yet: require exp
 HTTP428 plus a separate final integrity audit. Keep v5 paused. This decision
 supersedes the older instructions below to continue debug until completion.
 
+The official service and a separate completion-audit watcher now run durably in
+the background with `Restart=no`. The watcher requires a successful official
+service exit and complete state before invoking the exact reviewed GET-only
+auditor. The auditor acquires the official run lock, verifies frozen runtime and
+readiness evidence, reproduces every saved model request and submitted text/stop
+flag, and requires 57 unique conversations plus final HTTP428. Fresh run status,
+team summary and budget are saved privately and hash-bound to the report.
+Twelve audit tests and four watcher tests pass; independent source review cleared
+both. An incomplete service, source drift or any recovery/transport evidence
+halts confirmation. These checks measure submission integrity, not realism.
+
 
 ## Objective and authorization
 

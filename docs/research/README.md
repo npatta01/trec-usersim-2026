@@ -20,6 +20,14 @@ Monitor this same run through explicit HTTP428 and final audit. Keep v5 paused. 
 [submission ledger](../submission-ledger.md). This supersedes the older next
 actions below to continue debug until HTTP428.
 
+A separate, independently reviewed background watcher waits for successful
+official service exit, then runs the pinned read-only completion audit. Twelve
+audit tests and four watcher tests pass. It replays all cached requests and
+submissions, requires 57 unique conversations and explicit final HTTP428, and
+checks fresh organizer status, team summary and quota. It sends no POST or model
+request. Recovery evidence makes this normal-run audit halt for a separate review;
+it does not manufacture a completion or quality score.
+
 ## Coverage terminology
 
 The training export has 64 human conversation records. Official Task 1 has 62
