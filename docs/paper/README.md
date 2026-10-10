@@ -83,6 +83,20 @@ and track guidelines were checked October 10; exact paper-format requirements
 were not established by those public pages. No email, authenticated participant
 page or organizer endpoint was queried for this audit.
 
+In a subsequent October 10 deadline check, the organizers'
+[October 7 extension announcement](https://groups.google.com/d/msgid/trec-usersim/1b15da6d-1d40-4124-9698-a89a4ea9e746n%40googlegroups.com)
+was read through authorized email access. It sets the **run submission** deadline
+to October 9, 2026 (Anywhere on Earth), superseding the public page's October 7.
+This corresponds to October 10 at 12:00 UTC / 08:00 Eastern and has passed.
+It does not establish the separate notebook-paper deadline. The scoped email
+search found no UserSim notebook deadline or template announcement; obtain the
+participant instructions before treating a paper date as confirmed.
+
+For conference attendance, [NIST's event page](https://www.nist.gov/news-events/events/2026/11/trec-2026)
+lists November 16–18, with in-person registration closing November 2 and virtual
+registration closing November 18 at noon. This is separate from both run and
+paper submission. No registration or payment was made.
+
 ## Writing plan and current status
 
 1. **Done:** reconcile all nine run directories, archive originals byte-for-byte,
