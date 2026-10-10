@@ -4,6 +4,10 @@
 No further submission is needed for this baseline; this document does not
 authorize another run. Next: review organizer evaluation when available.
 
+The [thread-independent continuation guide](continuity.md) records the reading
+path, retained user requirements, private readers and credential locations.
+The project should be resumable from these files without the original chat.
+
 | Official task | Completed work | Model cost |
 |---|---|---:|
 | Task 1 | 62 predictions, 124 model calls | $0.029373225 |
@@ -15,11 +19,12 @@ endings, 38 administrative closures and one unfinished conversation; it is not
 a completed debug run.
 
 The [paper evidence map](paper/README.md) now links the method, experiments,
-figures and missing results. A verified private archive inside the stable local
-repo preserves all nine run directories and original development evidence;
-[public metadata](../submissions/manifest.json) includes per-run hashes/costs.
-Exact participant/model records remain ignored and absent from GitHub. Official
-score reports, author metadata and confirmed paper requirements remain pending.
+figures and missing results. A [verified private GitHub release](artifacts.md)
+preserves all nine run directories, original development evidence and rendered
+readers; [public metadata](../submissions/manifest.json) includes per-run hashes/costs.
+All 7,408 evidence files were verified after a fresh download and restoration
+without the original paths. Local copies are caches. Official score reports,
+author metadata and confirmed paper requirements remain pending.
 
 ## Selected behavior
 

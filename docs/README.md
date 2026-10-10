@@ -6,6 +6,8 @@ complete; current status and next action are in the [project handoff](project-ha
 
 ## Understand the project
 
+- [Continue without the original chat](continuity.md): a fresh-thread reading path, decisions and durable private artifacts.
+- [Artifact custody and restore](artifacts.md): private GitHub release, download verification and recovery without this machine.
 - [Architecture](task2_architecture.md): tasks, model roles, draft/edit pipeline
   and recovery images.
 - [Rendered input/prompt/response reader](run_viewer.md): inspect exact requests
@@ -26,7 +28,7 @@ complete; current status and next action are in the [project handoff](project-ha
 ## Assess the evidence
 
 - [Paper preparation](paper/README.md): writing plan, claims, evidence, result table and remaining gaps.
-- [Private preservation](paper/preservation.md): all available submission/research records inside the stable local repo directory, with offline verification.
+- [Private preservation](paper/preservation.md): all available submission/research records, immutable inventories and offline verification.
 - [Official-data inspection](research/official-data-evidence.md): schema, coverage,
   stopping signals, provenance and leakage limits.
 - [Method decisions](research/method-decisions.md): tested ideas, controls, results

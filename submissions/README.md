@@ -8,9 +8,13 @@ and are preserved with the [paper evidence](../docs/paper/README.md).
 
 Public git contains metadata and hashes. The exact available inputs, model
 requests, drafts, editor outputs, organizer requests/receipts, frozen code,
-checkpoints and recovery evidence live in the ignored private archive **inside
-the stable local repo directory**. See [location and verification](../docs/paper/preservation.md).
-A clone of GitHub does not include those private records.
+checkpoints and recovery evidence are in the
+[private GitHub evidence release](../docs/artifacts.md), with an ignored local
+cache inside the stable repo directory. See [snapshot verification](../docs/paper/preservation.md).
+Cloning the main source repo does not download release assets; use the separate
+private release's restore instructions. Creation-time local inventory limitations
+remain unchanged in the manifest; the [remote receipt](../docs/private-artifact-release.json)
+records the later verified off-host copy.
 
 | Task / mode | Run suffix | Status | Priced model receipts | Model cost (USD) |
 |---|---|---|---:|---:|

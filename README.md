@@ -13,6 +13,8 @@ Debug v5 remains intentionally paused.
 - [Prepare the paper](docs/paper/README.md): claim-to-evidence map, preserved records and missing items.
 - [Start reading or developing](docs/README.md): setup, data, research and history.
 - [Resume project context](docs/project-handoff.md): current decisions and limits.
+- [Continue without the original chat](docs/continuity.md): durable handoff, private evidence and reader locations.
+- [Download preserved artifacts](docs/artifacts.md): private GitHub release, checksums and tested restore instructions.
 
 ## The two tasks
 
@@ -62,5 +64,5 @@ execution. The original starter's two known test-collection failures are
 The [original organizer guide](docs/organizer-starter.md) is retained for
 provenance. The [official website](https://trec.usersim.ai/) and
 [guidelines](https://trec.usersim.ai/guidelines) define the competition.
-Training transcripts, model outputs, API receipts and credentials stay outside
-public git; their private locations are recorded in the submission ledger.
+Training transcripts, model outputs and API receipts are preserved in a separate
+private GitHub release. Credentials stay outside git and release assets.
