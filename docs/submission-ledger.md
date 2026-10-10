@@ -55,7 +55,7 @@ Resuming the same run did not start another run or resend accepted predictions.
 | Oct 6 | Task 1 official | `np-labs-luna-fidelity-task1-official-20261006-v1` | **Complete: 62 predictions across 10 goals**; Luna plus narrow fidelity editor | 0.029373225 |
 | Oct 6 | Task 2 debug | `np-labs-luna-task2-debug-20261006-v1` | **Halted:** 4 researcher messages saved, 3 assistant replies, 0 complete conversations; organizer HTTP500 | 0.004248240 |
 | Oct 6 | Task 2 debug | `np-labs-luna-task2-debug-20261006-v2` | **Halted:** 5 researcher messages saved, 4 assistant replies, 0 complete conversations; organizer HTTP500 | 0.005123280 |
-| Oct 7 | Task 2 debug | `np-labs-luna-task2-debug-20261007-v3` | halted: 0 completed, 0 operational skips; 3 checkpointed turns | 0.002196115 |
+| Oct 7 | Task 2 debug | `np-labs-luna-task2-debug-20261007-v3` | halted: 0 completed, 0 operational skips; 3 checkpointed turns; 8 priced model receipts including the fourth attempted turn | 0.003852275 |
 | Oct 8 | Task 2 debug | `np-labs-luna-task2-debug-v4` | halted: 3 completed, 0 operational skips; 17 checkpointed turns | 0.014966260 |
 | Oct 8–9 | Task 2 debug | `np-labs-luna-task2-debug-v5` | **Intentionally paused:** 886 saved turns, 129 normal endings, 38 administrative closures, 1 unfinished conversation; audited prefix, no HTTP428 | 0.664036040 |
 | Oct 9–10 | Task 2 official | `np-labs-luna-style-task2-official-20261009-v1` | **Complete: 57/57 processed**; 49 normal stops, 8 administrative closures; 266 submitted turns, 258 generated pairs / 516 model calls; explicit HTTP428 and final audit | 0.173554630 |
@@ -67,6 +67,14 @@ one 190-example official evaluation or treated as 190 independent examples.
 Model-only editor comparisons, synthetic probes and offline replays are not
 additional organizer submissions. Run-name proposals in historical notes are not
 runs unless listed here with start evidence.
+
+Costs use saved response usage, not only checkpoint accounting. The October 10
+paper-preservation audit found two priced model calls for debug-v3's fourth
+attempted turn omitted from its checkpoint counters. All eight receipts sum to
+$0.003852275; the unchanged checkpoint records six calls / $0.002196115. The
+[$0.001656160 accounting difference](../submissions/README.md#evidence-gaps-and-accounting)
+is exposed in the machine-readable inventory. Other listed run costs reconcile
+to their retained model receipts. This correction is not another organizer run.
 
 Official Task 2 is remotely complete: fresh status has no current conversation,
 and team summary reports 57 done / zero remaining. The final audit independently
@@ -91,13 +99,24 @@ timeout; a shorter future grace is a proposal, not an applied or proven limit.
 
 ## Exact inputs and outputs are retained privately
 
+All available run records are now also preserved in a checksum-verified archive
+**inside the stable local repository directory**, ignored by git and absent from
+GitHub. The [public run index](../submissions/manifest.json) covers all nine runs;
+the [paper preservation guide](paper/preservation.md) records location, original
+sources, hashes and verification commands. The archive includes detailed
+development evidence as well as submissions, but cannot recreate missing
+historical receipts. The [paper evidence map](paper/README.md) tracks remaining
+score/venue/author gaps.
+
 For the completed Task 1 official run, all 62 cases and 124 model-call receipts were audited again
 when this ledger was added. Each case retains:
 
 - Organizer input: persona, goal and complete supplied conversation prefix.
 - Exact draft and editor API request payloads, including system instructions and roles.
 - Raw model responses, usage/cost, generated draft and selected final response.
-- Exact organizer submission payload, timestamp and corresponding HTTP receipt.
+- Exact organizer submission payload and corresponding HTTP receipt; model
+  response timestamps and original file metadata where available. These do not
+  establish a measured end-to-end latency distribution.
 - Frozen configuration and source snapshots, plus the original source and receipt
   hashes retained before the researcher-ending-prefix recovery.
 
@@ -119,6 +138,8 @@ contents. Let `RUNS=/home/npatta01/data/trec-usersim-runs` and
 | Task 1 official | `$RUNS/task1-official-fidelity-20261006-v1/` |
 | First Task 2 debug | `$OLD/task2-debug-luna/` |
 | Second Task 2 debug | `$RUNS/task2-debug-luna-20261006-v2/` |
+| Third Task 2 debug | `$RUNS/task2-debug-luna-20261007-v3/` |
+| Fourth Task 2 debug | `$RUNS/task2-debug-luna-v4/` |
 | Current paused Task 2 debug | `$RUNS/task2-debug-luna-v5/` |
 | Task 2 official | `$RUNS/task2-official-luna-20261009-v1/` |
 
@@ -150,6 +171,12 @@ In the Task 2 official directory:
 Earlier runners used different filenames: the first debug run's `case-NNNN.json`
 contains `item`, `request`, `response` and reservation together. Do not assume all
 historical runs use the current file layout.
+
+The first Task 1 debug retains all 64 input/model request/response records and
+its final accepted organizer request plus HTTP428 completion. Its start and
+per-prediction organizer POST receipts were not saved. Both later Task 1 runs
+retain their per-prediction organizer receipts; the archival inventory makes
+this historical evidence gap explicit.
 
 ## Decisions and next action
 

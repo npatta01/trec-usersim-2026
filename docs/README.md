@@ -25,6 +25,8 @@ complete; current status and next action are in the [project handoff](project-ha
 
 ## Assess the evidence
 
+- [Paper preparation](paper/README.md): writing plan, claims, evidence, result table and remaining gaps.
+- [Private preservation](paper/preservation.md): all available submission/research records inside the stable local repo directory, with offline verification.
 - [Official-data inspection](research/official-data-evidence.md): schema, coverage,
   stopping signals, provenance and leakage limits.
 - [Method decisions](research/method-decisions.md): tested ideas, controls, results

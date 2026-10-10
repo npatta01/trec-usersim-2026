@@ -1,0 +1,329 @@
+{
+  "debug_runs": 7,
+  "evidence_manifest_sha256": "f7d9bbdbc506aa3c005aa01c5eb75a31afc3846ebe03c5a2483769c300cc2afb",
+  "limitations": [
+    "Local snapshot; no organizer calls during indexing.",
+    "Different debug/official pools are not one independent evaluation set.",
+    "No transcript-bearing records distributed in public git.",
+    "Not an off-host backup; never resume from the archive."
+  ],
+  "official_model_receipt_cost_usd": "0.202927855",
+  "official_runs": 2,
+  "organizer_runs": 9,
+  "runs": [
+    {
+      "archive_relative_directory": "official-data-and-development/task1-debug-luna",
+      "artifact_bytes": 2946730,
+      "artifact_files": 74,
+      "checkpoint_model_calls": 64,
+      "checkpoint_model_cost_usd": "0.016750475",
+      "checkpoint_status": "complete",
+      "frozen_source_files": 0,
+      "inventory_sha256": "774574b3301fed56d204cf0982d543d287b488bb829ec6cb7a1edf21a8f3799c",
+      "max_completion_tokens_values": [
+        4096
+      ],
+      "mode": "debug",
+      "model_call_receipts": 64,
+      "model_receipt_cost_usd": "0.016750475",
+      "official_evaluation_score": null,
+      "organizer_receipt_files": 0,
+      "organizer_receipt_note": "Only final accepted request/HTTP428 retained; per-prediction POST receipts and start receipt absent. All 64 input/model request/response records retained.",
+      "receipt_minus_checkpoint_cost_usd": "0.000000000",
+      "requested_models": [
+        "openai/gpt-6-luna"
+      ],
+      "run_id": "np-labs-luna-task1-debug-20261005-v1",
+      "state_file": "state.json",
+      "state_sha256": "dce2bf5d7844a88fa7d12f927e1920729257446d395a0ac51a60e80801725ddc",
+      "status": "complete",
+      "submitted": 64,
+      "task": 1,
+      "terminal_http428_files": [
+        "last_http_response.json"
+      ],
+      "whole_run_realism_rate": null
+    },
+    {
+      "archive_relative_directory": "organizer-and-model-runs/task1-debug-style-20261006-v1",
+      "artifact_bytes": 2901371,
+      "artifact_files": 295,
+      "checkpoint_model_calls": 128,
+      "checkpoint_model_cost_usd": "0.037675500",
+      "checkpoint_status": "complete",
+      "frozen_source_files": 10,
+      "inventory_sha256": "96af6f18b6230350ed4bcab95903412c66613bf17e0f3d95fa4e65f2124707f0",
+      "max_completion_tokens_values": [
+        4096
+      ],
+      "mode": "debug",
+      "model_call_receipts": 128,
+      "model_receipt_cost_usd": "0.037675500",
+      "official_evaluation_score": null,
+      "organizer_receipt_files": 65,
+      "organizer_receipt_note": "Saved received HTTP/transport-error receipts and recovery evidence retained; counts are not necessarily accepted turns.",
+      "receipt_minus_checkpoint_cost_usd": "0.000000000",
+      "requested_models": [
+        "openai/gpt-6-luna"
+      ],
+      "run_id": "np-labs-luna-style-task1-debug-20261006-v1",
+      "state_file": "result.json",
+      "state_sha256": "334f991a161fcdb7d4a35a65ad9f849e53c13feac19df31f9cd2c7f75c52de47",
+      "status": "complete",
+      "submitted": 64,
+      "task": 1,
+      "terminal_http428_files": [
+        "continue-0063.json"
+      ],
+      "whole_run_realism_rate": null
+    },
+    {
+      "archive_relative_directory": "organizer-and-model-runs/task1-official-fidelity-20261006-v1",
+      "artifact_bytes": 2360593,
+      "artifact_files": 294,
+      "checkpoint_model_calls": 124,
+      "checkpoint_model_cost_usd": "0.029373225",
+      "checkpoint_status": "complete",
+      "frozen_source_files": 10,
+      "inventory_sha256": "ca488a88f31ed38b1c040e9d4485e39ce0cbc0cb14054c2677b0082ee91c040d",
+      "max_completion_tokens_values": [
+        4096
+      ],
+      "mode": "official",
+      "model_call_receipts": 124,
+      "model_receipt_cost_usd": "0.029373225",
+      "official_evaluation_score": null,
+      "organizer_receipt_files": 63,
+      "organizer_receipt_note": "Saved received HTTP/transport-error receipts and recovery evidence retained; counts are not necessarily accepted turns.",
+      "receipt_minus_checkpoint_cost_usd": "0.000000000",
+      "requested_models": [
+        "openai/gpt-6-luna"
+      ],
+      "run_id": "np-labs-luna-fidelity-task1-official-20261006-v1",
+      "state_file": "result.json",
+      "state_sha256": "1196ebc0f93495aff003c5da8e42c73938ec18ad32f52bc8253fbceec9294572",
+      "status": "complete",
+      "submitted": 62,
+      "task": 1,
+      "terminal_http428_files": [
+        "continue-0061.json"
+      ],
+      "whole_run_realism_rate": null
+    },
+    {
+      "archive_relative_directory": "official-data-and-development/task2-debug-luna",
+      "artifact_bytes": 594454,
+      "artifact_files": 41,
+      "checkpoint_model_calls": 8,
+      "checkpoint_model_cost_usd": "0.004248240",
+      "checkpoint_status": "halted",
+      "completed_conversations": 0,
+      "frozen_source_files": 11,
+      "inventory_sha256": "a90c7f74dcd4aa8f3db3273b09e9231d4ea668adbf8ec0f8d6fad7b9d03ad03e",
+      "max_completion_tokens_values": [
+        4096
+      ],
+      "mode": "debug",
+      "model_call_receipts": 8,
+      "model_receipt_cost_usd": "0.004248240",
+      "official_evaluation_score": null,
+      "organizer_receipt_files": 5,
+      "organizer_receipt_note": "Saved received HTTP/transport-error receipts and recovery evidence retained; counts are not necessarily accepted turns.",
+      "receipt_minus_checkpoint_cost_usd": "0.000000000",
+      "requested_models": [
+        "openai/gpt-6-luna"
+      ],
+      "run_id": "np-labs-luna-task2-debug-20261006-v1",
+      "server_cutoffs": 0,
+      "state_file": "state.json",
+      "state_sha256": "7d162a07fb133642feadc4873cde65e8bdd9fb4e46da4fae50d183d7df28611a",
+      "status": "halted",
+      "task": 2,
+      "terminal_http428_files": [],
+      "total_user_turns": 3,
+      "user_stops": 0,
+      "whole_run_realism_rate": null
+    },
+    {
+      "archive_relative_directory": "organizer-and-model-runs/task2-debug-luna-20261006-v2",
+      "artifact_bytes": 494703,
+      "artifact_files": 39,
+      "checkpoint_model_calls": 10,
+      "checkpoint_model_cost_usd": "0.005123280",
+      "checkpoint_status": "halted",
+      "completed_conversations": 0,
+      "frozen_source_files": 12,
+      "inventory_sha256": "53029ece1bb24403962a3f67106aed1328cd59ef6c743efda8f922df48bb0b47",
+      "max_completion_tokens_values": [
+        4096
+      ],
+      "mode": "debug",
+      "model_call_receipts": 10,
+      "model_receipt_cost_usd": "0.005123280",
+      "official_evaluation_score": null,
+      "organizer_receipt_files": 6,
+      "organizer_receipt_note": "Saved received HTTP/transport-error receipts and recovery evidence retained; counts are not necessarily accepted turns.",
+      "receipt_minus_checkpoint_cost_usd": "0.000000000",
+      "requested_models": [
+        "openai/gpt-6-luna"
+      ],
+      "run_id": "np-labs-luna-task2-debug-20261006-v2",
+      "server_cutoffs": 0,
+      "state_file": "state.json",
+      "state_sha256": "c455e2669e6b9ee785c7b859c7e66f660cfb33faee76fd53d1dc732e5b299433",
+      "status": "halted",
+      "task": 2,
+      "terminal_http428_files": [],
+      "total_user_turns": 4,
+      "user_stops": 0,
+      "whole_run_realism_rate": null
+    },
+    {
+      "accounting_note": "Eight priced response receipts include the fourth attempted turn. Checkpoint tracks only six calls / three turns; original state preserved.",
+      "archive_relative_directory": "organizer-and-model-runs/task2-debug-luna-20261007-v3",
+      "artifact_bytes": 365732,
+      "artifact_files": 34,
+      "checkpoint_model_calls": 6,
+      "checkpoint_model_cost_usd": "0.002196115",
+      "checkpoint_status": "halted",
+      "completed_conversations": 0,
+      "frozen_source_files": 12,
+      "inventory_sha256": "fd68bc127055eb608f520862210197e74c2e70641dc379ee9a63713c5df607a4",
+      "max_completion_tokens_values": [
+        4096
+      ],
+      "mode": "debug",
+      "model_call_receipts": 8,
+      "model_receipt_cost_usd": "0.003852275",
+      "official_evaluation_score": null,
+      "organizer_receipt_files": 5,
+      "organizer_receipt_note": "Saved received HTTP/transport-error receipts and recovery evidence retained; counts are not necessarily accepted turns.",
+      "receipt_minus_checkpoint_cost_usd": "0.001656160",
+      "requested_models": [
+        "openai/gpt-6-luna"
+      ],
+      "run_id": "np-labs-luna-task2-debug-20261007-v3",
+      "server_cutoffs": 0,
+      "state_file": "state.json",
+      "state_sha256": "ce7effea52628c5c81333302bfaaa7b87b4f14d066ae487fa502cafa3bf39447",
+      "status": "halted",
+      "task": 2,
+      "terminal_http428_files": [],
+      "total_user_turns": 3,
+      "user_stops": 0,
+      "whole_run_realism_rate": null
+    },
+    {
+      "archive_relative_directory": "organizer-and-model-runs/task2-debug-luna-v4",
+      "artifact_bytes": 1132239,
+      "artifact_files": 95,
+      "checkpoint_model_calls": 36,
+      "checkpoint_model_cost_usd": "0.014966260",
+      "checkpoint_status": "halted",
+      "completed_conversations": 3,
+      "frozen_source_files": 12,
+      "inventory_sha256": "f0eecf79ec4c7f4fb22af27644351479bcc0c26168351f1efd0054f327203e87",
+      "max_completion_tokens_values": [
+        4096
+      ],
+      "mode": "debug",
+      "model_call_receipts": 36,
+      "model_receipt_cost_usd": "0.014966260",
+      "official_evaluation_score": null,
+      "organizer_receipt_files": 19,
+      "organizer_receipt_note": "Saved received HTTP/transport-error receipts and recovery evidence retained; counts are not necessarily accepted turns.",
+      "receipt_minus_checkpoint_cost_usd": "0.000000000",
+      "requested_models": [
+        "openai/gpt-6-luna"
+      ],
+      "run_id": "np-labs-luna-task2-debug-v4",
+      "server_cutoffs": 0,
+      "state_file": "state.json",
+      "state_sha256": "640628f2f17f086a0eb5e0cd9b68037680f25dd6063ff46a335e9474f2900b9f",
+      "status": "halted",
+      "task": 2,
+      "terminal_http428_files": [],
+      "total_user_turns": 17,
+      "user_stops": 3,
+      "whole_run_realism_rate": null
+    },
+    {
+      "accepted_error_turns": 38,
+      "archive_relative_directory": "organizer-and-model-runs/task2-debug-luna-v5",
+      "artifact_bytes": 44822859,
+      "artifact_files": 2944,
+      "checkpoint_model_calls": 1696,
+      "checkpoint_model_cost_usd": "0.664036040",
+      "checkpoint_status": "halted",
+      "completed_conversations": 129,
+      "frozen_source_files": 16,
+      "inventory_sha256": "44d911b7251dcde5ee4d2b9dcecabafbf24475eb66c9c6845a88c7094d131a52",
+      "max_completion_tokens_values": [
+        4096
+      ],
+      "mode": "debug",
+      "model_call_receipts": 1696,
+      "model_receipt_cost_usd": "0.664036040",
+      "official_evaluation_score": null,
+      "operational_closing_turns": 38,
+      "organizer_receipt_files": 885,
+      "organizer_receipt_note": "Saved received HTTP/transport-error receipts and recovery evidence retained; counts are not necessarily accepted turns.",
+      "receipt_minus_checkpoint_cost_usd": "0.000000000",
+      "requested_models": [
+        "openai/gpt-6-luna"
+      ],
+      "run_id": "np-labs-luna-task2-debug-v5",
+      "server_cutoffs": 0,
+      "skipped_conversations": 38,
+      "state_file": "state.json",
+      "state_sha256": "b1f47743ceef49c529a9302f4fcd52604ba148a4633c4e03482ac9f907f1d83a",
+      "status": "intentionally_paused",
+      "task": 2,
+      "terminal_http428_files": [],
+      "total_user_turns": 886,
+      "user_stops": 129,
+      "whole_run_realism_rate": null
+    },
+    {
+      "accepted_error_turns": 8,
+      "archive_relative_directory": "organizer-and-model-runs/task2-official-luna-20261009-v1",
+      "artifact_bytes": 12194117,
+      "artifact_files": 903,
+      "checkpoint_model_calls": 516,
+      "checkpoint_model_cost_usd": "0.173554630",
+      "checkpoint_status": "complete",
+      "completed_conversations": 49,
+      "frozen_source_files": 20,
+      "inventory_sha256": "2408c3b08a4a96d15e29223256c195f856c32106a6b0b2646a43c28200f075ba",
+      "max_completion_tokens_values": [
+        4096
+      ],
+      "mode": "official",
+      "model_call_receipts": 516,
+      "model_receipt_cost_usd": "0.173554630",
+      "official_evaluation_score": null,
+      "operational_closing_turns": 8,
+      "organizer_receipt_files": 267,
+      "organizer_receipt_note": "Saved received HTTP/transport-error receipts and recovery evidence retained; counts are not necessarily accepted turns.",
+      "receipt_minus_checkpoint_cost_usd": "0.000000000",
+      "requested_models": [
+        "openai/gpt-6-luna"
+      ],
+      "run_id": "np-labs-luna-style-task2-official-20261009-v1",
+      "server_cutoffs": 0,
+      "skipped_conversations": 8,
+      "state_file": "state.json",
+      "state_sha256": "ae78153b5b0eabaa9602108f844358f6258a3f59e3faa929fcd24e73c0175f62",
+      "status": "complete",
+      "task": 2,
+      "terminal_http428_files": [
+        "continue-0265.json"
+      ],
+      "total_user_turns": 266,
+      "user_stops": 49,
+      "whole_run_realism_rate": null
+    }
+  ],
+  "schema_version": 1,
+  "snapshot_utc": "2026-10-10T05:50:17.025917+00:00"
+}

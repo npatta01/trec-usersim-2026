@@ -66,3 +66,23 @@ HTML fixture are tracked; real official-run reading copies stay outside git and
 on the authorized private portal. Screenshots in `images/run-viewer-*.png` use
 only the synthetic fixture. See the viewer guide for regeneration, provenance and
 separate browser/receipt verification. Simulator behavior is unchanged.
+
+## Paper evidence preservation
+
+The [paper pack](paper/README.md) adds a claim-to-evidence map, writing outline
+and generated official coverage/cost table. The [preservation guide](paper/preservation.md)
+documents the private local snapshot and its public aggregate index; the
+[submission index](../submissions/README.md) exposes historical receipt/accounting
+gaps. These additions include offline archive/index tools and synthetic archive
+tests. They do not change simulator runtime or original run records.
+
+The archive verified 7,403 files against their sources. Original-data identity,
+all nine run IDs and official coverage/costs were checked from saved evidence.
+Public indexes contain no participant/profile/prompt/response text. Fresh
+verification passed: 148 offline tests (including nine preservation/accounting
+tests), 395 local Markdown links and eight image alt texts. The public run JSON
+and official CSV regenerate byte-identically; archive/source hashes, original
+data identity, private permissions and ignore protection passed. Public changed
+files passed recognized credential-pattern scanning. Simulator/starter source
+remains unchanged. No model or organizer API call was made. Re-run the relevant
+checks when the pack changes; earlier browser QA is not a new paper audit.

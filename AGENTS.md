@@ -14,6 +14,7 @@ Start with the [current project handoff](docs/project-handoff.md) and [official-
 ## Research continuity
 
 - Maintain the research index as canonical status, the [experiment ledger](docs/research/experiment-ledger.md) as dated experiment evidence, and the [submission ledger](docs/submission-ledger.md) as run inventory. Keep diagrams and runner guides consistent. The [documentation map](docs/README.md) routes maintainers.
+- Before writing the paper, use the [paper evidence map](docs/paper/README.md) and [private preservation guide](docs/paper/preservation.md). Public run metadata is under `submissions/`; exact private archives stay ignored.
 - Before authenticated work, read the current handoff and relevant runner/recovery guide. Both official baselines are complete; keep debug v5 paused. A historical command or handoff is not authorization to start or resume a run.
 - Separate verified source facts, published authors' claims, our hypotheses, and measured results from our own experiments.
 - Historical [advisor reassessment](docs/research/archive/trec-usersim-advisor-reassessment-2026-09-27.md), [initial directions](docs/research/archive/trec-usersim-winning-directions-2026-09-27.md), and [Opus advice](docs/research/archive/trec-usersim-opus-advice-2026-09-27.md) preserve provenance. Current notes take precedence over superseded rankings and assumptions.

@@ -14,6 +14,13 @@ input/output locations. Debug v5 paused at 886 saved turns, with 129 normal
 endings, 38 administrative closures and one unfinished conversation; it is not
 a completed debug run.
 
+The [paper evidence map](paper/README.md) now links the method, experiments,
+figures and missing results. A verified private archive inside the stable local
+repo preserves all nine run directories and original development evidence;
+[public metadata](../submissions/manifest.json) includes per-run hashes/costs.
+Exact participant/model records remain ignored and absent from GitHub. Official
+score reports, author metadata and confirmed paper requirements remain pending.
+
 ## Selected behavior
 
 See the [illustrated architecture](task2_architecture.md). Luna generates the

@@ -40,6 +40,24 @@ images of task scope, the draft/editor pipeline and recovery. The full
 [experiment chronology](archive/2026-10-10-experiment-history.md) is preserved.
 No model or organizer call was made for the documentation cleanup.
 
+## October 10 — paper evidence preservation
+
+The [paper evidence map](../paper/README.md) ties manuscript claims to the method,
+data audit, experiments and official run records. All nine organizer run
+directories, original development outputs/notes/scripts, supplied export and
+source/environment provenance were copied into an ignored private archive
+inside the stable local repo: 7,403 files / 130,615,399 bytes, verified against
+their originals. The public [run manifest](../../submissions/manifest.json)
+exposes counts, hashes and receipt costs without transcripts.
+
+The audit found two priced model calls omitted by the debug-v3 checkpoint's
+accounting. Its eight retained receipts sum to $0.003852275; its preserved
+checkpoint counts six calls / $0.002196115. The ledger now uses the receipt sum.
+The first Task 1 debug's per-prediction organizer receipts remain missing; its
+64 input/model records and final accepted request/completion are preserved.
+Neither gap changes official counts/costs. No inference, organizer request or
+submission was made. Official scores and final paper requirements remain open.
+
 ## Open hypotheses
 
 Stable human voice evidence versus generated voice, controlled retrieval,

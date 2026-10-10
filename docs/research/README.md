@@ -50,6 +50,12 @@ Review organizer evaluation when available. No further run is needed to finish
 this baseline; keep debug v5 paused and preserve private inputs/outputs,
 receipts, frozen source and reconciliation evidence.
 
+The [paper preparation map](../paper/README.md) records the writing plan and
+missing official scores/venue/author information. All available run and detailed
+development artifacts are now in a verified ignored archive inside the stable
+local repo; [preservation instructions](../paper/preservation.md) explain its
+scope and same-host backup limitation.
+
 For future research, use matched hard cases and successful controls, evaluate
 knowledge attribution and voice separately, and include repeated draws and
 context-aware blind review where practical. The backlog does not authorize a

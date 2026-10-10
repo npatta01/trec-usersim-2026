@@ -210,3 +210,4 @@ __marimo__/
 
 # Local conversations, model outputs, and authenticated run receipts
 /data/official/
+/data/private-evidence/

@@ -10,6 +10,7 @@ Debug v5 remains intentionally paused.
 
 - [Understand the system](docs/task2_architecture.md): illustrated architecture.
 - [Check submissions](docs/submission-ledger.md): run IDs, costs, quotas and evidence.
+- [Prepare the paper](docs/paper/README.md): claim-to-evidence map, preserved records and missing items.
 - [Start reading or developing](docs/README.md): setup, data, research and history.
 - [Resume project context](docs/project-handoff.md): current decisions and limits.
 
@@ -56,6 +57,7 @@ execution. The original starter's two known test-collection failures are
 | `experiments/` | Historical studies and unselected variants |
 | `simulator/` | Imported organizer starter |
 | `docs/` | Current guides, evidence and preserved history |
+| `submissions/` | Public per-run metadata and evidence hashes; exact records are private |
 
 The [original organizer guide](docs/organizer-starter.md) is retained for
 provenance. The [official website](https://trec.usersim.ai/) and

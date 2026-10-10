@@ -1,0 +1,3 @@
+task,run_id,status,predictions,processed_conversations,normal_endings,administrative_closures,submitted_turns,model_call_receipts,model_receipt_cost_usd,official_evaluation_score
+1,np-labs-luna-fidelity-task1-official-20261006-v1,complete,62,,,,,124,0.029373225,
+2,np-labs-luna-style-task2-official-20261009-v1,complete,,57,49,8,266,516,0.173554630,
