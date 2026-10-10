@@ -1,5 +1,9 @@
 # Task 2 architecture and panel review
 
+> Historical architecture/panel review. The implemented
+> [architecture](../task2_architecture.md) and [current handoff](../project-handoff.md)
+> supersede old layout, status and launch next actions below.
+
 ## Subsequent structural refactor
 
 The user subsequently requested the helper extraction. See the

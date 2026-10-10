@@ -1,5 +1,9 @@
 # Task 2 integration audit
 
+> Dated HTTP200/null-transition investigation. This is a bounded earlier audit,
+> not the final completion check. See the [current handoff](../project-handoff.md),
+> [runner guide](../task2_debug_runner.md) and [recovery record](task2-recovery-plan.md).
+
 No live requests or new runs were made for this audit. This is a bounded audit,
 not a guarantee that every server behavior has been discovered.
 

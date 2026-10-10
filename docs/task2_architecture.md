@@ -1,24 +1,24 @@
 # Task 2: how our researcher simulator works
 
-## Current operator decision — October 9
+## Current status — October 10
 
-v5 is intentionally paused with an audited prefix:886 turns, 129 normal endings,
-38 server-error closures and one unfinished conversation. No request is pending.
-No HTTP428/debug-completion claim is made. The ordinary official CLI keeps its
-completed-debug gate. For the user's decision to stop debug and send a baseline,
-a separate private launcher binds the paused evidence and quality review before
-credentials/POSTs, retaining the tested runtime and official default 24 outage
-limit. See [readiness and limitations](research/task2-recovery-plan.md).
+Both official baselines are complete. Task 2 processed 57 conversations: 49
+normal researcher endings and eight administrative closures. Debug v5 remains
+intentionally paused. The [handoff](project-handoff.md) and
+[submission ledger](submission-ledger.md) hold current evidence and limits.
 
 ```mermaid
 flowchart LR
-    D[Debug v5: safely paused] --> A[Audit saved requests and server history]
-    A --> Q[Review conversation quality and limitations]
-    Q --> G[Freeze exact readiness evidence]
-    G --> O[One official Task 2 baseline run]
-    O --> F[HTTP428 plus final receipt audit]
+    D[Debug v5: audited, intentionally paused] --> Q[Bound quality review and specific operator authorization]
+    Q --> O[One official Task 2 baseline]
+    O --> F[Final HTTP428: remotely complete]
+    F --> R[Local terminal reconciliation, no POST]
+    R --> A[57 processed: final audit complete]
 ```
 
+The ordinary official CLI retains its completed-debug gate; the baseline launch
+used a separately reviewed private operator exception for this paused prefix.
+No further official run is authorized by these diagrams.
 
 We generate the **researcher’s side** of a conversation. The organizer supplies
 the dataset-search assistant. These are two separate systems.
@@ -59,8 +59,11 @@ flowchart TD
 ```
 
 Each new scenario supplies a new persona and goal. The history resets completely.
-Within a conversation we retain all available messages. We do not compact or
-summarize them in the current baseline.
+Within a conversation we retain all available utterance text. Persona/goal
+fields use the starter representation; raw timestamps, annotations and other
+metadata are kept privately but not all rendered. See the
+[input projection](research/official-data-evidence.md#what-the-model-receives).
+We do not compact or summarize history in the current baseline.
 
 An operational close sends `is_final=true` from the researcher to end a
 conversation blocked by an observed backend error. It does not erase that
@@ -209,7 +212,7 @@ repair a server-side partial turn.
 |---|---|
 | 200 + valid assistant reply | Append the exchange and generate the next researcher turn |
 | 201 or strictly validated 200 + new empty scenario | Record the ending and reset persona, goal, and history |
-| 428 + explicit run-finished message | Mark the entire run complete |
+| 428 + recognized completion message (exact matching ID when run-bound) | Mark the entire run complete |
 | Saved 500/502 or exactly classified conversation-bound503 with persisted unanswered turn | Recovery wrapper sends one distinct final message, verifies advancement, and records a skip |
 | Classified original ReadTimeout with exact persisted unanswered turn | Wait for a delayed reply; after 30 minutes and a fresh check, allow one distinct close within outage bounds |
 | Other errors, mismatched IDs, invalid history, uncertain transport | Halt for inspection |
@@ -258,15 +261,26 @@ remain intact until recovery is explicitly resolved.
 
 ## What is demonstrated, and what is still open?
 
-Synthetic tests cover the lifecycle, resets, stop propagation, budget guards,
-safe receipt replay, metadata mismatches, timeout polling, delayed-reply evidence,
-outage limits and official-route isolation. At the October 9 migration checkpoint,
-v5 had 46 completed conversations and 11 operational closes and was halted on an
-original timeout. No official Task 2 submission had started.
-Official launch requires completed debug evidence and a conversation review bound
-to the final state, completion receipt, frozen code and recovery policy.
-Persona realism, natural voice, and semantic editor fidelity still need behavioral
-evaluation; passing software tests does not establish them.
+The 139 synthetic runtime tests / 92 subtests cover lifecycle, resets, stop
+propagation, budget guards, receipt replay, metadata mismatches, timeout polling,
+delayed-reply evidence, outage limits, official-route isolation and terminal
+completion/error handling. Full private official replay and remote confirmation
+verify 57 processed conversations, saved requests/outputs and separate recovery
+accounting. They establish integration and completion, not researcher realism.
+
+The final run-specific HTTP428 was initially rejected. A reviewed local
+reconciliation retained the frozen runtime and original failure evidence and
+advanced the accepted final message once without another POST. Public source now
+shares Task 1's completion classifier and preserves unknown protocol errors;
+that fix does not retroactively regenerate official outputs. See the
+[completion and recovery record](research/task2-recovery-plan.md).
+
+Natural voice, persona differentiation, unsupported knowledge/actions, semantic
+editor fidelity and excessive persistence remain concerns. The official training
+export has no positive researcher-stop labels. There is no organizer score or
+whole-run quality rate yet. The tested [method alternatives](research/method-decisions.md)
+remain separate from the implemented baseline.
 
 See the [runner guide](task2_debug_runner.md) for commands and the
-[recovery handoff](research/task2-debug-handoff.md) for the actual run status.
+[current handoff](project-handoff.md) for status. Earlier debug handoffs preserve
+historical failures; they are not instructions to resume completed work.

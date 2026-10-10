@@ -1,5 +1,9 @@
 # Organizer recovery request — draft, not sent
 
+> Historical unsent support draft for the first failure. It was not sent and
+> is not a current recovery procedure. Current state is in the
+> [handoff](../project-handoff.md) and [recovery record](task2-recovery-plan.md).
+
 Subject: Task 2 debug: HTTP500 after user message persisted — safe recovery?
 
 Hi organizers,

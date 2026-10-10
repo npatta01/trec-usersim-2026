@@ -74,10 +74,19 @@ power-loss durability is not established.
 
 ## Verification
 
-The current suite has 87 offline tests. Task 1 coverage includes debug/official
+The current shared runtime suite has 139 offline tests / 92 subtests (October 10).
+Run `.venv/bin/python -m unittest discover -s tests -p 'test_*.py'` from the
+repository root after installing the dependencies in the
+[setup guide](task2_debug_runner.md#setup-and-offline-verification).
+Task 1 coverage includes debug/official
 route isolation, default editor, independent prefix replacement, replay without
 reposting, uncertainty, cost caps and source/config changes. A separate local
 replay of all 64 saved debug cases preserved every draft request and editor input;
 its editor was an identity stub, so that replay tests wiring rather than quality.
 
-See [live validation and submission status](research/task1-live-validation.md).
+The official run completed 62 predictions and explicitly selected `fidelity`;
+its 124 model calls cost $0.029373225. See the current
+[submission ledger](submission-ledger.md) and [handoff](project-handoff.md).
+[Live validation](research/task1-live-validation.md) preserves the earlier debug
+checkpoint, not current submission status. Input projection and metadata limits
+are documented in [official-data evidence](research/official-data-evidence.md#what-the-model-receives).

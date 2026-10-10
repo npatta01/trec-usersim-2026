@@ -1,4 +1,11 @@
-# Experiment ledger for the Task 2 integration
+# Experiment ledger
+
+The [method decision summary](method-decisions.md) covers the earlier local and
+hosted-model, prompt, few-shot, editor, long-history and literature-adaptation
+screens, with their controls and limitations. [Official-data evidence](official-data-evidence.md)
+records the separate training audit. Dated integration and recovery entries
+below preserve execution history; the [submission ledger](../submission-ledger.md)
+is the canonical organizer-run inventory.
 
 ## October 10: official Task 2 complete and reconciled
 

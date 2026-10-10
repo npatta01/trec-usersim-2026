@@ -1,5 +1,9 @@
 # Task 2 second debug attempt — October 6, 2026
 
+> Historical second debug attempt. Current completion and paused-debug state
+> are in the [handoff](../project-handoff.md) and [submission ledger](../submission-ledger.md).
+> This record does not authorize retrying or starting another run.
+
 ## Authorization and decision
 
 The user authorized one fresh debug run if the existing conversation could not

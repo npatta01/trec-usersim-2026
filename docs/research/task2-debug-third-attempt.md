@@ -1,5 +1,9 @@
 # Task 2 post-outage debug attempt — October 7, 2026
 
+> Historical third debug attempt. Organizer repair notices and quotas below
+> describe that date. See the [current handoff](../project-handoff.md) and
+> [submission ledger](../submission-ledger.md) for later results.
+
 User authorized checking the organizer update and trying debug again.
 Organizer Marcel reports an internal service outage is resolved, quoted in
 [the participant reply](https://mail.google.com/mail/u/0/#all/1a115bab4c94d7a5).

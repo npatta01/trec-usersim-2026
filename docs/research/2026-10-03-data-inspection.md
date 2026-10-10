@@ -1,5 +1,9 @@
 # Data inspection and corrections to the proposed approaches
 
+> Historical supplementary-only audit. The official export was supplied later;
+> its current [coverage and limits](official-data-evidence.md) supersede the
+> original access uncertainty below. These two collections remain separate.
+
 Inspected October 3, 2026. **This audit covers the public supplementary collection, not the official TREC training logs.** Neither local checkout contained those logs; scoped searches of local data/download folders did not locate them. The official participant-page request returned HTTP 401. A path or authorized access configuration is still needed before claims about our official training data are possible.
 
 ## Evidence inspected

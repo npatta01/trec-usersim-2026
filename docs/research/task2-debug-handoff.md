@@ -1,5 +1,9 @@
 # Task 2 debug handoff — October 6, 2026
 
+> Historical first debug attempt. Both official baselines are now complete;
+> debug v5 is intentionally paused. See the [current handoff](../project-handoff.md)
+> and [submission ledger](../submission-ledger.md), not this attempt's next actions.
+
 This file records the **first** attempt. A separately authorized
 [second attempt](task2-debug-second-attempt.md) also halted; the current
 [submission ledger](../submission-ledger.md) has both runs and updated quotas.

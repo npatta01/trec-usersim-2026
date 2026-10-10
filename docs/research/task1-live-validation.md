@@ -1,5 +1,10 @@
 # Task 1 validation and conditional submission — October 6
 
+> Historical October 6 debug/conditional-launch checkpoint. The later official
+> Task 1 run used narrow fidelity editing and is complete. See the current
+> [handoff](../project-handoff.md) and [submission ledger](../submission-ledger.md).
+> Do not execute the dated next actions as a new authorization.
+
 ## Authorization and scope
 
 User requested local/debug testing and, if the results look right, an official
