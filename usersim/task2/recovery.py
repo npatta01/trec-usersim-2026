@@ -36,7 +36,7 @@ from .reconciliation import (
 from .timeout import TIMEOUT_POLICY, recover_timeout
 from .protocol import (
     build_continue_payload,
-    is_completion,
+    is_completion_for_run,
     normalize_item,
     same_json,
     validate_continue_response,
@@ -104,8 +104,8 @@ def verify_official_gate(debug_dir, review_file, *, max_skips=POLICY["max_skips"
     if not receipts:
         raise RuntimeError("No debug completion receipt")
     final = json.loads(receipts[-1].read_text())
-    if final.get("path") != "/task2/debug/continue" or not is_completion(
-        final.get("status"), final.get("body")
+    if final.get("path") != "/task2/debug/continue" or not is_completion_for_run(
+        final.get("status"), final.get("body"), state.get("run_id")
     ):
         raise RuntimeError("Debug completion not confirmed by organizer")
     if final.get("payload", {}).get("run_id") != state.get("run_id"):
@@ -305,20 +305,32 @@ def run_with_recovery(
             runner.organizer_dir / f"transport-error-continue-{index:04d}.json"
         )
         if runner.pending_path.exists() or timeout_proof.exists():
-            return recover_timeout(
+            recover_timeout(
                 runner, get_session, max_skips=max_skips, now=now, wait=wait
             )
-        return recover_backend_error(runner, get_session, max_skips=max_skips)
+            return True
+        receipt_path = runner.organizer_dir / f"continue-{index:04d}.json"
+        if receipt_path.exists():
+            receipt = json.loads(receipt_path.read_text())
+            if (
+                receipt.get("path") == runner.continue_path
+                and is_recoverable_backend_receipt(receipt)
+            ):
+                recover_backend_error(runner, get_session, max_skips=max_skips)
+                return True
+        return False
 
     state = runner._load_state()
     if state["status"] == "halted":
-        recover_current()
+        if not recover_current():
+            raise RuntimeError("Halted runner has no classified recovery evidence")
     while True:
         try:
             return runner.run()
         except (ValueError, ReadTimeout):
             runner.record_failure()
-            recover_current()
+            if not recover_current():
+                raise
 
 
 def main(argv=None):

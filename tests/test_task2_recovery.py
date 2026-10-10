@@ -300,7 +300,7 @@ class RecoveryTests(unittest.TestCase):
                 "payload": payload,
                 "request_sha256": digest(payload),
                 "status": 428,
-                "body": {"detail": "Run completed"},
+                "body": {"detail": 'No more open goals for run "debug-r". Run was finished!'},
             }
             for name, value in [
                 ("state.json", state),
@@ -319,6 +319,11 @@ class RecoveryTests(unittest.TestCase):
             f = p / "review.json"
             f.write_text(json.dumps(review))
             self.assertEqual(verify_official_gate(p, f)["debug_run_id"], "debug-r")
+            wrong = {**final, "body": {"detail": 'No more open goals for run "other-r". Run was finished!'}}
+            (p / "organizer/continue-0000.json").write_text(json.dumps(wrong))
+            with self.assertRaisesRegex(RuntimeError, "completion not confirmed"):
+                verify_official_gate(p, f)
+            (p / "organizer/continue-0000.json").write_text(json.dumps(final))
             selected_policy = {**POLICY, "max_skips": 48, "mode": "debug"}
             (p / "recovery-policy.json").write_text(json.dumps(selected_policy))
             with self.assertRaises(RuntimeError):

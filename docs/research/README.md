@@ -1,5 +1,26 @@
 # TREC UserSim research notes
 
+## October 10: both official baselines complete
+
+Task 1 submitted 62 predictions. Task 2's final HTTP428, full saved-request replay
+and fresh organizer GET agree: **57 processed, zero remaining**. Task 2 has
+**49 normal endings and eight administrative closures**, 266 submitted turns,
+258 generated pairs / 516 model calls and **$0.173554630 actual cost**. Three
+official allowances remain for each task. Debug v5 stays intentionally paused.
+
+Our Task 2 completion parser initially rejected exact run-ID-bound wording that
+Task 1 already accepted. A reviewed local reconciliation preserved frozen sources
+and original evidence and corrected the checkpoint without another POST or model
+call. The public parser/recovery fix passes 139 tests / 92 subtests; all 91 audit
+controls pass. Full replay and remote confirmation establish submission integrity,
+not researcher realism or competition score. Existing knowledge, style and
+persistence limitations remain documented.
+
+Next: review organizer results when available. No further run is needed for this
+baseline. [Completion/recovery evidence](task2-recovery-plan.md) and
+[submission ledger](../submission-ledger.md). Earlier dated checkpoints below
+preserve history and are superseded by this completion record.
+
 ## October 9: stop debug and submit one baseline
 
 v5 is intentionally paused at a clean boundary: 886 saved turns, 129 normal

@@ -1,6 +1,6 @@
 # Submission ledger
 
-Last reconciled: October 9, 2026. This is the canonical inventory of organizer
+Last reconciled: October 10, 2026. This is the canonical inventory of organizer
 runs. It is separate from the [experiment ledger](research/experiment-ledger.md),
 which also records model-only comparisons that consume no organizer allowance.
 
@@ -30,7 +30,7 @@ scenario records: 52 records appeared three times and one appeared twice.
 Those are scenario-agent conversations, not 158 original human training logs,
 158 participants or 158 organizer allowances. This snapshot is not the final
 debug pool size. Only one v5 debug run was being continued; it is now intentionally paused. One official Task 2
-run has started with HTTP200 and is still in progress.
+run completed with explicit HTTP428 and a final integrity audit.
 
 ## Allowances
 
@@ -42,7 +42,7 @@ run has started with HTTP200 and is still in progress.
 | Task 2 debug | 10 | 5 | **5** |
 
 Initial counts were verified before the first debug run. Latest saved HTTP200
-`/budget/check` agrees with this table (`task2-official-luna-20261009-v1/budget-after-start.json`). Debug and official allowances are separate,
+`/budget/check` agrees with this table (`task2-official-luna-20261009-v1/final-budget.json`). Debug and official allowances are separate,
 and each task has its own allowance. A halted run still uses an allowance.
 Resuming the same run did not start another run or resend accepted predictions.
 
@@ -58,40 +58,36 @@ Resuming the same run did not start another run or resend accepted predictions.
 | Oct 7 | Task 2 debug | `np-labs-luna-task2-debug-20261007-v3` | halted: 0 completed, 0 operational skips; 3 checkpointed turns | 0.002196115 |
 | Oct 8 | Task 2 debug | `np-labs-luna-task2-debug-v4` | halted: 3 completed, 0 operational skips; 17 checkpointed turns | 0.014966260 |
 | Oct 8–9 | Task 2 debug | `np-labs-luna-task2-debug-v5` | **Intentionally paused:** 886 saved turns, 129 normal endings, 38 administrative closures, 1 unfinished conversation; audited prefix, no HTTP428 | 0.664036040 |
-| Oct 9 | Task 2 official | `np-labs-luna-style-task2-official-20261009-v1` | **In progress:** 47/57 processed, 40 normal endings and 7 administrative closures; 226 checkpointed turns; later timeout awaiting delayed reply | Pending final accounting |
+| Oct 9–10 | Task 2 official | `np-labs-luna-style-task2-official-20261009-v1` | **Complete: 57/57 processed**; 49 normal stops, 8 administrative closures; 266 submitted turns, 258 generated pairs / 516 model calls; explicit HTTP428 and final audit | 0.173554630 |
 
-There are exactly **two official runs started**: Task 1 is complete, Task 2 is
-still in progress. The two Task 1 debug runs each
+There are exactly **two official runs started, both complete**: one for Task 1
+and one for Task 2. The two Task 1 debug runs each
 contain 64 predictions, but should not be added to the 62 official predictions as
 one 190-example official evaluation or treated as 190 independent examples.
 Model-only editor comparisons, synthetic probes and offline replays are not
 additional organizer submissions. Run-name proposals in historical notes are not
 runs unless listed here with start evidence.
 
-Official Task 2 continues in a background service. A separate reviewed watcher
-will confirm successful completion by replaying retained inputs/outputs and
-checking fresh organizer status after explicit final HTTP428. Its current audit
-also verifies proven delayed ReadTimeout replies, retaining GET evidence separately
-from POST receipts. Monitoring observed consecutive delayed replies recovered
-without resends, and a separately verified HTTP502 administrative closure. The
-independently reviewed replacement audit verifies original/closing receipts,
-exact server history, intent, limits and counters; normal endings and error
-closures are reported separately. Seventy-four audit tests and four watcher
-controls pass, including mixed delayed/closure paths, grace-period closure
-proofs and confirmed receipt-before-pending-removal replay without another POST.
-The new checker retains a full 30-minute grace and validates ordered recorded
-timestamps; it does not change live recovery. Unbound archived diagnostics and unrecognized recovery
-variants require a separate review. No completion or
-whole-run quality claim is made while it runs.
+Official Task 2 is remotely complete: fresh status has no current conversation,
+and team summary reports 57 done / zero remaining. The final audit independently
+replays every cached model request and submitted text/stop flag, preserving the
+49 normal stops separately from eight administrative closures (five backend,
+three timeout). Three delayed replies required neither repost nor close.
 
-At the latest monitored checkpoint, all 440 saved model receipts sum to
-$0.146237160 actual cost; $1.622307800 is reservation accounting, not spending.
-Three delayed replies were recovered without reposting. Timeouts 188 and 208
-each exhausted the full grace and advanced through a distinct HTTP200 close;
-bounded cached-request and closure checks pass. HTTP502 at 211 also advanced
-through a distinct close. Timeout 226 is currently waiting under the same policy.
-These are observations from the same official run, not additional starts or
-allowances. Final totals require the completion audit.
+The final HTTP428 used exact run-ID-bound wording that our Task 2 parser initially
+rejected. A reviewed local reconciliation archived the original halted state and
+masked secondary error, retained the frozen runtime and manifest, and advanced
+that accepted final message once. No original POST was repeated, model called or
+additional allowance consumed. All 91 audit controls pass; the saved final report
+binds receipt, reconciliation, GET, source and state hashes. This establishes
+completion/integrity, not an official score or whole-run quality rating.
+
+Model receipts sum to $0.173554630 actual Task 2 cost. Cumulative reservation
+accounting is $1.908891500. Debug v5 remains paused at 886 turns; its cost and
+coverage are separate. The frozen 30-minute timeout grace was preserved for this
+run. Observed delayed replies arrived roughly 31–92 seconds after the POST
+timeout; a shorter future grace is a proposal, not an applied or proven limit.
+
 
 ## Exact inputs and outputs are retained privately
 
@@ -138,29 +134,42 @@ In the Task 1 official directory:
 | `result.json`, `audit.json` | Completion, counts, cost and integrity audit |
 | `final-status.json`, `final-summary.json`, `final-budget.json` | Read-only organizer confirmation and remaining quota |
 
+In the Task 2 official directory:
+
+| File pattern | Contents |
+|---|---|
+| `model/turn-NNNN-{draft,edit}.json` | Exact full requests, raw outputs and usage/cost for all 258 generated pairs |
+| `organizer/start.json`, `organizer/continue-NNNN.json` | Saved start and received continuation request/response receipts |
+| `organizer/transport-error-continue-NNNN.json` | Transport failures; no fabricated successful POST receipt |
+| `recovery/`, `reconciliation/` | Verified delayed replies and original/closing administrative evidence |
+| `terminal-reconciliation/` | Original halted state and secondary error, bound terminal intent and result |
+| `manifest.json`, `frozen/`, `readiness/`, `recovery-policy.json` | Unchanged runtime/configuration and audited paused-prefix readiness |
+| `completion-audit-tools/`, `completion-terminal-audit-source-review.json` | Exact separately reviewed audit/reconciliation source and review pins |
+| `integrity-audit.json`, `final-status.json`, `final-summary.json`, `final-budget.json` | Full replay and read-only completion/coverage/quota confirmation |
+
 Earlier runners used different filenames: the first debug run's `case-NNNN.json`
 contains `item`, `request`, `response` and reservation together. Do not assume all
 historical runs use the current file layout.
 
 ## Decisions and next action
 
-Task 1 is submitted. The user chose to pause Task 2 v5 and proceed toward one
-official baseline. The exact 886-turn prefix, pause boundary and current server
-history pass read-only audit. Independent selective review approves baseline
-readiness with explicit persona/knowledge/persistence limitations. A separately
-reviewed private operator launcher binds that evidence; the ordinary CLI's
-completed-debug requirement remains unchanged. Keep v5 paused. Independent source
-review cleared the private operator launcher and 10 synthetic tests pass. One
-official run has started with HTTP200, using default 24/25%/3 recovery limits, $6 cumulative
-model reservations, 1,000 total turns and 30 turns per conversation. Preserve every
-input, model call, submitted message and response privately; require explicit
-HTTP428 and a final audit. Never blindly resend a persisted failed message.
-See the [recovery plan](research/task2-recovery-plan.md).
+Both official tasks are submitted and complete. Task 1 has 62 predictions; Task 2
+has 57 processed conversations (49 normal endings and eight administrative
+closures). No further submission is needed for this baseline. Review organizer
+results when available; no competition score or whole-run realism rate is
+claimed. Keep debug v5 intentionally paused and retain private inputs/outputs,
+receipts, frozen sources and reconciliation evidence. Never resend an accepted
+or uncertain original message. See the [recovery plan](research/task2-recovery-plan.md).
 
 Update this ledger whenever an organizer run starts, halts, resumes or completes.
 Record a new quota snapshot after the transition; distinguish predictions, model
 calls, whole conversations and run allowances. Keep private transcripts and keys
 out of this public-shareable summary.
+
+## Historical recovery checkpoints
+
+The dated records below preserve what was known at the time. The current run
+table and completion record above supersede their next actions and quota counts.
 
 ## October 7 active Task 2 debug attempt
 

@@ -159,7 +159,7 @@ def validate_continue_response(
 
     current = normalize_item(current)
     if status == 428:
-        if not is_completion(status, body):
+        if not is_completion_for_run(status, body, payload.get("run_id")):
             raise ValueError("428 response is not an explicit completed-run response")
         return {"kind": "complete"}
     if status not in (200, 201):
@@ -263,3 +263,16 @@ def is_completion(status: int, body: Any) -> bool:
         "run was finished",
         "run completed",
     }
+
+
+def is_completion_for_run(status: int, body: Any, run_id: str) -> bool:
+    """Recognize canonical completions or the exact run-bound organizer variant."""
+
+    if not isinstance(run_id, str) or not run_id:
+        return False
+    return is_completion(status, body) or (
+        status == 428
+        and body == {
+            "detail": f'No more open goals for run "{run_id}". Run was finished!'
+        }
+    )

@@ -161,7 +161,7 @@ class BudgetCliTests(unittest.TestCase):
             new.freeze()
             # If migration is interrupted after freezing the larger cap,
             # the old halted state still blocks all paid/submission calls.
-            with self.assertRaisesRegex(RuntimeError, "No backend failure receipt"):
+            with self.assertRaisesRegex(RuntimeError, "Halted runner has no classified recovery evidence"):
                 recovery.run_with_recovery(
                     new,
                     lambda: (_ for _ in ()).throw(AssertionError("Unneeded GET")),

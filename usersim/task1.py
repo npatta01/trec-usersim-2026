@@ -19,7 +19,7 @@ from usersim.checkpoints import atomic, digest
 from usersim.prompts import build_messages, editor_messages
 from usersim.requests import model_payload, validate
 from usersim.task2.model import CheckpointedModel
-from usersim.task2.protocol import is_completion, utc_timestamp
+from usersim.task2.protocol import is_completion_for_run, utc_timestamp
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -173,13 +173,7 @@ def _checked_item(status: int, body: Any, *, previous: dict | None = None) -> di
 def _is_task1_completion(status: int, body: Any, run_id: str) -> bool:
     """Recognize shared completions or the exact Task 1 run-specific response."""
 
-    return is_completion(status, body) or (
-        status == 428
-        and body
-        == {
-            "detail": f'No more open goals for run "{run_id}". Run was finished!'
-        }
-    )
+    return is_completion_for_run(status, body, run_id)
 
 
 class _Task1Model(CheckpointedModel):

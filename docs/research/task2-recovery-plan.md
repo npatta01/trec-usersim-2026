@@ -1,5 +1,45 @@
 # Task 2 backend-error recovery plan
 
+## October 10: official Task 2 complete and reconciled
+
+Official run `np-labs-luna-style-task2-official-20261009-v1` reached the organizer's
+explicit HTTP428 completion. Fresh GET status is complete with no current
+conversation; the team summary confirms **57 processed and zero remaining**.
+Final accounting: **49 normal researcher stops, eight administrative closures**
+(five backend-error and three unanswered-timeout closures), **266 submitted
+turns**, 258 generated draft/editor pairs and 516 model calls. Actual model cost
+is **$0.173554630**; $1.908891500 is reservation accounting, not spending. Three
+earlier delayed replies were recovered without reposting. Three official Task 2
+allowances and five debug allowances remain. Debug v5 stays intentionally paused.
+
+The last POST was accepted, but our Task 2 parser rejected the organizer's exact
+run-ID-bound completion wording, already supported by Task 1. Recovery then
+masked that protocol error. A source-reviewed local reconciliation preserved the
+frozen runtime/manifest, prior halted checkpoint and secondary error, bound the
+original receipt to fresh GET evidence, replayed all cached requests and outcomes,
+and advanced the last turn once as a normal stop. It made **no POST or model
+request**. The original service and watcher exits remain historical failures
+from the rejected response; no active inference worker remains. The last message was not resent; no additional run was started.
+
+The final audit verifies all 57 unique conversation IDs, saved request/output
+pairs, administrative evidence, counters, frozen sources and remote completion.
+Its 91 synthetic controls include terminal wording/ID tampering, source and GET
+request binding, mixed recovery, partial archive and interruption replay. The
+public runner shares the exact run-bound completion classifier with Task 1 and
+only dispatches recovery for classified timeout/backend evidence. All 139 tests
+under `tests/` and 92 subtests pass. Bare repository pytest still has two existing
+organizer-starter collection errors: missing `PersonaDefinition` in
+`simulator/tests/test_response_strategies.py` and `test_user_simulator.py`.
+
+Both official tasks now have one completed submission. This is submission and
+integrity evidence, not a human-realism rate or competition score. Knowledge,
+persona differentiation and persistence limitations remain documented. Next:
+review organizer evaluation when available; no further run is needed to complete
+this baseline. [Submission ledger](../submission-ledger.md).
+
+Earlier dated checkpoints below preserve history and are superseded by this
+completion record.
+
 ## October 9: debug paused by choice; official baseline readiness
 
 The user chose to stop debug and proceed toward one official Task 2 baseline.

@@ -98,7 +98,7 @@ class TurnLimitCliTests(unittest.TestCase):
             )
             (out / "manifest.json").unlink()
             runner.freeze()
-            with self.assertRaisesRegex(RuntimeError, "No backend failure receipt"):
+            with self.assertRaisesRegex(RuntimeError, "Halted runner has no classified recovery evidence"):
                 recovery.run_with_recovery(runner, lambda: self.fail("Unexpected GET"))
             self.assertEqual(len(models), 2)
             self.assertEqual(len(posts), 2)
