@@ -1,60 +1,50 @@
-# Documentation map
+# Documentation
 
-Start with the [project handoff](project-handoff.md): both official baselines are
-complete, and no further run is needed. This map distinguishes current guides
-from historical research and recovery checkpoints.
+Start with the [illustrated architecture](task2_architecture.md) to understand
+what we generate and how the two tasks differ. Both official baselines are
+complete; current status and next action are in the [project handoff](project-handoff.md).
 
-| Need | Read |
-|---|---|
-| Current status, selected behavior, next action | [Project handoff](project-handoff.md), then [research index](research/README.md) |
-| Runs, remaining allowances, costs, private receipt locations | [Submission ledger](submission-ledger.md) |
-| How the system works, including diagrams and module boundaries | [Task 2 architecture](task2_architecture.md) |
-| Task 1 setup, preview, editor selection and safeguards | [Task 1 runner](task1_runner.md) |
-| Task 2 setup, execution gates and recovery | [Task 2 runner](task2_debug_runner.md), then [recovery plan](research/task2-recovery-plan.md) |
-| Organizer task and endpoint contract | [Task 1 workflow](task1_workflow.md), [Task 2 workflow](task2_workflow.md) |
-| What the official training export actually supports | [Official-data evidence](research/official-data-evidence.md) |
-| Methods tested, rejected variants, uncertainties | [Method decisions](research/method-decisions.md), then [experiment ledger](research/experiment-ledger.md) |
-| Task 1 narrow fidelity repair and its limits | [Fidelity comparison](research/task1-fidelity-fix.md) |
-| Source layout and historical experiment entry points | [Code structure](research/code-structure-plan.md), [experiments](../experiments/README.md) |
-| Literature and earlier proposals | [October 3 source refresh](research/2026-10-03-research-refresh.md), [implementation proposals](research/implementation-options.md) |
-| Supplementary collection, distinct from official training | [October 3 supplementary inspection](research/2026-10-03-data-inspection.md) |
+## Understand the project
 
-The research index is the canonical status; the submission ledger is the
-canonical run inventory; the experiment ledger preserves dated evidence.
-Historical handoffs describe what was known on their date, not current work to
-execute. The diagrams explain the implemented baseline; candidate diagrams in
-the proposal document are explicitly historical.
+- [Architecture](task2_architecture.md): tasks, model roles, draft/edit pipeline
+  and recovery images.
+- [Rendered input/prompt/response reader](run_viewer.md): inspect exact requests
+  privately and explore a complete conversation. Public screenshots use invented examples.
+- [Submission ledger](submission-ledger.md): actual runs, costs, allowances and
+  private input/output locations.
+- [Research status](research/README.md): selected method, evidence and open gaps.
 
-## Maintaining the record
+## Run or test the code
 
-When behavior changes, update the relevant runner guide and architecture before
-handoff. Record the experiment's inputs, controls, result, limitations and decision
-in the experiment ledger; revise the method summary when the decision changes.
-When a run starts or its state changes, reconcile its saved receipts and update
-the submission ledger and research index. Distinguish normal stops from
-administrative closures and reservations from money spent.
+- [Task 1 runner](task1_runner.md): independent prefixes, preview, editor selection.
+- [Task 2 runner](task2_debug_runner.md): setup, execution gates and safeguards.
+- [Recovery guide](research/task2-recovery-plan.md): verified delayed replies,
+  administrative closes and frozen checkpoints.
+- Organizer contracts: [Task 1](task1_workflow.md), [Task 2](task2_workflow.md).
+- [Original starter guide](organizer-starter.md) and [experiment modules](../experiments/README.md).
 
-Verification commands and known legacy-test failures are in the
-[execution guide](task2_debug_runner.md#setup-and-offline-verification). Use CLI
-`--help` and Task 1 preview for offline inspection; Task 2 execution commands have
-no preview mode. Source checks and synthetic tests do not establish user realism.
+## Assess the evidence
 
-Public documentation contains source, synthetic examples and aggregate results.
-Training transcripts, exact model requests/outputs, API receipts, personal data
-and keys stay in the private locations listed in the submission ledger. Those
-files are needed to reproduce historical experiments; this public checkout alone
-does not contain them. Never copy credentials into commands, docs or review packets.
+- [Paper preparation](paper/README.md): writing plan, claims, evidence, result table and remaining gaps.
+- [Private preservation](paper/preservation.md): all available submission/research records inside the stable local repo directory, with offline verification.
+- [Official-data inspection](research/official-data-evidence.md): schema, coverage,
+  stopping signals, provenance and leakage limits.
+- [Method decisions](research/method-decisions.md): tested ideas, controls, results
+  and reasons for keeping or rejecting variants.
+- [Experiment ledger](research/experiment-ledger.md): dated decisions and study inventory.
+- [Task 1 fidelity study](research/task1-fidelity-fix.md): selected narrow repair.
+- [Source refresh](research/2026-10-03-research-refresh.md): literature inspection.
 
-## Documentation verification — October 10
+## Maintain the record
 
-The public documentation was reconciled against current source, the official
-export's aggregate checksum/schema, private submission state and saved final
-audit/GET records. Old access uncertainty and launch checkpoints are marked
-historical; their original evidence is preserved rather than silently replaced.
+Keep status in the research index, run accounting in the submission ledger, and
+experiment decisions in the experiment ledger. Update diagrams when behavior
+changes. Preserve historical evidence in the [archive](research/archive/README.md).
+Historical next actions do not authorize a new run.
 
-Repository-relative Markdown paths/anchors and whitespace were checked. All
-139 runtime tests passed in the existing development environment. Both Task 2
-CLIs and Task 1 `--help` were exercised; Task 1 preview created no run directory,
-and Task 2 refused execution without `--run`. The clean checkout does not include
-private artifacts; no new model or organizer calls were made for this update.
-The dependency installation recipe was reviewed, not reinstalled from scratch.
+Public docs contain source, synthetic examples and aggregate findings. Raw
+participant data, exact requests/outputs, receipts and keys remain private.
+Software checks establish integration, not researcher realism.
+
+See [documentation maintenance](maintenance.md) for image sources, regeneration
+and the cleanup's verification record.
