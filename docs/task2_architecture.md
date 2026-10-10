@@ -24,6 +24,17 @@ the CLI compatibility default remains `style`. Task 2 keeps `style` and returns
 strict text/stop output. Code preserves its draft stop boolean; semantic meaning
 preservation is an instruction, not a code guarantee.
 
+## See the input, prompt and response
+
+The [rendered reader](run_viewer.md) shows all saved Task 1 official cases and
+one complete Task 2 conversation on the private portal. Each researcher turn
+opens its supplied input, exact draft/editor messages and submitted text.
+
+This public screenshot uses an **invented example**, with no participant data
+or measured model outputs:
+
+![An invented example shows organizer input in blue, model prompts in violet, and a draft plus submitted researcher message in green.](images/run-viewer-turn.png)
+
 ## Why the chat roles look reversed
 
 | Material | Model API role |

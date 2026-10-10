@@ -57,3 +57,12 @@ Current status: cleanup and illustrations verified. Next action: review the
 documentation PR. No paid model or organizer requests were made. GitHub's live
 page layout is not a separate browser QA result; the inspected images are the
 actual generated assets at the stated widths.
+
+## Rendered examples
+
+The [run viewer](run_viewer.md) adds color-coded input, model messages and output,
+plus conversation-to-turn inspection. Reusable source and an explicitly synthetic
+HTML fixture are tracked; real official-run reading copies stay outside git and
+on the authorized private portal. Screenshots in `images/run-viewer-*.png` use
+only the synthetic fixture. See the viewer guide for regeneration, provenance and
+separate browser/receipt verification. Simulator behavior is unchanged.

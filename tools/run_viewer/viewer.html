@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="__CSP__">
+<title>TREC UserSim · Input, prompt & response</title>
+<style>__CSS__</style>
+</head>
+<body>
+<header class="masthead"><div class="wrap">
+<a class="home" href="#main">TREC UserSim</a>
+<h1>Inside a researcher turn</h1>
+<p>What the organizer supplied, what we asked the model, and what we sent back.</p>
+<p id="provenance" class="provenance"></p>
+</div></header>
+<main id="main" class="wrap">
+<div class="controls">
+<label>Task<select id="run"></select></label>
+<label class="case-picker">Example<select id="conversation"></select></label>
+<label id="turn-label">Researcher turn<select id="turn"></select></label>
+<div class="paging"><button id="previous" type="button" aria-label="Previous example or turn">Previous</button><button id="next" type="button" aria-label="Next example or turn">Next</button></div>
+</div>
+<p id="context-note" class="muted"></p>
+<nav class="view-nav" aria-label="Reading view"><button id="one-turn" type="button" aria-pressed="true">Input → prompt → response</button><button id="whole" type="button" aria-pressed="false">Whole conversation</button></nav>
+<p id="selection" class="selection" aria-live="polite"></p>
+<div id="flow" class="flow"></div>
+<div id="thread" class="thread" hidden></div>
+<footer>
+<p>Blue: organizer / search assistant. Violet: model instructions. Green: our simulated researcher.</p>
+<p>Conversation claims are shown as recorded, not verified dataset facts. Completion and style quality are different questions.</p>
+<details><summary>Source and privacy</summary><p id="source"></p><p>This is an offline reading copy. It makes no model or organizer calls, uses no external scripts, and contains no authentication headers. Exact text is kept in expandable sections; long messages are not truncated.</p></details>
+</footer>
+</main>
+<script id="viewer-data" type="application/json">__DATA__</script>
+<script>__JS__</script>
+</body></html>

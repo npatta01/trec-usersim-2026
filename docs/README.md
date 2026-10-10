@@ -8,6 +8,8 @@ complete; current status and next action are in the [project handoff](project-ha
 
 - [Architecture](task2_architecture.md): tasks, model roles, draft/edit pipeline
   and recovery images.
+- [Rendered input/prompt/response reader](run_viewer.md): inspect exact requests
+  privately and explore a complete conversation. Public screenshots use invented examples.
 - [Submission ledger](submission-ledger.md): actual runs, costs, allowances and
   private input/output locations.
 - [Research status](research/README.md): selected method, evidence and open gaps.
