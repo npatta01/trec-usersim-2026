@@ -1,0 +1,22 @@
+\begin{tikzpicture}[x=1cm,y=1cm,font=\small,>=Stealth,
+ prose/.style={anchor=north west,align=left,text width=10.2cm,inner sep=0},
+ reason/.style={anchor=north west,align=left,text width=3.3cm,font=\footnotesize,inner sep=0}]
+\node[anchor=west,font=\bfseries] at (1,0.65) {Invented exchange};
+\node[anchor=west,font=\bfseries] at (11.9,0.65) {Researcher decision};
+\draw[gray!25,line width=1.5pt] (.25,.05)--(.25,-9.0);
+\foreach \n/\y/\c in {1/0/researcher,2/-1.9/agent,3/-3.5/researcher,4/-5.4/agent,5/-7.5/researcher}{
+ \node[circle,fill=\c,text=white,font=\bfseries,inner sep=4pt] at (.25,\y-.22) {\n};}
+\node[prose] at (1,0) {\textcolor{researcher}{\textbf{Researcher / opening}}\\I need neighborhood-level heat measurements, with dates and locations, to compare exposure across the city.};
+\node[reason,color=researcher] at (11.9,-.2) {\textbf{Continue}\\State the information need.};
+\node[prose] at (1,-1.9) {\textcolor{agent}{\textbf{Search assistant}}\\I found a resource with annual city averages.};
+\node[prose] at (1,-3.5) {\textcolor{researcher}{\textbf{Researcher / objection}}\\City averages won't let me compare neighborhoods. Is there anything with individual sensor locations?};
+\node[reason,color=researcher] at (11.9,-3.7) {\textbf{Continue}\\Spatial coverage is still insufficient.};
+\node[prose] at (1,-5.4) {\textcolor{agent}{\textbf{Search assistant}}\\Another resource has hourly sensor readings and coordinates. Its description lists dates and a download link.};
+\node[prose] at (1,-7.5) {\textcolor{researcher}{\textbf{Researcher / acceptance}}\\That sounds closer to what I need. I'll use the link to check the coverage. Thanks, that's enough to get started.};
+\node[reason,color=researcher] at (11.9,-7.7) {\textbf{Stop}\\Enough help to proceed; no completed check is claimed.};
+\draw[gray!25] (11.5,.35)--(11.5,-9.1);
+\draw[gray!25] (1,-1.5)--(15.2,-1.5);
+\draw[gray!25] (1,-3.1)--(15.2,-3.1);
+\draw[gray!25] (1,-5.0)--(15.2,-5.0);
+\draw[gray!25] (1,-7.1)--(15.2,-7.1);
+\end{tikzpicture}

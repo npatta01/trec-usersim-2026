@@ -1,0 +1,23 @@
+{
+  "selection": "Two rated user-side requests about named-entity dataset documentation, chosen for contrasting ratings. Different contexts; not a matched experiment. User authorized real examples. Only simulator-generated text is excerpted.",
+  "examples": [
+    {
+      "example": "A",
+      "run_id": "np-labs-luna-style-task2-official-20261009-v1",
+      "text": "Thanks—this is a helpful shortlist, and I appreciate the caveats. I’m still hesitant to treat the license summaries as verified, since the answer points to project pages but doesn’t identify the exact release files or license documents. Could you do one focused check for **MasakhaNER 2.0, HIPE-2020, and LitBank**: give the precise release/repository location and state separately what terms apply to the annotations and to the underlying text? If a release has no clear license file or its terms are ambiguous, please say that explicitly rather than infer a license.",
+      "characters": 568,
+      "humanity": 0,
+      "editor_unchanged": true,
+      "text_sha256": "75b2f363d04dd888c5ddfd98a98e63de7ab5a684fa36bd37d8f8df6203939928"
+    },
+    {
+      "example": "B",
+      "run_id": "np-labs-luna-style-task2-official-20261009-v1",
+      "text": "Please provide the licensing, splits, and annotation provenance for WikiANN and WikiNeural, especially whether their annotations are human-verified.",
+      "characters": 148,
+      "humanity": 4,
+      "editor_unchanged": true,
+      "text_sha256": "155f8f027bda4be0a789ff7eb229cbe36c764e6cd9312c21448155b312bd0020"
+    }
+  ]
+}

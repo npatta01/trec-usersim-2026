@@ -1,0 +1,14 @@
+{
+  "run_id": "np-labs-luna-style-task2-official-20261009-v1",
+  "audit_date": "2026-11-07",
+  "kind": "Post-hoc descriptive audit of preserved model receipts; not organizer evaluation or a new inference experiment.",
+  "population": "All 258 generated draft/editor pairs in the official Task 2 run; administrative closures excluded.",
+  "pairs": 258,
+  "unchanged": 245,
+  "shortened": 2,
+  "lengthened": 11,
+  "same_length_changed": 0,
+  "comparison": "Exact draft text (parsed JSON text field) versus editor response text; no whitespace normalization. Editor input draft checked for equality.",
+  "source_inventory_sha256": "a21d3141883b2d7d5572dcfaa24e117e04b10ae2e8b3c13b54c08e7f5b7be268",
+  "limits": "Output changes do not measure quality. Original drafts have no matched organizer human-likeness ratings; no causal editor benefit or harm is established."
+}

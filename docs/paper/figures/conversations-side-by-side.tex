@@ -1,0 +1,28 @@
+\newcommand{\compareLeftFollow}{\notenum{1}\leadmark{Please provide the licensing, splits, and annotation provenance} for WikiANN and WikiNeural, especially whether their annotations are human-verified.}
+\newcommand{\compareRightFollow}{\notenum{1}\leadmark{Thanks—this is a helpful shortlist, and I appreciate the caveats. I’m still hesitant to treat the license summaries as verified, since the answer points to project pages but doesn’t identify the exact release files or license documents.} Could you do one focused check for \notenum{2}\syntaxmark{**}MasakhaNER 2.0, HIPE-2020, and LitBank\syntaxmark{**}: give the precise release/repository location and state separately what terms apply to the annotations and to the underlying text? If a release has no clear license file or its terms are ambiguous, please say that explicitly rather than infer a license.}
+\newcommand{\compareLeftClose}{\notenum{3}\goodmark{Thanks. That answers the question:} the index has no humanities-specific annotated NER corpus, so I’ll treat the multilingual general-domain datasets \goodmark{only as methodological benchmarks, not substitutes for humanities data.}}
+\newcommand{\compareRightClose}{That distinction is exactly what I needed. I’ll treat the \notenum{3}\goodmark{release-level license statements as provisional} where the files don’t make their scope clear, and keep the annotation rights separate from the source-text rights. For now, LitBank looks like the clearest candidate for literary work, while HIPE and MasakhaNER are useful research resources but need \goodmark{version- and source-specific review before redistribution}. Thanks for correcting the earlier overstatement and making the remaining uncertainty explicit.}
+\begin{minipage}{\linewidth}
+\linespread{1.0}\selectfont
+\small
+\setlength{\tabcolsep}{7pt}
+\renewcommand{\arraystretch}{1.0}
+\begin{tabularx}{\linewidth}{@{}Y|Y@{}}
+\textcolor{researcher}{\textbf{Better-rated conversation}} & \textcolor{error}{\textbf{Poorly rated conversation}}\\[6pt]
+\searchicon\enspace\textbf{Assistant / summary} & \searchicon\enspace\textbf{Assistant / summary}\\[2pt]
+Offers WikiANN and WikiNeural as multilingual options. Says the index has no ready-made annotated corpus specifically for humanities or historical text. & Recommends a shortlist including MasakhaNER, HIPE and LitBank. Gives project links and discusses annotation quality and licensing, while noting that exact release terms need checking.\\[5pt]\hline\noalign{\vskip4pt}
+\simicon\enspace\textbf{Follow-up: 4/4; 148 characters} & \simicon\enspace\textbf{Follow-up: 0/4; 568 characters}\\[3pt]
+\compareLeftFollow & \compareRightFollow\\[5pt]\hline\noalign{\vskip4pt}
+{\footnotesize\color{gray}Three intervening exchanges omitted.} & {\footnotesize\color{gray}Next assistant reply; no exchanges omitted.}\\[3pt]
+\searchicon\enspace\textbf{Assistant / summary} & \searchicon\enspace\textbf{Assistant / summary}\\[2pt]
+Says none of the results in its index is a humanities-specific annotated NER dataset, and declines to offer raw historical text as an annotated substitute. & Acknowledges that earlier license summaries were not fully verified. Separates the rights in annotations from those in the source text and gives a qualified, release-by-release account.\\[5pt]\hline\noalign{\vskip4pt}
+\simicon\enspace\textbf{Closing: 4/4; 220 characters} & \simicon\enspace\textbf{Closing: 1/4; 509 characters}\\[3pt]
+\compareLeftClose & \compareRightClose\\[5pt]
+\end{tabularx}
+\par\vspace{7pt}
+{\footnotesize
+\textbf{1\quad How the request starts:} direct request versus two introductory sentences.\\[2pt]
+\textbf{2\quad Visible markup:} the organizer-provided human rating cites ** and dash punctuation as bot-like cues.\\[2pt]
+\textbf{3\quad What the closing emphasizes:} intended use versus repeated licensing qualifications.
+}
+\end{minipage}

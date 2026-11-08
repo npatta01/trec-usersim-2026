@@ -1,0 +1,50 @@
+{
+  "run_id": "np-labs-luna-style-task2-official-20261009-v1",
+  "selection": "One official conversation selected to show clarification and closure. Researcher text is verbatim; assistant messages are summarized. This is not a representative performance sample.",
+  "omitted_message_indices": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "steps": [
+    {
+      "message_index": 0,
+      "speaker": "simulator",
+      "text": "I’m looking for annotated NER datasets, preferably multilingual and covering humanities or historical texts. Which datasets are available, and what languages and entity types do they include?",
+      "humanity": 4,
+      "is_final": false,
+      "text_sha256": "65bfac68555f1904217ec5d2b536b3578bd3fa816ae0431da7007153d2aa893e"
+    },
+    {
+      "message_index": 1,
+      "speaker": "search_assistant",
+      "summary": "Offers WikiANN and WikiNeural as multilingual options. Says the index has no ready-made annotated corpus specifically for humanities or historical text.",
+      "source_text_sha256": "0cd92ae36042c5fb024636d273b687d36484c91477ba3b72f6c5d13b8f679d1b"
+    },
+    {
+      "message_index": 2,
+      "speaker": "simulator",
+      "text": "Please provide the licensing, splits, and annotation provenance for WikiANN and WikiNeural, especially whether their annotations are human-verified.",
+      "humanity": 4,
+      "is_final": false,
+      "text_sha256": "155f8f027bda4be0a789ff7eb229cbe36c764e6cd9312c21448155b312bd0020"
+    },
+    {
+      "message_index": 9,
+      "speaker": "search_assistant",
+      "summary": "Says none of the results in its index is a humanities-specific annotated NER dataset, and declines to offer raw historical text as an annotated substitute.",
+      "source_text_sha256": "7cf483d44babc57cd249773ec6a0d5cbf560e964a26d0692efc27ace2fac7c9b"
+    },
+    {
+      "message_index": 10,
+      "speaker": "simulator",
+      "text": "Thanks. That answers the question: the index has no humanities-specific annotated NER corpus, so I’ll treat the multilingual general-domain datasets only as methodological benchmarks, not substitutes for humanities data.",
+      "humanity": 4,
+      "is_final": true,
+      "text_sha256": "6b12b2b56259e3d1e8cacdf537555c0fff0506270528c6d5c2ec0dd1589fd539"
+    }
+  ]
+}

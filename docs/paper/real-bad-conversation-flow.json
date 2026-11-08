@@ -1,0 +1,45 @@
+{
+  "run_id": "np-labs-luna-style-task2-official-20261009-v1",
+  "selection": "A contiguous late segment of an official Task 2 conversation about NER data, selected because both shown researcher turns received low human-likeness ratings. Assistant messages summarized. Low ratings concern realism, not an independently established factual error.",
+  "omitted_message_indices_before_segment": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": [
+    {
+      "message_index": 5,
+      "speaker": "search_assistant",
+      "summary": "Recommends a shortlist including MasakhaNER, HIPE and LitBank. Gives project links and discusses annotation quality and licensing, while noting that exact release terms need checking.",
+      "source_text_sha256": "d147f9c14cfdd365f011f0f63bcfb4b52112d09a81d967641bc714f6434addd3"
+    },
+    {
+      "message_index": 6,
+      "speaker": "simulator",
+      "text": "Thanks—this is a helpful shortlist, and I appreciate the caveats. I’m still hesitant to treat the license summaries as verified, since the answer points to project pages but doesn’t identify the exact release files or license documents. Could you do one focused check for **MasakhaNER 2.0, HIPE-2020, and LitBank**: give the precise release/repository location and state separately what terms apply to the annotations and to the underlying text? If a release has no clear license file or its terms are ambiguous, please say that explicitly rather than infer a license.",
+      "characters": 568,
+      "humanity": 0,
+      "is_final": false,
+      "text_sha256": "75b2f363d04dd888c5ddfd98a98e63de7ab5a684fa36bd37d8f8df6203939928",
+      "editor_unchanged": true
+    },
+    {
+      "message_index": 7,
+      "speaker": "search_assistant",
+      "summary": "Acknowledges that earlier license summaries were not fully verified. Separates the rights in annotations from those in the source text and gives a qualified, release-by-release account.",
+      "source_text_sha256": "df5788e75580b034d4d4f6ddcdafcdd3ab3ed14cc30978e5db3b2d43b24778ac"
+    },
+    {
+      "message_index": 8,
+      "speaker": "simulator",
+      "text": "That distinction is exactly what I needed. I’ll treat the release-level license statements as provisional where the files don’t make their scope clear, and keep the annotation rights separate from the source-text rights. For now, LitBank looks like the clearest candidate for literary work, while HIPE and MasakhaNER are useful research resources but need version- and source-specific review before redistribution. Thanks for correcting the earlier overstatement and making the remaining uncertainty explicit.",
+      "characters": 509,
+      "humanity": 1,
+      "is_final": true,
+      "text_sha256": "ed7d25b0298622edfb8bf59be4aa26d7edd0955e955280bf670e9294d1b03c36",
+      "editor_unchanged": true
+    }
+  ]
+}

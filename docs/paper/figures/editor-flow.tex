@@ -1,0 +1,12 @@
+\begin{tikzpicture}[x=1cm,y=1cm,>=Stealth,font=\small,
+ prose/.style={anchor=north west,align=left,inner sep=0},
+ choice/.style={draw=model!70,fill=model!5,rounded corners=6pt,align=center,inner sep=9pt,text width=8cm}]
+\node[prose,text width=15cm] at (0,0) {\textbf{Draft clause}\\``\textcolor{error}{I downloaded it}, and it only has city averages. Does it include neighborhood data?''};
+\node[choice] (q) at (7.4,-2.0) {Does the supplied researcher background or an earlier researcher message establish the download?};
+\node[prose,text width=6.4cm] (yes) at (0,-3.6) {\textcolor{researcher}{\textbf{Yes: preserve the action claim}}\\The download is supported. Style edits should not erase it.};
+\node[prose,text width=6.6cm] (no) at (8.5,-3.6) {\textcolor{error}{\textbf{No: repair only that clause}}\\``The information here only shows city averages. Does it include neighborhood data?''};
+\draw[->,thick,color=researcher] (q.south west)--node[left,font=\footnotesize]{yes} (3.2,-3.35);
+\draw[->,thick,color=error] (q.south east)--node[right,font=\footnotesize]{no} (11.7,-3.35);
+\draw[gray!30] (0,-5.5)--(15.1,-5.5);
+\node[prose,text width=15cm,font=\footnotesize] at (0,-5.8) {\textbf{Both branches preserve the concern and the question.} An action suggested or performed by the search assistant is not evidence that the researcher performed it. New compromises and ordinary expertise are outside this narrow trigger.};
+\end{tikzpicture}

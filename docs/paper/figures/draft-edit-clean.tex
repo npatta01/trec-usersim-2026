@@ -1,0 +1,18 @@
+\begin{tikzpicture}[x=1cm,y=1cm,>=Stealth,font=\small,
+ box/.style={draw=ink!30,fill=white,rounded corners=4pt,line width=.7pt,inner sep=9pt,align=center},
+ call/.style={box,draw=researcher!60,fill=researcher!9,text width=5.2cm,minimum height=1.6cm},
+ lab/.style={font=\footnotesize,fill=white,inner sep=3pt,align=center}]
+\fill[ink!3,rounded corners=7pt] (-.2,.6) rectangle (16.2,-6.9);
+\node[anchor=west,font=\small\bfseries,text=ink] at (0,.1) {Both tasks: draft a message, then edit its wording};
+\node[box,draw=ink!30,text width=14.7cm] (context) at (8,-1.0) {\textbf{Shared input}\\Researcher profile, goal and available conversation history};
+\node[call] (draft) at (3.0,-3.0) {\textcolor{researcher}{\textbf{1. Draft call}}\\Write the researcher reply.\\Task 2: choose continue or stop.};
+\node[call,draw=model!60,fill=model!10] (edit) at (12.7,-3.0) {\textcolor{model}{\textbf{2. Editor call}}\\Revise the reply text.\\Task 2: read the fixed decision.};
+\draw[->,line width=1pt,color=ink!70] (draft.north |- context.south)--(draft.north);
+\draw[->,line width=1pt,color=ink!70] (edit.north |- context.south)--(edit.north);
+\draw[->,line width=1pt,color=ink!70] (draft.east)--node[lab,above]{draft reply} (edit.west);
+\node[box,fill=agent!8,draw=agent!55,text width=5.2cm,minimum height=1.1cm] (out) at (12.7,-5.8) {\textbf{Submit}\\Edited researcher reply\\Task 2: original decision};
+\draw[->,line width=1pt,color=ink!70] (edit.south)--node[lab,right]{edited text} (out.north);
+\draw[->,line width=1.2pt,color=researcher] (draft.south)--(3.0,-5.8)--node[lab,above,text=researcher]{Task 2: copy continue/stop\\without changing it} (out.west);
+\node[anchor=north west,text width=7.1cm,align=left,font=\footnotesize] at (0,-7.0) {\textcolor{researcher}{\textbf{Task 1 editor}}\\Edit wording; correct unsupported claims of completed actions.};
+\node[anchor=north west,text width=7.1cm,align=left,font=\footnotesize] at (8.8,-7.0) {\textcolor{model}{\textbf{Task 2 editor}}\\Edit wording only; keep the draft decision.};
+\end{tikzpicture}

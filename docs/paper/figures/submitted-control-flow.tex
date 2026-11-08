@@ -1,0 +1,16 @@
+\begin{tikzpicture}[x=1cm,y=1cm,>=Stealth,font=\small,
+ box/.style={draw=gray!55,rounded corners=4pt,align=center,inner sep=7pt},
+ call/.style={box,fill=model!5,draw=model!60,text width=5cm},
+ lab/.style={font=\footnotesize,align=center,fill=white,inner sep=2pt}]
+\node[box,text width=14cm,fill=gray!4] (context) at (7.5,0) {\textbf{Same original context for both calls}\\Researcher profile + goal + conversation so far};
+\node[call] (draft) at (3.4,-2.0) {\textbf{1. Write the reply}\\Task 2: also choose continue or stop};
+\node[call] (edit) at (11.6,-2.0) {\textbf{2. Edit the wording}\\Compare with the profile and last two researcher messages};
+\node[box,draw=researcher!70,fill=researcher!5,text width=5cm] (out) at (11.6,-4.1) {\textbf{Submit the edited reply}\\Task 2: attach draft decision};
+\draw[->,thick] (context.south west)++(.6,0) -- (draft.north);
+\draw[->,thick] (context.south east)++(-.6,0) -- (edit.north);
+\draw[->,thick] (draft.east)--node[lab,above]{draft text\\Task 2: + decision} (edit.west);
+\draw[->,thick] (edit.south)--node[lab,right]{edited text} (out.north);
+\draw[->,thick,color=researcher] (draft.south)--(3.4,-4.1)--node[lab,above]{Task 2: copy decision} (out.west);
+\node[anchor=north west,align=left,text width=7.1cm,font=\footnotesize] at (.4,-5.0) {\textbf{Task 1 editor}\\Edit voice; also fix unsupported claims that the researcher already performed an action.};
+\node[anchor=north west,align=left,text width=7.1cm,font=\footnotesize] at (8.2,-5.0) {\textbf{Task 2 editor}\\Edit voice. It receives the fixed stop decision and cannot change the submitted boolean.};
+\end{tikzpicture}

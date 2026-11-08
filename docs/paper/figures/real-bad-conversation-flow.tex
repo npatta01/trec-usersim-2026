@@ -1,0 +1,21 @@
+\begin{minipage}{\linewidth}
+\begin{tikzpicture}[font=\small,
+ turn/.style={anchor=north west,align=left,text width=10.5cm,inner sep=0},
+ note/.style={anchor=north west,align=left,text width=4.1cm,font=\footnotesize,inner sep=4pt,draw=gray!35,rounded corners=3pt}]
+\node[turn] (b0) at (0,0) {\textcolor{agent}{\searchicon\enspace\textbf{Search assistant / summary}}\\[2pt]Recommends a shortlist including MasakhaNER, HIPE and LitBank. Gives project links and discusses annotation quality and licensing, while noting that exact release terms need checking.};
+\node[turn] (b1) at ([yshift=-9pt]b0.south west) {\textcolor{researcher}{\simicon\enspace\textbf{Our simulator / follow-up / rated 0 of 4}}\\[2pt]\notenum{1}\leadmark{Thanks—this is a helpful shortlist, and I appreciate the caveats. I’m still hesitant to treat the license summaries as verified, since the answer points to project pages but doesn’t identify the exact release files or license documents.} Could you do one focused check for \notenum{2}\syntaxmark{**}MasakhaNER 2.0, HIPE-2020, and LitBank\syntaxmark{**}: give the precise release/repository location and state separately what terms apply to the annotations and to the underlying text? If a release has no clear license file or its terms are ambiguous, please say that explicitly rather than infer a license.};
+\node[turn] (b2) at ([yshift=-9pt]b1.south west) {\textcolor{agent}{\searchicon\enspace\textbf{Search assistant / summary}}\\[2pt]Acknowledges that earlier license summaries were not fully verified. Separates the rights in annotations from those in the source text and gives a qualified, release-by-release account.};
+\node[turn] (b3) at ([yshift=-9pt]b2.south west) {\textcolor{researcher}{\simicon\enspace\textbf{Our simulator / stop / rated 1 of 4}}\\[2pt]That distinction is exactly what I needed. I’ll treat the \notenum{3}\leadmark{release-level license statements as provisional} where the files don’t make their scope clear, and keep the annotation rights separate from the source-text rights. For now, LitBank looks like the clearest candidate for literary work, while HIPE and MasakhaNER are useful research resources but need \leadmark{version- and source-specific review before redistribution}. Thanks for correcting the earlier overstatement and making the remaining uncertainty explicit.};
+\node[note,fill=leadhl!65] (n1) at ([xshift=.5cm]b1.north east) {\textbf{1\quad Request comes third}\\Two sentences of thanks and qualifications precede the question.\\[3pt]\textbf{Better-rated:} starts ``Please provide\ldots''};
+\node[note,fill=markhl!55] (n2) at ([yshift=-7pt]n1.south west) {\textbf{2\quad Markup remains}\\Literal ** markers were sent. The annotator flagged these and punctuation.};
+\node[note,fill=leadhl!65] (n3) at ([xshift=.5cm]b3.north east) {\textbf{3\quad Closing recap}\\Repeats release-level licensing qualifications.\\[3pt]\textbf{Better-rated:} states how the data will be used, then ends.};
+\end{tikzpicture}
+\par\vspace{7pt}
+{\small\textbf{Compare the same kinds of turn}}\par\vspace{3pt}
+\small
+\begin{tabularx}{\linewidth}{@{}Y>{\raggedright\arraybackslash}p{4.4cm}>{\raggedright\arraybackslash}p{4.4cm}@{}}\toprule
+ & Better-rated conversation & Poorly rated conversation\\\midrule
+Follow-up & 148 characters; rated 4/4. Direct request first. & 568 characters; rated 0/4. Request in sentence three.\\[3pt]
+Closing reply & 220 characters; rated 4/4. States the intended use. & 509 characters; rated 1/4. Extended recap of caveats.\\\bottomrule
+\end{tabularx}
+\end{minipage}

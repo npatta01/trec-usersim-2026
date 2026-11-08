@@ -1,0 +1,20 @@
+{
+  "basis": "Descriptive comparison of two selected official conversations with different personas and histories; not causal. Original wording and scores are unchanged.",
+  "follow_up": {
+    "better_chars": 148,
+    "better_rating": 4,
+    "poor_chars": 568,
+    "poor_rating": 0
+  },
+  "closing": {
+    "better_chars": 220,
+    "better_rating": 4,
+    "poor_chars": 509,
+    "poor_rating": 1
+  },
+  "notes": {
+    "1": "Our interpretation: two introductory sentences before the direct request.",
+    "2": "Grounded in the organizer annotator reason: punctuation and literal Markdown markers.",
+    "3": "Our interpretation: extended closing recap of licensing qualifications."
+  }
+}

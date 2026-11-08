@@ -1,0 +1,10 @@
+\begin{tikzpicture}[font=\small,
+ turn/.style={anchor=north west,align=left,text width=14.4cm,inner sep=0},
+ gap/.style={anchor=north west,align=left,text width=14.4cm,font=\footnotesize,text=gray,inner sep=0}]
+\node[turn] (t0) at (0,0) {\textcolor{researcher}{\simicon\enspace\textbf{Our simulator / opening}}\\[2pt]I’m looking for annotated NER datasets, preferably multilingual and covering humanities or historical texts. Which datasets are available, and what languages and entity types do they include?};
+\node[turn] (t1) at ([yshift=-9pt]t0.south west) {\textcolor{agent}{\searchicon\enspace\textbf{Search assistant / summary}}\\[2pt]Offers WikiANN and WikiNeural as multilingual options. Says the index has no ready-made annotated corpus specifically for humanities or historical text.};
+\node[turn] (t2) at ([yshift=-9pt]t1.south west) {\textcolor{researcher}{\simicon\enspace\textbf{Our simulator / follow-up}}\\[2pt]\goodmark{Please provide the licensing, splits, and annotation provenance} for WikiANN and WikiNeural, especially whether their annotations are human-verified.};
+\node[gap] (omitted) at ([yshift=-6pt]t2.south west) {Three intervening exchanges omitted.};
+\node[turn] (t3) at ([yshift=-9pt]omitted.south west) {\textcolor{agent}{\searchicon\enspace\textbf{Search assistant / summary}}\\[2pt]Says none of the results in its index is a humanities-specific annotated NER dataset, and declines to offer raw historical text as an annotated substitute.};
+\node[turn] (t4) at ([yshift=-9pt]t3.south west) {\textcolor{researcher}{\simicon\enspace\textbf{Our simulator / stop}}\\[2pt]\goodmark{Thanks. That answers the question:} the index has no humanities-specific annotated NER corpus, so I’ll treat the multilingual general-domain datasets \goodmark{only as methodological benchmarks, not substitutes for humanities data.}};
+\end{tikzpicture}
