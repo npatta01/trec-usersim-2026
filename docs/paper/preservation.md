@@ -1,7 +1,7 @@
 # Private paper evidence preservation
 
 Snapshot created October 10, 2026. **All available artifacts from the nine
-recorded organizer runs are preserved in a separate private GitHub release.**
+recorded organizer runs are preserved in a separate GitHub release.**
 The [artifact guide](../artifacts.md) links the release and tested restore steps.
 Ignored local copies are caches. Public git contains the
 [run manifest](../../submissions/manifest.json), aggregate evidence hashes,
@@ -90,8 +90,7 @@ or copied for this task. Codex session histories are not part of the snapshot.
 `/data/private-evidence/` is excluded in the PR's `.gitignore` and the common
 local git exclude file, protecting the older stable checkout before merge.
 Never use `git add -f` on this archive. The user authorized private GitHub release
-preservation on October 10. Keep the companion repository private even if the
-main source repo becomes public. This archival access does not establish rights
+preservation on October 10. On November 7, 2026, the owner authorized moving the evidence into this public repository’s release and removing the companion after verification. This archival access does not establish rights
 to publish participant examples in a paper.
 
 The immutable local snapshot was subsequently bundled with the continuity

@@ -9,7 +9,7 @@ and are preserved with the [paper evidence](../docs/paper/README.md).
 Public git contains metadata and hashes. The exact available inputs, model
 requests, drafts, editor outputs, organizer requests/receipts, frozen code,
 checkpoints and recovery evidence are in the
-[private GitHub evidence release](../docs/artifacts.md), with an ignored local
+[GitHub evidence release](../docs/artifacts.md), with an ignored local
 cache inside the stable repo directory. See [snapshot verification](../docs/paper/preservation.md).
 Cloning the main source repo does not download release assets; use the separate
 private release's restore instructions. Creation-time local inventory limitations

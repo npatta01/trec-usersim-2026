@@ -1,6 +1,6 @@
 # Artifact custody and restore
 
-Updated October 10, 2026. Useful project artifacts are preserved on GitHub;
+Updated November 7, 2026. Useful project artifacts are preserved on GitHub;
 local data directories, rendered pages and temporary worktrees are no longer
 their only copies. No model calls or organizer requests were made for this work.
 
@@ -9,20 +9,22 @@ their only copies. No model calls or organizer requests were made for this work.
 | Material | Durable location |
 |---|---|
 | Supported code, method decisions, diagrams, ledgers and paper plan | [Main source repository](https://github.com/npatta01/trec-usersim-2026) |
-| Exact training export, all available submission records and development results | [Private evidence release](https://github.com/npatta01/trec-usersim-2026-private-evidence/releases/tag/paper-evidence-2026-10-10) |
-| Historical scripts/notes, frozen code and environment/source provenance | The same private release, in `paper-evidence/` |
-| Three self-contained rendered readers | The same private release, in `thread-continuity/` |
-| Release metadata, checksums and restoration verification | [Private evidence repository](https://github.com/npatta01/trec-usersim-2026-private-evidence), plus the [safe custody receipt](private-artifact-release.json) here |
+| Exact training export, all available submission records and development results | [Evidence release](https://github.com/npatta01/trec-usersim-2026/releases/tag/paper-evidence-2026-10-10) |
+| Historical scripts/notes, frozen code and environment/source provenance | The same evidence release, in `paper-evidence/` |
+| Three self-contained rendered readers | The same evidence release, in `thread-continuity/` |
+| Release metadata, checksums and restoration verification | [Preserved companion records](evidence/), plus the [safe custody receipt](private-artifact-release.json) here |
 | Organizer/provider credentials | Separate account access; deliberately absent from git and release assets |
 
-The main repository was private at this audit, but the user plans to make it
-public. **The companion evidence repository must stay private.** Its release
-contains participant records and private outputs. Archival access does not
-establish rights to publish those records or paper excerpts.
+The owner authorized consolidation into this public repository on November 7, 2026.
+The four original release assets are preserved byte-for-byte, including historical
+restore instructions that name the retired repository. Use the download command below.
+Original companion documentation and receipts are retained under [evidence/](evidence/).
+The complete companion Git history is preserved as `companion-history.bundle` in the release.
+See the [migration verification](evidence/migration-verification.json).
 
 ## Release contents and verification
 
-Release tag: `paper-evidence-2026-10-10`. Four assets are published:
+Release tag: `paper-evidence-2026-10-10`. The four original assets are preserved, alongside the companion Git-history bundle:
 
 - `trec-usersim-paper-evidence-2026-10-10.tar.gz`: 35,458,724 bytes; two immutable
   evidence snapshots and a source tar pinned to merged main commit
@@ -42,7 +44,7 @@ The bundle was extracted into a new private directory, then its included source
 verified every evidence file, inventory and checksum **without accessing the
 original source paths**. The included preservation/index tests also passed
 (nine tests). The [verification receipt](private-artifact-release.json) records
-hashes, coverage and the private repository visibility.
+hashes, coverage and current repository visibility.
 
 The first Task 1 debug's per-prediction organizer POST receipts and start receipt
 were never saved. They cannot be reconstructed by archiving. The
@@ -52,7 +54,7 @@ official counts are reconciled; completion remains separate from effectiveness.
 
 ## Restore on another machine
 
-Sign into GitHub with an account authorized for the private evidence repository.
+The release is available in this public repository.
 Choose a private location outside a public repository or served directory:
 
 ```bash
@@ -60,7 +62,7 @@ umask 077
 mkdir -p /private/location/trec-usersim-evidence
 cd /private/location/trec-usersim-evidence
 gh release download paper-evidence-2026-10-10 \
-  --repo npatta01/trec-usersim-2026-private-evidence
+  --repo npatta01/trec-usersim-2026
 sha256sum --check SHA256SUMS
 tar -xzf trec-usersim-paper-evidence-2026-10-10.tar.gz
 mkdir -p source/code
@@ -71,7 +73,7 @@ python source/code/scripts/archive_paper_evidence.py verify "$PWD/thread-continu
 
 Both verifiers should report `status: verified`, with 7,403 and five files
 respectively. Do not use `--check-sources` on a new host; absolute original paths
-are provenance, not restore dependencies. The companion repository also contains
+are provenance, not restore dependencies. The [preserved companion directory](evidence/) contains
 `verify_download.py` and the saved restore report for automated offline checking.
 
 Consult the [continuation guide](continuity.md), [project handoff](project-handoff.md)
@@ -83,7 +85,7 @@ accepted or uncertain messages or restart completed submissions to recover data.
 ## Future preservation
 
 Keep the release tag and assets unchanged. Preserve new useful records in a new
-dated private release, and update the main repo's artifact index and handoff only
+dated release with explicitly approved visibility, and update the main repo's artifact index and handoff only
 after download and standalone verification. Keep current source/docs in git;
 rendered readers are derived copies. Credentials, caches and raw Codex session
 histories are outside the research archive scope. Record decisions and evidence

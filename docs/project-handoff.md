@@ -26,7 +26,7 @@ endings, 38 administrative closures and one unfinished conversation; it is not
 a completed debug run.
 
 The [paper evidence map](paper/README.md) now links the method, experiments,
-figures and missing results. A [verified private GitHub release](artifacts.md)
+figures and missing results. A [verified GitHub release](artifacts.md)
 preserves all nine run directories, original development evidence and rendered
 readers; [public metadata](../submissions/manifest.json) includes per-run hashes/costs.
 All 7,408 evidence files were verified after a fresh download and restoration

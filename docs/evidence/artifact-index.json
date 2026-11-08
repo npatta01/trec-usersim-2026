@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-10-10T12:17:41.871152+00:00",
+  "repository": "npatta01/trec-usersim-2026-private-evidence",
+  "release_tag": "paper-evidence-2026-10-10",
+  "release_url": "https://github.com/npatta01/trec-usersim-2026-private-evidence/releases/tag/paper-evidence-2026-10-10",
+  "visibility_required": "private",
+  "artifact": {
+    "name": "trec-usersim-paper-evidence-2026-10-10.tar.gz",
+    "bytes": 35458724,
+    "sha256": "7b3bdbe4d997a347342a81d080fdbc538c042722939f9c960a29bc0d887180a4"
+  },
+  "snapshots": [
+    {
+      "directory_in_bundle": "paper-evidence",
+      "manifest_sha256": "f7d9bbdbc506aa3c005aa01c5eb75a31afc3846ebe03c5a2483769c300cc2afb",
+      "evidence_files": 7403,
+      "evidence_bytes": 130615399
+    },
+    {
+      "directory_in_bundle": "thread-continuity",
+      "manifest_sha256": "e8cd0320c6c908ebbd2ced1621840ffa30fbe0e895a503b17fe1edb003432546",
+      "evidence_files": 5,
+      "evidence_bytes": 2905467
+    }
+  ],
+  "source_repository": "https://github.com/npatta01/trec-usersim-2026",
+  "source_commit": "60382f8950a3ab2a219c07e85b32c9ed222d4a81",
+  "source_tar": {
+    "path_in_bundle": "source/trec-usersim-source-60382f8950a3.tar",
+    "sha256": "f58f0eed61609afac305b42d6645037d733d0229b86312398833c1be7ef993d8"
+  },
+  "organizer_runs": 9,
+  "official_runs": 2,
+  "debug_runs": 7,
+  "credentials_included": false,
+  "raw_chat_sessions_included": false,
+  "local_copies_are_caches": true
+}

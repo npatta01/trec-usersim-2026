@@ -58,7 +58,7 @@ notebook-paper date and requirements remain unverified.
 The [paper preparation map](../paper/README.md) records the writing plan and
 missing official scores/venue/author information. All available run and detailed
 development artifacts and rendered readers are preserved in a
-[private GitHub evidence release](../artifacts.md), verified by a fresh download
+[GitHub evidence release](../artifacts.md), verified by a fresh download
 and standalone restore. [Preservation instructions](../paper/preservation.md)
 explain the immutable snapshots and evidence limits; local copies are caches.
 

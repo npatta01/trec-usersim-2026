@@ -91,7 +91,7 @@ checks when the pack changes; earlier browser QA is not a new paper audit.
 
 The [continuation guide](continuity.md) captures the project reading path,
 retained decisions, next paper action and credential locations without copying
-chat history. [Artifact custody](artifacts.md) links the separate private GitHub
+chat history. [Artifact custody](artifacts.md) links the main-repository GitHub
 release and restore instructions. Raw data and outputs remain outside public
 git; useful records and rendered readers no longer depend solely on this host.
 

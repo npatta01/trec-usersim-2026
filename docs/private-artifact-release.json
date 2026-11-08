@@ -1,43 +1,51 @@
 {
   "schema_version": 1,
   "status": "verified",
-  "verified_utc": "2026-10-10T12:24:21.401677+00:00",
-  "repository": "npatta01/trec-usersim-2026-private-evidence",
-  "repository_url": "https://github.com/npatta01/trec-usersim-2026-private-evidence",
-  "repository_private": true,
+  "verified_utc": "2026-11-08T00:51:36.162764+00:00",
+  "repository": "npatta01/trec-usersim-2026",
+  "repository_url": "https://github.com/npatta01/trec-usersim-2026",
+  "repository_private": false,
   "release_tag": "paper-evidence-2026-10-10",
-  "release_url": "https://github.com/npatta01/trec-usersim-2026-private-evidence/releases/tag/paper-evidence-2026-10-10",
-  "release_published_utc": "2026-10-10T12:22:47Z",
+  "release_url": "https://github.com/npatta01/trec-usersim-2026/releases/tag/paper-evidence-2026-10-10",
+  "release_published_utc": "2026-11-08T00:51:16Z",
   "release_draft": false,
   "release_assets": [
     {
       "name": "artifact-index.json",
-      "apiUrl": "https://api.github.com/repos/npatta01/trec-usersim-2026-private-evidence/releases/assets/627908713",
-      "url": "https://github.com/npatta01/trec-usersim-2026-private-evidence/releases/download/paper-evidence-2026-10-10/artifact-index.json",
+      "apiUrl": "https://api.github.com/repos/npatta01/trec-usersim-2026/releases/assets/722436823",
+      "url": "https://github.com/npatta01/trec-usersim-2026/releases/download/paper-evidence-2026-10-10/artifact-index.json",
       "size": 1464,
       "digest": "sha256:b6d0cba7fd5491f7cfd4a4d9de1ef1a6e42b942323354047f066e78dd0f718db",
       "state": "uploaded"
     },
     {
+      "name": "companion-history.bundle",
+      "apiUrl": "https://api.github.com/repos/npatta01/trec-usersim-2026/releases/assets/722436822",
+      "url": "https://github.com/npatta01/trec-usersim-2026/releases/download/paper-evidence-2026-10-10/companion-history.bundle",
+      "size": 10866,
+      "digest": "sha256:20db46d4c1efeac84388ea277dd88f02fbf3bd18d5b8fd9803f32435bfef0e29",
+      "state": "uploaded"
+    },
+    {
       "name": "RESTORE.md",
-      "apiUrl": "https://api.github.com/repos/npatta01/trec-usersim-2026-private-evidence/releases/assets/627908714",
-      "url": "https://github.com/npatta01/trec-usersim-2026-private-evidence/releases/download/paper-evidence-2026-10-10/RESTORE.md",
+      "apiUrl": "https://api.github.com/repos/npatta01/trec-usersim-2026/releases/assets/722436820",
+      "url": "https://github.com/npatta01/trec-usersim-2026/releases/download/paper-evidence-2026-10-10/RESTORE.md",
       "size": 2609,
       "digest": "sha256:965e1b91c68ad581e67ca97f75fd2ea1241c2869bd9151aca1af24af1e3da43f",
       "state": "uploaded"
     },
     {
       "name": "SHA256SUMS",
-      "apiUrl": "https://api.github.com/repos/npatta01/trec-usersim-2026-private-evidence/releases/assets/627908712",
-      "url": "https://github.com/npatta01/trec-usersim-2026-private-evidence/releases/download/paper-evidence-2026-10-10/SHA256SUMS",
+      "apiUrl": "https://api.github.com/repos/npatta01/trec-usersim-2026/releases/assets/722436824",
+      "url": "https://github.com/npatta01/trec-usersim-2026/releases/download/paper-evidence-2026-10-10/SHA256SUMS",
       "size": 275,
       "digest": "sha256:949ad79a6c7e2feef09e926680059da8943e5cfde1206442a4159f0c9c3d57f7",
       "state": "uploaded"
     },
     {
       "name": "trec-usersim-paper-evidence-2026-10-10.tar.gz",
-      "apiUrl": "https://api.github.com/repos/npatta01/trec-usersim-2026-private-evidence/releases/assets/627908718",
-      "url": "https://github.com/npatta01/trec-usersim-2026-private-evidence/releases/download/paper-evidence-2026-10-10/trec-usersim-paper-evidence-2026-10-10.tar.gz",
+      "apiUrl": "https://api.github.com/repos/npatta01/trec-usersim-2026/releases/assets/722436821",
+      "url": "https://github.com/npatta01/trec-usersim-2026/releases/download/paper-evidence-2026-10-10/trec-usersim-paper-evidence-2026-10-10.tar.gz",
       "size": 35458724,
       "digest": "sha256:7b3bdbe4d997a347342a81d080fdbc538c042722939f9c960a29bc0d887180a4",
       "state": "uploaded"
@@ -74,5 +82,6 @@
   "known_gap": "First Task 1 debug per-prediction organizer POST receipts and start receipt were not originally saved.",
   "historical_indexes": "Creation-time local snapshot indexes remain immutable; this receipt records later remote custody.",
   "restored_run_index_matches_public_byte_for_byte": true,
-  "restored_official_results_csv_matches_public_byte_for_byte": true
+  "restored_official_results_csv_matches_public_byte_for_byte": true,
+  "migration_verification": "evidence/migration-verification.json"
 }

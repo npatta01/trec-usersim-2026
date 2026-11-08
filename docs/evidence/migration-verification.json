@@ -1,0 +1,186 @@
+{
+  "verified_utc": "2026-11-08T00:51:36.162764+00:00",
+  "status": "verified",
+  "downloaded_assets": [
+    {
+      "name": "trec-usersim-paper-evidence-2026-10-10.tar.gz",
+      "bytes": 35458724,
+      "sha256": "7b3bdbe4d997a347342a81d080fdbc538c042722939f9c960a29bc0d887180a4"
+    },
+    {
+      "name": "artifact-index.json",
+      "bytes": 1464,
+      "sha256": "b6d0cba7fd5491f7cfd4a4d9de1ef1a6e42b942323354047f066e78dd0f718db"
+    },
+    {
+      "name": "RESTORE.md",
+      "bytes": 2609,
+      "sha256": "965e1b91c68ad581e67ca97f75fd2ea1241c2869bd9151aca1af24af1e3da43f"
+    }
+  ],
+  "bundle_sha256": "7b3bdbe4d997a347342a81d080fdbc538c042722939f9c960a29bc0d887180a4",
+  "source_commit": "60382f8950a3ab2a219c07e85b32c9ed222d4a81",
+  "source_tar_sha256": "f58f0eed61609afac305b42d6645037d733d0229b86312398833c1be7ef993d8",
+  "snapshots": [
+    {
+      "directory": "paper-evidence",
+      "schema_version": 1,
+      "status": "verified",
+      "snapshot_utc": "2026-10-10T05:50:17.025917+00:00",
+      "manifest_sha256": "f7d9bbdbc506aa3c005aa01c5eb75a31afc3846ebe03c5a2483769c300cc2afb",
+      "checksum_file_sha256": "1a83b43be80a3204d8ce0051d3646ae6c80edaa85cf3ea209d6ba60ddbdc414e",
+      "files": 7403,
+      "bytes": 130615399,
+      "components": [
+        {
+          "component": "official-data-and-development",
+          "files": 2037,
+          "bytes": 52524926,
+          "inventory_sha256": "e7ef10bd79c7a60db9bc232e9df67741413060bb0c040dacbc04047d996d2eb9"
+        },
+        {
+          "component": "organizer-and-model-runs",
+          "files": 5170,
+          "bytes": 73969973,
+          "inventory_sha256": "1f48972b0314641bb8a7284d337dbcff9be8907ee372ec56ac8b88f115efb621"
+        },
+        {
+          "component": "provenance",
+          "files": 4,
+          "bytes": 2922650,
+          "inventory_sha256": "4474ce0629481a7b48279419ea8568fdb779d94f846a98b4c28e8b0cd054a008"
+        },
+        {
+          "component": "research-notes-original",
+          "files": 77,
+          "bytes": 627306,
+          "inventory_sha256": "dd6cef1afbbbd20ad569572df7d58c1a00db0475e878fe03acc06a9a0face762"
+        },
+        {
+          "component": "research-scripts-original",
+          "files": 91,
+          "bytes": 412724,
+          "inventory_sha256": "d7c04527202412ceffc283db9106b267f6d7fe118e6fcef4d267f0a0edb4f3ef"
+        },
+        {
+          "component": "research-starter-original",
+          "files": 14,
+          "bytes": 105218,
+          "inventory_sha256": "5f68bc1d9277791a0fb80c96075295404ab451c3704540c3f99f92517a141a53"
+        },
+        {
+          "component": "research-tools-original",
+          "files": 10,
+          "bytes": 52602,
+          "inventory_sha256": "e00aa8ab564b33d6e2f0c05bef7526f69283df3872d63a4223e609d0b233fed4"
+        }
+      ],
+      "excluded_files": 161,
+      "opaque_encrypted_fields": 3712,
+      "original_sources_checked": false,
+      "credentials_included": false,
+      "transcripts_private": true,
+      "off_host_backup": false
+    },
+    {
+      "directory": "thread-continuity",
+      "schema_version": 1,
+      "status": "verified",
+      "snapshot_utc": "2026-10-10T12:11:22.046706+00:00",
+      "manifest_sha256": "e8cd0320c6c908ebbd2ced1621840ffa30fbe0e895a503b17fe1edb003432546",
+      "checksum_file_sha256": "bc894e791da29358e3bea9b3510a0ab573d2b0d040027874fc2aef47409a5c2a",
+      "files": 5,
+      "bytes": 2905467,
+      "components": [
+        {
+          "component": "continuity-provenance",
+          "files": 2,
+          "bytes": 2259,
+          "inventory_sha256": "7f37333b3a368dd97e4d16439fd80b7ca808cffd8c0a12d5412efbc3dcfcd381"
+        },
+        {
+          "component": "current-run-reader",
+          "files": 1,
+          "bytes": 2028487,
+          "inventory_sha256": "7849964e2fdef0312ce2bf466297b92c8570cc1072dee29b38dc8f7cb2841140"
+        },
+        {
+          "component": "historical-debug-reader",
+          "files": 1,
+          "bytes": 796082,
+          "inventory_sha256": "71831a54531396ba9dea6aa8568e4cb9552559d80439b520bcef5685f1011af5"
+        },
+        {
+          "component": "synthetic-reader",
+          "files": 1,
+          "bytes": 78639,
+          "inventory_sha256": "c9b8325eef23a3d6c5e8b9b3a42e1779a51188cc0fed30c223536829664b6fda"
+        }
+      ],
+      "excluded_files": 0,
+      "opaque_encrypted_fields": 0,
+      "original_sources_checked": false,
+      "credentials_included": false,
+      "transcripts_private": true,
+      "off_host_backup": false
+    }
+  ],
+  "evidence_files_verified": 7408,
+  "original_paths_required": false,
+  "credentials_required": false,
+  "model_or_organizer_calls": 0,
+  "offline_tests": [
+    {
+      "pattern": "test_evidence_archive.py",
+      "exit_code": 0,
+      "output": ".......\n----------------------------------------------------------------------\nRan 7 tests in 0.018s\n\nOK\n"
+    },
+    {
+      "pattern": "test_submission_evidence.py",
+      "exit_code": 0,
+      "output": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.006s\n\nOK\n"
+    }
+  ],
+  "release_url": "https://github.com/npatta01/trec-usersim-2026/releases/tag/paper-evidence-2026-10-10",
+  "release_assets_verified": [
+    {
+      "name": "artifact-index.json",
+      "bytes": 1464,
+      "sha256": "b6d0cba7fd5491f7cfd4a4d9de1ef1a6e42b942323354047f066e78dd0f718db",
+      "matches_original": true,
+      "url": "https://github.com/npatta01/trec-usersim-2026/releases/download/paper-evidence-2026-10-10/artifact-index.json"
+    },
+    {
+      "name": "companion-history.bundle",
+      "bytes": 10866,
+      "sha256": "20db46d4c1efeac84388ea277dd88f02fbf3bd18d5b8fd9803f32435bfef0e29",
+      "matches_original": true,
+      "url": "https://github.com/npatta01/trec-usersim-2026/releases/download/paper-evidence-2026-10-10/companion-history.bundle"
+    },
+    {
+      "name": "RESTORE.md",
+      "bytes": 2609,
+      "sha256": "965e1b91c68ad581e67ca97f75fd2ea1241c2869bd9151aca1af24af1e3da43f",
+      "matches_original": true,
+      "url": "https://github.com/npatta01/trec-usersim-2026/releases/download/paper-evidence-2026-10-10/RESTORE.md"
+    },
+    {
+      "name": "SHA256SUMS",
+      "bytes": 275,
+      "sha256": "949ad79a6c7e2feef09e926680059da8943e5cfde1206442a4159f0c9c3d57f7",
+      "matches_original": true,
+      "url": "https://github.com/npatta01/trec-usersim-2026/releases/download/paper-evidence-2026-10-10/SHA256SUMS"
+    },
+    {
+      "name": "trec-usersim-paper-evidence-2026-10-10.tar.gz",
+      "bytes": 35458724,
+      "sha256": "7b3bdbe4d997a347342a81d080fdbc538c042722939f9c960a29bc0d887180a4",
+      "matches_original": true,
+      "url": "https://github.com/npatta01/trec-usersim-2026/releases/download/paper-evidence-2026-10-10/trec-usersim-paper-evidence-2026-10-10.tar.gz"
+    }
+  ],
+  "companion_history_restored": true,
+  "companion_head": "1479688a6da81e3f3d2ab3337b33d6713ce150fc",
+  "original_issues_count": 0,
+  "wiki_present": false
+}

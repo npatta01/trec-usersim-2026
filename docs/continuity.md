@@ -16,7 +16,7 @@ or permission to execute a historical command.
    [experiment ledger](research/experiment-ledger.md) and detailed private notes
    for writing. Official scores, author information and venue requirements are
    still unresolved; absence from these records does not prove scores were never released.
-4. Use the [private GitHub release and restore guide](artifacts.md) to obtain
+4. Use the [GitHub release and restore guide](artifacts.md) to obtain
    exact records, and the [recovery guide](research/task2-recovery-plan.md) before
    any future authenticated work. Historical instructions are not current run authorization.
 
@@ -58,13 +58,12 @@ entering an older checkout; stale worktrees need not reflect GitHub `main`.
 
 ## Private records survive outside this machine
 
-The [private GitHub evidence release](artifacts.md) is the durable artifact copy.
+The [GitHub evidence release](artifacts.md) is the durable artifact copy.
 It contains all available run/development records, the supplied official export,
 three rendered readers and pinned source. A fresh download and standalone restore
 verified every one of its 7,408 evidence files. Source and current handoff docs
-are versioned in the main repo; cloning it alone does not fetch private assets.
-Keep the companion evidence repository private if this source repository later
-becomes public.
+are versioned in the main repo; cloning it alone does not fetch release assets.
+The owner authorized consolidation into this repository’s public release on November 7, 2026. See [migration verification](evidence/migration-verification.json).
 
 The stable local evidence root is:
 
@@ -118,4 +117,4 @@ organizer calls were made for this preservation audit.
 No useful preserved research artifact depends solely on this thread, its
 attachments, a temporary worktree or this host. Credentials remain outside git
 and release assets by design. Do not treat local cleanup as authorization to
-delete the private GitHub release, frozen checkpoints or source worktrees.
+delete the GitHub release, frozen checkpoints or source worktrees.

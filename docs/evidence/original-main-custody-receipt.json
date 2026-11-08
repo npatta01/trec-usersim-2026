@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "status": "verified",
+  "verified_utc": "2026-10-10T12:24:21.401677+00:00",
+  "repository": "npatta01/trec-usersim-2026-private-evidence",
+  "repository_url": "https://github.com/npatta01/trec-usersim-2026-private-evidence",
+  "repository_private": true,
+  "release_tag": "paper-evidence-2026-10-10",
+  "release_url": "https://github.com/npatta01/trec-usersim-2026-private-evidence/releases/tag/paper-evidence-2026-10-10",
+  "release_published_utc": "2026-10-10T12:22:47Z",
+  "release_draft": false,
+  "release_assets": [
+    {
+      "name": "artifact-index.json",
+      "apiUrl": "https://api.github.com/repos/npatta01/trec-usersim-2026-private-evidence/releases/assets/627908713",
+      "url": "https://github.com/npatta01/trec-usersim-2026-private-evidence/releases/download/paper-evidence-2026-10-10/artifact-index.json",
+      "size": 1464,
+      "digest": "sha256:b6d0cba7fd5491f7cfd4a4d9de1ef1a6e42b942323354047f066e78dd0f718db",
+      "state": "uploaded"
+    },
+    {
+      "name": "RESTORE.md",
+      "apiUrl": "https://api.github.com/repos/npatta01/trec-usersim-2026-private-evidence/releases/assets/627908714",
+      "url": "https://github.com/npatta01/trec-usersim-2026-private-evidence/releases/download/paper-evidence-2026-10-10/RESTORE.md",
+      "size": 2609,
+      "digest": "sha256:965e1b91c68ad581e67ca97f75fd2ea1241c2869bd9151aca1af24af1e3da43f",
+      "state": "uploaded"
+    },
+    {
+      "name": "SHA256SUMS",
+      "apiUrl": "https://api.github.com/repos/npatta01/trec-usersim-2026-private-evidence/releases/assets/627908712",
+      "url": "https://github.com/npatta01/trec-usersim-2026-private-evidence/releases/download/paper-evidence-2026-10-10/SHA256SUMS",
+      "size": 275,
+      "digest": "sha256:949ad79a6c7e2feef09e926680059da8943e5cfde1206442a4159f0c9c3d57f7",
+      "state": "uploaded"
+    },
+    {
+      "name": "trec-usersim-paper-evidence-2026-10-10.tar.gz",
+      "apiUrl": "https://api.github.com/repos/npatta01/trec-usersim-2026-private-evidence/releases/assets/627908718",
+      "url": "https://github.com/npatta01/trec-usersim-2026-private-evidence/releases/download/paper-evidence-2026-10-10/trec-usersim-paper-evidence-2026-10-10.tar.gz",
+      "size": 35458724,
+      "digest": "sha256:7b3bdbe4d997a347342a81d080fdbc538c042722939f9c960a29bc0d887180a4",
+      "state": "uploaded"
+    }
+  ],
+  "downloaded_assets_match_github_digests": true,
+  "fresh_download_and_restore_verified": true,
+  "evidence_files_verified": 7408,
+  "evidence_bytes_verified": 133520866,
+  "snapshots": [
+    {
+      "directory": "paper-evidence",
+      "files": 7403,
+      "bytes": 130615399,
+      "manifest_sha256": "f7d9bbdbc506aa3c005aa01c5eb75a31afc3846ebe03c5a2483769c300cc2afb",
+      "checksum_file_sha256": "1a83b43be80a3204d8ce0051d3646ae6c80edaa85cf3ea209d6ba60ddbdc414e"
+    },
+    {
+      "directory": "thread-continuity",
+      "files": 5,
+      "bytes": 2905467,
+      "manifest_sha256": "e8cd0320c6c908ebbd2ced1621840ffa30fbe0e895a503b17fe1edb003432546",
+      "checksum_file_sha256": "bc894e791da29358e3bea9b3510a0ab573d2b0d040027874fc2aef47409a5c2a"
+    }
+  ],
+  "source_commit": "60382f8950a3ab2a219c07e85b32c9ed222d4a81",
+  "source_tar_sha256": "f58f0eed61609afac305b42d6645037d733d0229b86312398833c1be7ef993d8",
+  "offline_tests_passed": 9,
+  "original_paths_required": false,
+  "credentials_included": false,
+  "raw_chat_sessions_included": false,
+  "model_or_organizer_calls": 0,
+  "local_copies_are_caches": true,
+  "known_gap": "First Task 1 debug per-prediction organizer POST receipts and start receipt were not originally saved.",
+  "historical_indexes": "Creation-time local snapshot indexes remain immutable; this receipt records later remote custody.",
+  "restored_run_index_matches_public_byte_for_byte": true,
+  "restored_official_results_csv_matches_public_byte_for_byte": true
+}

@@ -79,7 +79,7 @@ behavior matches real researchers.
 - [ ] If reporting realism preferences quantitatively, document the review
   sample, rubric, reviewer identities/independence, blinding and uncertainty.
   Existing small or unblinded screens should retain those limitations.
-- [x] Preserve the evidence off-host in the [private GitHub release](../artifacts.md).
+- [x] Preserve the evidence off-host in the [GitHub release](../artifacts.md).
   Fresh download, GitHub asset digests, standalone restore and all 7,408 file
   hashes passed. Credentials remain separate from this research backup.
 

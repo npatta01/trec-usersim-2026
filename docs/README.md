@@ -7,7 +7,7 @@ complete; current status and next action are in the [project handoff](project-ha
 ## Understand the project
 
 - [Continue without the original chat](continuity.md): a fresh-thread reading path, decisions and durable private artifacts.
-- [Artifact custody and restore](artifacts.md): private GitHub release, download verification and recovery without this machine.
+- [Artifact custody and restore](artifacts.md): GitHub release, download verification and recovery without this machine.
 - [Architecture](task2_architecture.md): tasks, model roles, draft/edit pipeline
   and recovery images.
 - [Rendered input/prompt/response reader](run_viewer.md): inspect exact requests
