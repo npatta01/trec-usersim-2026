@@ -1,0 +1,17 @@
+\begin{tikzpicture}[x=1cm,y=1cm,>=Stealth,font=\small,
+ card/.style={rounded corners=3pt,inner sep=7pt,align=left},
+ researcher/.style={card,fill=researcher!10,draw=researcher!60},
+ agent/.style={card,fill=agent!9,draw=agent!55}]
+\node[anchor=west,font=\bfseries,color=ink] at (0,3.4) {A. Task 1: predict one researcher turn};
+\node[card,fill=gray!8,text width=6.1cm,anchor=west] (prefix) at (0,2.45) {\textbf{Supplied prefix}\\Researcher $\rightarrow$ Search assistant $\rightarrow \cdots$};
+\node[researcher,text width=5.3cm,anchor=west] (next) at (9,2.45) {\textbf{Our simulator}\\Generates one next researcher message};
+\draw[->,thick] (prefix.east)--node[above,font=\footnotesize]{predict}(next.west);
+\node[anchor=west,font=\footnotesize,color=ink] at (0,1.55) {Next case: replace the prefix. Do not carry forward our predictions.};
+\draw[gray!35] (0,1.15)--(15,1.15);
+\node[anchor=west,font=\bfseries,color=ink] at (0,.8) {B. Task 2: interact until the researcher stops};
+\node[researcher,text width=4.7cm,anchor=west] (sim) at (0,-1.0) {\textbf{Our simulator}\\Generates researcher text + stop decision};
+\node[agent,text width=4.7cm,anchor=west] (search) at (9.2,-1.0) {\textbf{Organizer's search assistant}\\Returns a dataset-search reply};
+\draw[->,thick,color=researcher] (sim.north east) to[bend left=15] node[above,font=\footnotesize]{continue: send researcher text} (search.north west);
+\draw[->,thick,color=agent] (search.south west) to[bend left=17] node[below,font=\footnotesize]{append reply to history} (sim.south east);
+\draw[->,thick,color=researcher] (sim.south)--++(0,-1.15) node[below,align=center,font=\footnotesize]{stop: end this conversation\\then reset for the next scenario};
+\end{tikzpicture}

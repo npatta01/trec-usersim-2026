@@ -1,0 +1,135 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[margin=.9in]{geometry}
+\usepackage{graphicx,fontspec,microtype,booktabs,tabularx,array,xcolor,tikz,float,needspace}
+\setmainfont{TeX Gyre Pagella}
+\usetikzlibrary{arrows.meta,positioning}
+\usepackage{xurl,soul}
+\usepackage[colorlinks=true,urlcolor=blue!55!black,linkcolor=blue!55!black]{hyperref}
+\definecolor{researcher}{HTML}{315B70}
+\definecolor{agent}{HTML}{26333D}
+\definecolor{model}{HTML}{26333D}
+\definecolor{error}{HTML}{26333D}
+\definecolor{ink}{HTML}{26333D}
+\definecolor{leadhl}{HTML}{E8E8E8}
+\definecolor{markhl}{HTML}{E8E8E8}
+\definecolor{goodhl}{HTML}{E8E8E8}
+\newcommand{\leadmark}[1]{{\sethlcolor{leadhl}\hl{#1}}}
+\newcommand{\syntaxmark}[1]{{\sethlcolor{markhl}\hl{#1}}}
+\newcommand{\goodmark}[1]{{\sethlcolor{goodhl}\hl{#1}}}
+\newcommand{\notenum}[1]{\textsuperscript{\textbf{#1}}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\setlength{\parskip}{6pt}\setlength{\parindent}{0pt}
+\linespread{1.07}
+\setlength{\emergencystretch}{2em}
+\setlength{\textfloatsep}{16pt}
+\title{A Prompted Researcher Simulator for TREC UserSim 2026}
+\author{Nidhin Pattaniyil \and Tanwir Zaman \and Semih Yagli}\date{}
+\hypersetup{pdftitle={A Prompted Researcher Simulator for TREC UserSim 2026},pdfauthor={Nidhin Pattaniyil, Tanwir Zaman, Semih Yagli}}
+\input{figures/speaker-icons.tex}
+\begin{document}
+\begin{center}
+{\Large\bfseries A Prompted Researcher Simulator\\[3pt]for TREC UserSim 2026}\par
+\vspace{3pt}
+{\setlength{\tabcolsep}{9pt}\begin{tabular}{@{}ccc@{}}
+Nidhin Pattaniyil & Tanwir Zaman & Semih Yagli\\[2pt]
+\footnotesize\href{mailto:npatta01@gmail.com}{npatta01@gmail.com} &
+\footnotesize\href{mailto:zaman.tanwir@gmail.com}{zaman.tanwir@gmail.com} &
+\footnotesize\href{mailto:semihyagli1@gmail.com}{semihyagli1@gmail.com}
+\end{tabular}}\\[4pt]
+{\small Independent researchers\enspace$\cdot$\enspace Team NP Labs}
+\end{center}
+\begin{abstract}
+We used GPT-6 Luna~\cite{luna} to play the researcher in both TREC UserSim tasks. One model call drafts a reply; a second edits the wording. In Task 1, the editor can also correct claims that the researcher did something the conversation does not support. In Task 2, it keeps the draft's decision to continue or stop.
+\par\smallskip\noindent
+Our replies were 80--92\% longer than human replies in the preliminary organizer results. Average human-likeness ratings were 2.38/4 for Task 1 and 2.31/4 for Task 2 on the rated subsets. The editor left 95\% of generated Task 2 drafts unchanged, including some poorly rated replies. We examine the prompt and two recorded conversations to show what the editor left unchanged and what we would change in a future submission.
+\end{abstract}
+
+\section{Introduction}
+TREC UserSim asks participants to simulate a researcher looking for datasets. The organizers provide the search assistant, and our system produces the researcher's messages~\cite{track}. We participated as NP Labs.
+
+\textbf{Task 1: predict one reply.} Given a researcher profile, goal and partial conversation, produce the next researcher message. The simulator starts from the supplied history for each case.
+
+\textbf{Task 2: run the conversation.} Start from a researcher profile and goal, respond to the organizer's assistant over multiple turns, and decide when to finish or abandon the search (Figure~\ref{fig:tasks}).
+
+\begin{figure}[H]\centering
+\input{figures/task-overview-clean.tex}
+\caption{The simulator writes the researcher's messages. Task 1 asks for one reply; Task 2 continues the exchange with the organizers' assistant.}\label{fig:tasks}
+\end{figure}
+
+\section{Method: drafting and editing researcher replies}
+For each task, we use GPT-6 Luna to draft a reply and then edit it~\cite{code}. The two calls see the researcher's profile, goal, domain knowledge, known datasets and full conversation history. There is no fine-tuning or retrieval. The draft prompt asks the model to speak naturally as that researcher. In Task 2, it can stop when it has enough help or the search is going nowhere.
+
+The editor uses the last two researcher messages as examples of how to write. In Task 1, it can correct a claim such as ``I downloaded it'' if the researcher's background and earlier messages do not support it. In Task 2, it changes only the wording and keeps the draft's stop decision (Figure~\ref{fig:method}).
+
+\begin{figure}[H]\centering
+\input{figures/draft-edit-clean.tex}
+\caption{Our two model calls. In Task 2, the editor sees the draft's stop decision but cannot change it. The final reply carries that original decision.}\label{fig:method}
+\end{figure}
+
+We wanted the reply to sound more like the researcher without changing what they asked for. We therefore told the editor to make small changes and keep the details (Figure~\ref{fig:prompt}).
+
+\begin{figure}[H]\centering
+\input{figures/prompt-audit.tex}
+\caption{Excerpts from the Task 2 editor prompt, shown exactly as submitted.}\label{fig:prompt}
+\end{figure}
+
+\clearpage
+\section{Results}
+Our replies were longer than the human replies in both tasks (Figure~\ref{fig:results}). The organizers' November 4 release contains our annotated conversations, human ratings for some replies, and summary statistics for human conversations~\cite{results}. It does not include the human test replies themselves. Human training conversations were available separately.
+
+\begin{figure}[H]\centering
+\includegraphics[width=\linewidth]{figures/results-comparison.pdf}
+\caption{Average reply lengths and conversation lengths for our runs and the human comparison: 62 conversations in Task 1 and 57 in Task 2 per group. The release does not report how much these values vary across conversations. These bars show length; human-likeness ratings are in Table~\ref{tab:scores}.}\label{fig:results}
+\end{figure}
+
+Task 1 replies were about 80\% longer than the human mean; Task 2 replies were 92\% longer. Task 2 also averaged 4.7 researcher turns versus 3.6 for humans. More turns can be useful, so this difference alone does not show that the simulator should have stopped earlier.
+
+\begin{table}[H]\centering\small
+\begin{tabularx}{\linewidth}{@{}Yrr@{}}\toprule
+Measure & Task 1 & Task 2\\\midrule
+Dialogue-act JSD (lower is closer) & 0.106 & 0.158\\
+Human-likeness mean (0--4) & 2.38 & 2.31\\
+Rated user turns / conversations & 16 / 16 & 67 / 14\\\bottomrule
+\end{tabularx}
+\caption{Preliminary scores for our submitted runs. The organizers supplied JSD; we averaged the human ratings they provided. The human-likeness scale runs from definitely a bot (0) to definitely human (4).}\label{tab:scores}
+\end{table}
+
+Dialogue acts describe the type of conversational move. JSD (Jensen--Shannon divergence) measures how often our simulator uses these moves compared with humans: 0 means matching distributions and 1 means no overlap. Three LLMs assigned the labels by majority vote. The human ratings cover only the replies counted in Table~\ref{tab:scores}; some come from the same conversation. We received no human baseline rating or other teams' scores, so we cannot say how we rank.
+
+We submitted 62 Task 1 predictions and processed 57 Task 2 conversations. Eight Task 2 conversations ended because of backend failures or timeouts. These were not the simulator's choices to stop. The organizers did not provide scores with those conversations removed.
+
+
+
+
+
+\clearpage
+\subsection{Two conversations with different ratings}
+Figure~\ref{fig:comparison} shows one highly rated and one poorly rated Task 2 exchange about named-entity recognition (NER) datasets. The editor left all four shown replies unchanged.
+
+\begin{figure}[H]\centering
+\input{figures/conversations-side-by-side.tex}
+\caption{Two selected examples. Gray highlights link to notes 1--3. We quote the simulator exactly, summarize assistant replies, and mark skipped exchanges. Ratings and note 2 come from the organizers' human evaluation; other notes are ours. These examples cannot show how common the behavior is or what caused the ratings. We did not check factual accuracy.}\label{fig:comparison}
+\end{figure}
+
+\clearpage
+\section{Discussion}\label{sec:gaps}
+We did a poor job of checking whether our simulator sounded like a person. We checked too few examples and reused training conversations. Looking back at the prompt and the official replies, we see two problems with how we used the editor.
+
+\textbf{The editor usually copied the draft.} We told it to keep the details and avoid shortening replies automatically (Figure~\ref{fig:prompt}). That was a bad prompt for dealing with overly long replies. We gave it no length target based on human replies. Of 258 generated Task 2 draft/edit pairs, 245 (95\%) were unchanged, two became shorter, and eleven became longer. The editor therefore did little to change the length of our replies.
+
+\textbf{We used our own replies as style examples.} In Task 2, the editor's examples were the simulator's last two messages. For the poorly rated closing in Figure~\ref{fig:comparison}, its input included this earlier reply:
+\begin{quote}\small
+\textcolor{researcher}{\textbf{Earlier reply, supplied as a voice reference:}} ``Thanks---this is a helpful shortlist, and I appreciate the caveats.''\par
+\textcolor{model}{\textbf{Next closing draft, returned unchanged:}} ``That distinction is exactly what I needed.''
+\end{quote}
+Both replies start by thanking or agreeing with the assistant. We asked the editor to follow the simulator's earlier wording, so we may have encouraged it to keep a style that already sounded unnatural. We did not test whether human examples would work better. We also have no human ratings of the original drafts, so we cannot say whether the edits improved them.
+
+\textbf{What we would do better.} We would give the editor examples of human wording from the training data, then compare drafts and edits on separate conversations. We would ask human raters whether each reply sounds natural and check that the edit keeps the request and uncertainty intact. Shortening a reply is useful only if it still says what the researcher meant.
+
+\begin{thebibliography}{9}\small
+\bibitem{track} TREC User Simulation Track organizers. \emph{Guidelines for Participants}. \url{https://trec.usersim.ai/guidelines}. Accessed November 7, 2026.
+\bibitem{luna} OpenAI. \emph{GPT-6 Luna: model documentation}. \url{https://developers.openai.com/api/docs/models/gpt-6-luna}. Accessed November 7, 2026.
+\bibitem{results} TREC User Simulation Track organizers. \emph{Preliminary evaluation results: README and run annotations}. Participant release, November 4, 2026. Downloaded November 7, 2026.
+\bibitem{code} NP Labs. \emph{TREC UserSim 2026: simulator source and aggregate evidence}. Private repository. \url{https://github.com/npatta01/trec-usersim-2026}.
+\end{thebibliography}
+\end{document}

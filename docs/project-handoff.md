@@ -83,3 +83,7 @@ intact; future tests need matched hard cases and successful controls.
 
 The [earlier detailed handoff](research/archive/2026-10-10-handoff-history.md)
 preserves the full operator record.
+
+## November 7 preliminary results update
+
+Organizer results are now downloaded and incorporated in the manuscript. See [result interpretation](paper/organizer-results-2026-11-07.md) for metrics, rated sample sizes, provenance and limitations. Earlier pending-score statements are historical. Author details are complete. Paper format and submission requirements remain unconfirmed. Debug v5 stays paused.

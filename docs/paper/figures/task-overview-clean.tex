@@ -1,0 +1,22 @@
+\begin{tikzpicture}[x=1cm,y=1cm,>=Stealth,font=\small,
+ box/.style={draw=ink!25,fill=white,rounded corners=4pt,line width=.7pt,inner sep=8pt,align=center,minimum height=1.0cm},
+ modelbox/.style={box,draw=researcher!65,fill=researcher!10},
+ lab/.style={font=\footnotesize,fill=white,inner sep=2pt,align=center}]
+\fill[agent!5,rounded corners=7pt] (-.2,.6) rectangle (16.2,-1.8);
+\fill[researcher!5,rounded corners=7pt] (-.2,-2.2) rectangle (16.2,-6.3);
+\node[anchor=west,font=\small\bfseries,text=agent] at (0,.1) {(a) Task 1: predict one researcher reply};
+\node[box,text width=4.2cm] (context) at (2.3,-1.0) {Profile + goal\\Supplied dialogue prefix};
+\node[modelbox,text width=3.3cm] (one) at (8.0,-1.0) {\simicon\enspace Simulator};
+\node[box,text width=4.1cm] (reply) at (13.7,-1.0) {One researcher reply};
+\draw[->,line width=1pt,color=ink!70] (context.east)--(one.west);
+\draw[->,line width=1pt,color=ink!70] (one.east)--(reply.west);
+
+\node[anchor=west,font=\small\bfseries,text=researcher] at (0,-2.6) {(b) Task 2: generate a conversation};
+\node[box,text width=4.2cm] (scenario) at (2.3,-3.8) {Profile + goal};
+\node[modelbox,text width=3.3cm] (session) at (8.0,-3.8) {\simicon\enspace Simulator};
+\node[box,draw=agent!55,fill=agent!8,text width=4.1cm] (agent) at (13.7,-3.8) {\searchicon\enspace Search assistant\\Provided by organizers};
+\draw[->,line width=1pt,color=ink!70] (scenario.east)--(session.west);
+\draw[->,line width=1pt,color=ink!70] (session.east)--node[lab,above]{researcher\\message} (agent.west);
+\draw[->,line width=1pt,color=ink!70] (agent.south)--(13.7,-5.15)--node[lab,below]{assistant reply} (8.0,-5.15)--(session.south);
+\node[anchor=north,align=center,font=\footnotesize,text=researcher] at (8.0,-5.75) {The simulator can continue or end the search.};
+\end{tikzpicture}
