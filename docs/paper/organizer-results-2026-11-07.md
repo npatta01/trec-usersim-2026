@@ -24,3 +24,18 @@ shorten automatically. In Task 2, the last two voice examples are the simulator'
 own earlier turns, so reinforcing its generated register is a plausible mechanism,
 not a measured causal explanation. The stop decision is prompted, not calibrated
 against positive researcher stop labels in the supplied training export.
+
+## Patterns within the rated replies
+
+We matched the run IDs in `preliminary-results-2026-11-07.json` to the two
+`human_evaluation` JSON files in the checksum-verified November 4 archive.
+
+- Reply length and rating had near-zero rank association in both rated subsets.
+  Spearman's correlation of the Python character count of each submitted
+  researcher reply with its numeric human-likeness rating was +0.026 for
+  Task 1 (16 rated replies) and −0.010 for Task 2 (67 rated replies).
+  Tied character counts and ratings use average ranks.
+- Across the 14 rated Task 2 conversations, the final reply scored higher
+  than the first in 3, tied in 7, and scored lower in 4. Each comparison
+  uses a rated opening and a rated final researcher message
+  (`is_final: true`). Each conversation contributes one comparison.

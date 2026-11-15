@@ -1,0 +1,504 @@
+---
+pagetitle: "TREC UserSim 2026 · NP Labs"
+lang: en
+format:
+  revealjs:
+    theme: simple
+    css: trec-usersim-2026-talk.css
+    embed-resources: true
+    width: 1280
+    height: 760
+    margin: 0.06
+    center: false
+    view: slide
+    html-math-method: plain
+    scroll-activation-width: 0
+    transition: fade
+    slide-number: c/t
+    hash: true
+    controls: false
+    progress: true
+    footer: ""
+    include-before-body:
+      text: |
+        <div id="theme-controls" hidden>
+          <button type="button" id="theme-toggle" data-state="auto" aria-keyshortcuts="D" title="Change color theme (D)">
+            <span class="theme-dot" aria-hidden="true"></span><span id="theme-name">Auto</span>
+          </button>
+        </div>
+    include-after-body:
+      text: |
+        <script>
+        (() => {
+          if (new URLSearchParams(location.search).has('print-pdf')) return;
+          const labels = { auto: 'Auto', dark: 'Dark', light: 'Light', story: 'Storybook' };
+          const themes = Object.keys(labels);
+          const storageKey = 'trec-usersim-talk-theme';
+          const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
+          const controls = document.getElementById('theme-controls');
+          const button = document.getElementById('theme-toggle');
+          const name = document.getElementById('theme-name');
+          let theme = 'auto';
+          try {
+            const saved = localStorage.getItem(storageKey);
+            if (themes.includes(saved)) theme = saved;
+          } catch {
+            // The switcher also works when browser storage is unavailable.
+          }
+
+          function applyTheme() {
+            const systemTheme = systemDark.matches ? 'dark' : 'light';
+            document.documentElement.dataset.theme = theme === 'auto' ? systemTheme : theme;
+            button.dataset.state = theme;
+            name.textContent = labels[theme];
+            const hint = theme === 'auto' ? ' (follows your system)' : '';
+            button.setAttribute('aria-label', labels[theme] + ' color theme' + hint + '. Activate to change.');
+          }
+
+          button.addEventListener('click', () => {
+            theme = themes[(themes.indexOf(theme) + 1) % themes.length];
+            applyTheme();
+            try {
+              localStorage.setItem(storageKey, theme);
+            } catch {
+              // Keep the current selection for this page.
+            }
+          });
+          button.addEventListener('keydown', event => {
+            if (event.key === 'Enter' || event.key === ' ') event.stopPropagation();
+          });
+          systemDark.addEventListener('change', applyTheme);
+          document.addEventListener('keydown', event => {
+            if (event.key !== 'd' || event.repeat || event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey) return;
+            const target = event.target;
+            if (target instanceof HTMLElement && (target.isContentEditable || target.closest('input, textarea, select'))) return;
+            if (document.querySelector('.reveal.overview, .slide-menu-wrapper.active')) return;
+            button.click();
+          });
+
+          applyTheme();
+          controls.hidden = false;
+        })();
+        </script>
+        <script>
+        (() => {
+          const phone = window.matchMedia('(max-width: 680px)');
+          function showSlidesOnPhone(event) {
+            if (!phone.matches || location.search.includes('print-pdf')) return;
+            for (const slide of document.querySelectorAll('.reveal .slides > section')) {
+              slide.removeAttribute('aria-hidden');
+              slide.removeAttribute('hidden');
+            }
+            if (location.hash && event?.currentSlide) {
+              event.currentSlide.scrollIntoView({ block: 'start' });
+            }
+          }
+          Reveal.on('ready', showSlidesOnPhone);
+          Reveal.on('slidechanged', showSlidesOnPhone);
+          phone.addEventListener('change', () => {
+            if (phone.matches) showSlidesOnPhone();
+            else Reveal.sync();
+          });
+        })();
+        </script>
+        <script>
+        for (const summary of document.querySelectorAll('.full-reply summary')) {
+          summary.addEventListener('keydown', event => {
+            if (event.key === ' ' || event.key === 'Enter') event.stopPropagation();
+          });
+        }
+        </script>
+---
+
+## TREC UserSim 2026 {#title-slide}
+
+```{=html}
+<div class="talk-intro">
+  <p class="talk-subtitle">A Simple Draft-and-Edit Baseline</p>
+  <div class="presenter-block">
+    <p class="presenter-label">Presented by</p>
+    <p class="presenters">Nidhin Pattaniyil and Tanwir Zaman</p>
+    <p class="talk-date">Team NP Labs · <time datetime="2026-11-18">November 18, 2026</time></p>
+  </div>
+</div>
+```
+
+::: {.notes}
+Nidhin Pattaniyil and Tanwir Zaman present on behalf of Team NP Labs. The notebook paper was written with Semih Yagli.
+
+UserSim asks teams to play the researcher in a dataset search. We use a two-call draft-and-edit baseline. We’ll follow one search and use it to show what the second call actually changed.
+:::
+
+## What the track asks {#track}
+
+```{=html}
+<div class="track-body">
+  <p class="track-intro">We play the <strong>researcher</strong> who needs a dataset. The organizers supply the <strong>search assistant</strong>.</p>
+  <div class="task-grid">
+    <div class="task-card">
+      <img src="talk-assets/icon-dialogue.webp" alt="">
+      <div>
+        <p class="task-label">Task 1</p>
+        <h3>Predict one reply</h3>
+        <p>Read the conversation so far and write the researcher’s next message.</p>
+      </div>
+    </div>
+    <div class="task-card interactive-task">
+      <img src="talk-assets/icon-search.webp" alt="">
+      <div>
+        <p class="task-label">Task 2</p>
+        <h3>Run the conversation</h3>
+        <p>Take turns with the assistant and decide when the researcher should stop.</p>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+::: {.source}
+[TREC UserSim participant guidelines](https://trec.usersim.ai/guidelines) · Notebook paper, §1
+:::
+
+::: {.notes}
+Both tasks give us a researcher persona and a goal. In Task 1, the organizers also provide a partial dialogue, and we produce a single next researcher turn. In Task 2, the simulator initiates the search and sees the assistant’s replies as they arrive. It decides when it has enough help or when to abandon the search.
+:::
+
+## The dataset search we will follow {#dataset-search}
+
+```{=html}
+<p class="trace-step">Recorded Task 2 conversation</p>
+<div class="example-layout">
+  <figure class="search-scene">
+    <img src="talk-assets/archive-research-rag-style.webp" alt="Illustration of a researcher at an archive desk with a historical text and datasets on a laptop.">
+  </figure>
+  <div>
+    <p class="example-goal">Find a dataset that labels <mark>people and places</mark> in historical texts.</p>
+    <p class="example-preference">The researcher prefers multilingual data.</p>
+  </div>
+</div>
+```
+
+::: {.source}
+UserSim notebook paper, §1
+:::
+
+::: {.notes}
+This is a recorded Task 2 search. The researcher wants annotated data for named-entity recognition, which means labeling people, places, and other named entities. We follow the first exchange and one follow-up.
+:::
+
+## What we gave GPT-6 Luna {#method}
+
+```{=html}
+<p class="trace-step">Same dataset search · Before the first message</p>
+<div class="method">
+  <dl class="prompt-fields" aria-label="Inputs to GPT-6 Luna">
+    <div>
+      <dt>Researcher profile</dt>
+      <dd>Background, experience with AI, and traits.</dd>
+    </div>
+    <div>
+      <dt>Search goal</dt>
+      <dd>Find annotated datasets for named-entity recognition in the humanities, preferably multilingual.</dd>
+    </div>
+    <div>
+      <dt>Domain knowledge</dt>
+      <dd>How familiar the researcher is with the topic and which datasets they already know.</dd>
+    </div>
+    <div>
+      <dt>Conversation history</dt>
+      <dd>No messages yet. “Please start the conversation based on the goal and your persona.”</dd>
+    </div>
+  </dl>
+  <div class="pipeline" aria-label="Draft the reply, edit its wording, then send">
+    <div class="stage"><img src="talk-assets/icon-draft.webp" alt=""><strong>Draft</strong><span>Reply + stop decision</span></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="stage"><img src="talk-assets/icon-edit.webp" alt=""><strong>Style edit</strong><span>Revise wording</span></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="stage stage-submit"><img src="talk-assets/icon-send.webp" alt=""><strong>Send</strong><span>Edited text</span></div>
+  </div>
+  <div class="stop-path"><span><strong>Task 2</strong> · Keep the draft’s stop decision</span></div>
+</div>
+```
+
+::: {.source}
+UserSim notebook paper, §2 · Opening instruction quoted from the recorded prompt
+:::
+
+::: {.notes}
+The four boxes summarize the input fields in the recorded opening call, and the last box quotes the opening instruction. In Task 2 the draft returns two fields, text and is_final. A second call to GPT-6 Luna sees the same context and the draft. It edits the wording using up to two earlier researcher messages as style examples. There were none at the opening. The runner sends the editor’s text and copies the first call’s stop decision.
+
+Task 1 predicts a single next reply from a supplied dialogue. Its editor can also correct unsupported claims about completed actions.
+:::
+
+## Our first message and the assistant’s reply {#opening-response}
+
+```{=html}
+<p class="trace-step">Same dataset search · First exchange</p>
+<div class="turn-trace">
+  <article class="turn-card">
+    <div class="turn-label"><img src="talk-assets/icon-send.webp" alt=""><h3>Our simulator · submitted text</h3></div>
+    <blockquote>“I’m looking for annotated NER datasets, preferably multilingual and covering humanities or historical texts. Which datasets are available, and <mark>what languages and entity types do they include?</mark>”</blockquote>
+    <p class="turn-decision reply-score"><strong>4/4 human-likeness</strong> · Preliminary organizer rating</p>
+  </article>
+  <span class="trace-arrow" aria-hidden="true">→</span>
+  <article class="turn-card assistant-turn">
+    <div class="turn-label"><img src="talk-assets/icon-search.webp" alt=""><h3>Search assistant · summary</h3></div>
+    <p class="shortlist">WikiANN and WikiNeural</p>
+    <p class="turn-detail">The assistant offered these multilingual options. Its index had no annotated corpus specifically for humanities or historical texts.</p>
+  </article>
+</div>
+<div class="turn-ratings">
+  <p>Human-likeness by researcher turn</p>
+  <ol class="turn-scores">
+    <li class="featured-turn"><span>Turn 1</span> <strong>4/4</strong></li>
+    <li><span>Turn 2</span> <strong>4/4</strong></li>
+    <li><span>Turn 3</span> <strong>4/4</strong></li>
+    <li><span>Turn 4</span> <strong>4/4</strong></li>
+    <li><span>Turn 5</span> <strong>4/4</strong></li>
+    <li><span>Turn 6</span> <strong>4/4</strong></li>
+  </ol>
+</div>
+```
+
+::: {.source}
+Recorded first exchange and preliminary organizer ratings. UserSim notebook paper, §1.
+:::
+
+::: {.notes}
+This is our complete first submitted message. Both Luna calls returned the same wording, and the draft chose to continue. The organizers gave this opening 4/4 for human-likeness. All six researcher replies in this conversation received 4/4. The next turn can name individual datasets because the search assistant has supplied a shortlist.
+:::
+
+## Our style editor rarely changed the wording {#follow-up}
+
+```{=html}
+<div class="turn-trace editor-summary">
+  <article class="turn-card prompt-turn">
+    <div class="turn-label"><img src="talk-assets/icon-edit.webp" alt=""><h3>What we asked</h3></div>
+    <p class="turn-detail">Match the researcher’s tone with small edits.</p>
+    <blockquote>“If the draft fits, return it unchanged.”</blockquote>
+  </article>
+  <span class="trace-arrow" aria-hidden="true">→</span>
+  <article class="turn-card edit-turn">
+    <div class="turn-label"><img src="talk-assets/icon-send.webp" alt=""><h3>WikiANN follow-up · sent unchanged</h3></div>
+    <blockquote>“Please provide the licensing, splits, and annotation provenance for WikiANN and WikiNeural, especially <mark>whether their annotations are human-verified.</mark>”</blockquote>
+    <p class="turn-decision reply-score"><strong>4/4 human-likeness</strong> · Preliminary organizer rating</p>
+  </article>
+</div>
+```
+
+::: {.source}
+Recorded Task 2 editor prompt and submitted reply. UserSim notebook paper, §2 and Figs. 1–2.
+:::
+
+::: {.notes}
+We added a second Luna call to match the researcher’s tone. We gave it the opening message as a writing sample. Our prompt asked for minimal edits and explicitly allowed Luna to keep a draft it judged to fit. That conservative instruction may help explain why the editor made so few changes. The runner sent this reply word for word with the original decision to continue. The conclusion shows how often the editor changed the wording.
+:::
+
+## The style pass kept the flagged formatting {#licensing-results}
+
+```{=html}
+<p class="trace-step">Same Task 2 search · Style editor left both drafts unchanged</p>
+<div class="reply-comparison">
+  <article class="turn-card submitted-reply">
+    <div class="turn-label"><img src="talk-assets/icon-send.webp" alt=""><h3>Turn 3 · Narrow the shortlist</h3><div class="reply-meta"><strong class="reply-rating">3/4</strong> <span>607 characters</span></div></div>
+    <p class="reply-context"><strong>Assistant summary</strong> · Compared general NER benchmarks with humanities corpora.</p>
+    <details class="full-reply">
+      <summary><span class="show-full">Read full reply</span><span class="show-key-lines">Show key lines</span></summary>
+      <blockquote tabindex="0">“This is a useful overview, especially the distinction between broad modern benchmarks and humanities-focused corpora. Before I choose a combination, could you narrow it to a few strongest candidates and give the canonical project or dataset links? I’m particularly interested in which releases have human-annotated gold labels versus automatic or projected annotations, and in license/access details verified for the specific release<mark>—</mark>not just the underlying source text. Please flag any uncertainty, especially where names like HIPE or MasakhaNER refer to multiple versions with different contents or terms.”</blockquote>
+    </details>
+    <blockquote class="reply-excerpt">
+      <p>“… could you narrow it to a few strongest candidates and give the canonical project or dataset links?”</p>
+      <p>“… license/access details verified for the specific release<mark>—</mark>not just the underlying source text.”</p>
+    </blockquote>
+    <p class="reply-rater"><strong>Rater label</strong> · Probably human</p>
+  </article>
+  <article class="turn-card submitted-reply flagged-reply">
+    <div class="turn-label"><img src="talk-assets/icon-send.webp" alt=""><h3>Turn 4 · Check licenses</h3><div class="reply-meta"><strong class="reply-rating">0/4</strong> <span>568 characters</span></div></div>
+    <p class="reply-context"><strong>Assistant summary</strong> · Linked MasakhaNER, HIPE, and LitBank. Exact release terms still needed checking.</p>
+    <details class="full-reply">
+      <summary><span class="show-full">Read full reply</span><span class="show-key-lines">Show key lines</span></summary>
+      <blockquote tabindex="0">“Thanks<mark>—</mark>this is a helpful shortlist, and I appreciate the caveats. I’m still hesitant to treat the license summaries as verified, since the answer points to project pages but doesn’t identify the exact release files or license documents. Could you do one focused check for <mark>**</mark>MasakhaNER 2.0, HIPE-2020, and LitBank<mark>**</mark>: give the precise release/repository location and state separately what terms apply to the annotations and to the underlying text? If a release has no clear license file or its terms are ambiguous, please say that explicitly rather than infer a license.”</blockquote>
+    </details>
+    <blockquote class="reply-excerpt">
+      <p>“Thanks<mark>—</mark>this is a helpful shortlist, and I appreciate the caveats.”</p>
+      <p>“Could you do one focused check for <mark>**</mark>MasakhaNER 2.0, HIPE-2020, and LitBank<mark>**</mark>: … state separately what terms apply to the annotations and to the underlying text?”</p>
+    </blockquote>
+    <p class="reply-rater"><strong>Rater flagged</strong> · Dashes and literal <code>**</code></p>
+  </article>
+</div>
+<div class="turn-ratings">
+  <p>Human-likeness by researcher turn</p>
+  <ol class="turn-scores">
+    <li><span>Turn 1</span> <strong>1/4</strong></li>
+    <li><span>Turn 2</span> <strong>2/4</strong></li>
+    <li class="featured-turn"><span>Turn 3</span> <strong>3/4</strong></li>
+    <li class="flagged-turn"><span>Turn 4</span> <strong>0/4</strong></li>
+    <li><span>Turn 5</span> <strong>1/4</strong></li>
+  </ol>
+</div>
+```
+
+::: {.source}
+Preliminary organizer evaluation. Ellipses mark omissions. Assistant replies and rater comments summarized.
+:::
+
+::: {.notes}
+This example shows which cues made it through the style pass. Turn 3 asks for a shortlist, canonical links, human-annotated labels, and release-level licensing. Turn 4 follows up on three named datasets and asks which license terms cover the annotations and the underlying text. Turn 4 was 39 characters shorter. Both replies contain an em dash. The rater flagged dashes and literal Markdown on turn 4. Both drafts match the accepted submissions word for word.
+:::
+
+## Preliminary results for both tasks {#task-metrics}
+
+```{=html}
+<div class="scorecard-wrap">
+  <table class="task-scorecard" aria-label="Preliminary results for both UserSim tasks">
+    <thead>
+      <tr><th scope="col">Measure</th><th scope="col">Task 1<span class="metric-note">62 reply predictions</span></th><th scope="col">Task 2<span class="metric-note">57 conversations</span></th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Dialogue-act JSD<span class="metric-note">Lower means a closer match to the mix of human dialogue acts</span></th>
+        <td><strong>0.106</strong></td><td><strong>0.158</strong></td>
+      </tr>
+      <tr>
+        <th scope="row">Average human-likeness<span class="metric-note">Human ratings from 0 to 4</span></th>
+        <td><strong>2.38/4</strong><span class="metric-note">16 rated replies in 16 conversations</span></td>
+        <td><strong>2.31/4</strong><span class="metric-note">67 rated replies in 14 conversations</span></td>
+      </tr>
+      <tr>
+        <th scope="row">Average reply length<span class="metric-note">Characters · NP Labs vs human reference</span></th>
+        <td><strong>563</strong> vs 313</td>
+        <td><strong>382</strong> vs 199</td>
+      </tr>
+      <tr>
+        <th scope="row">Average turns per conversation<span class="metric-note">NP Labs vs human reference</span></th>
+        <td>One predicted reply per prompt</td>
+        <td><strong>4.7</strong> vs 3.6 researcher turns<span class="metric-note">8.2 vs 6.9 total turns</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <dl class="rating-scale" aria-label="Human-likeness scale anchors">
+    <div><dt>0</dt><dd>Definitely a bot</dd></div>
+    <div><dt>2</dt><dd>Can't tell</dd></div>
+    <div><dt>4</dt><dd>Definitely human</dd></div>
+  </dl>
+</div>
+```
+
+::: {.source}
+Preliminary organizer evaluation, November 4. Task 2 counts include eight administrative closures. UserSim notebook paper, Fig. 3 and Table 1.
+:::
+
+::: {.notes}
+Dialogue acts are moves such as asking for clarification or acknowledging an answer. The organizers used a majority vote of three language models to assign the acts. Jensen–Shannon divergence compares each task’s mix with its human reference. Zero means the same distribution, and lower values are closer. The Task 1 mix was closer to its reference by this measure. Mean human-likeness was similar across the rated sets. Task 2 human ratings include multiple replies per conversation. The reported Task 2 turn averages cover the full run.
+:::
+
+## Our replies were longer in both tasks {#results}
+
+```{=html}
+<div class="summary-grid">
+  <div class="length-chart">
+    <p class="chart-label">Characters per researcher reply</p>
+    <div class="length-group">
+      <h3>Task 1 <span>80% longer on average</span></h3>
+      <div class="length-row human-length"><span>Human avg.</span><div class="meter" aria-hidden="true"><i style="--length:52.17%"></i></div><strong>313</strong></div>
+      <div class="length-row sim-length"><span>NP Labs avg.</span><div class="meter" aria-hidden="true"><i style="--length:93.83%"></i></div><strong>563</strong></div>
+    </div>
+    <div class="length-group">
+      <h3>Task 2 <span>92% longer on average</span></h3>
+      <div class="length-row human-length"><span>Human avg.</span><div class="meter" aria-hidden="true"><i style="--length:33.17%"></i></div><strong>199</strong></div>
+      <div class="length-row sim-length"><span>NP Labs avg.</span><div class="meter" aria-hidden="true"><i style="--length:63.67%"></i></div><strong>382</strong></div>
+      <div class="length-examples">
+        <p class="chart-label">The two licensing replies · Human-likeness ratings</p>
+        <div class="length-row example-length"><span>4/4 reply</span><div class="meter" aria-hidden="true"><i style="--length:24.67%"></i></div><strong>148</strong></div>
+        <div class="length-row example-length"><span>0/4 reply</span><div class="meter" aria-hidden="true"><i style="--length:94.67%"></i></div><strong>568</strong></div>
+      </div>
+    </div>
+    <div class="length-row length-axis" aria-hidden="true">
+      <div class="length-ticks"><span>0</span><span>300</span><span>600</span></div>
+    </div>
+  </div>
+  <div class="pattern-summary">
+    <div class="result-pattern">
+      <h3>Length barely tracked ratings</h3>
+      <p>Rank correlation in the rated replies</p>
+      <p class="rank-values">Task 1 <strong>+0.03</strong> <span>·</span> Task 2 <strong>−0.01</strong></p>
+    </div>
+    <div class="result-pattern">
+      <h3>Ratings changed in both directions</h3>
+      <p>Opening to final reply · 14 rated Task 2 conversations</p>
+      <div class="rating-change">
+        <p><strong>3</strong><span>Higher</span></p>
+        <p><strong>7</strong><span>Same</span></p>
+        <p><strong>4</strong><span>Lower</span></p>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+::: {.source}
+Preliminary organizer evaluation. The length examples are individual replies from separate Task 2 searches. Rank correlations and opening-to-final counts use the rated subsets.
+:::
+
+::: {.notes}
+All bars use the same 0–600 character scale. The 148-character WikiANN follow-up scored 4/4, while the 568-character reply in the other search scored 0/4. Across the rated replies, the rank correlations of character count with human-likeness were +0.026 for Task 1 and −0.010 for Task 2. We used average ranks for ties within each task.
+
+We compared the first and final researcher ratings within each of the 14 Task 2 conversations with both endpoints rated. Seven were tied, four fell, and three rose. The search shown earlier ties at 1/4 from opening to closing and drops from 3/4 to 0/4 in between. Task 2 took about one additional researcher turn per conversation compared with the human reference.
+:::
+
+## What raters flagged in our replies {#reply-issues}
+
+```{=html}
+<p class="trace-step">Selected examples from the preliminary Task 2 evaluation</p>
+<div class="reply-issues">
+  <article class="turn-card flagged-reply">
+    <div class="turn-label"><h3>Visible formatting</h3><strong class="reply-rating">0/4</strong></div>
+    <blockquote>“Thanks<mark>—</mark>…” and “<mark>**</mark>MasakhaNER 2.0, HIPE-2020, and LitBank<mark>**</mark>”</blockquote>
+    <p class="issue-rater">The rater flagged the dashes and double asterisks.</p>
+  </article>
+  <article class="turn-card">
+    <div class="turn-label"><h3>Tone shifted to expert</h3><strong class="reply-rating">1/4</strong></div>
+    <blockquote>“The joinability matters a lot for my use case.”</blockquote>
+    <p class="issue-rater">The rater noticed a shift from casual to expert language.</p>
+  </article>
+  <article class="turn-card">
+    <div class="turn-label"><h3>Too much detail</h3><strong class="reply-rating">1/4</strong></div>
+    <blockquote>“… especially diabetes and cardiovascular history, BMI, smoking, activity, blood pressure, cholesterol, medications, and age.”</blockquote>
+    <p class="issue-rater">The rater found the request overly detailed.</p>
+  </article>
+  <article class="turn-card flagged-reply">
+    <div class="turn-label"><h3>Closing recap</h3><strong class="reply-rating">1/4</strong></div>
+    <blockquote>“… compare it with IMS/PRONOSTIA while accounting for censoring and chronological splits.”</blockquote>
+    <p class="issue-rater">The rater found it unusual to end by recapping what the researcher planned to do.</p>
+  </article>
+</div>
+```
+
+::: {.source}
+Scores are human-likeness ratings. Excerpts are from our submitted replies. Rater comments are summarized.
+:::
+
+::: {.notes}
+The formatting example is turn 4 from the earlier slide. The rater of the opening in that same search thought it sounded too knowledgeable, even though the reply said “I’m new to this area.” In a citation-dataset search the rater commented on a shift from casual to expert tone. Other raters flagged excessive detail in a dataset request and the recap of intended work in a closing message. These are individual judgments on four examples from the preliminary Task 2 evaluation.
+:::
+
+## Conclusion {#audit}
+
+```{=html}
+<ul class="closing-points">
+  <li><strong>Simple prompting.</strong> GPT-6 Luna drafted each reply, then ran a style pass.</li>
+  <li><strong>Style refinement.</strong> The editor left <strong>95%</strong> of Task 2 drafts unchanged, including the 4/4 and 0/4 replies.</li>
+  <li><strong>Raters flagged</strong> literal Markdown, dashes, an overly expert tone, excess detail, and closing recaps.</li>
+  <li><strong>Preliminary scores.</strong> Task 1 averaged <strong>2.38/4</strong> for human-likeness (JSD 0.106). Task 2 averaged <strong>2.31/4</strong> (JSD 0.158).</li>
+</ul>
+```
+
+::: {.source}
+Task 2 draft/edit audit and preliminary organizer results. UserSim notebook paper, §§2–4.
+:::
+
+::: {.notes}
+This was a simple prompted baseline. In Task 2, we sent the editor’s text with the stop decision chosen in the draft. When the search continued, we added the assistant’s reply to the conversation and sent the updated history in the next prompt. The style editor took the simulator’s own previous replies as voice examples, so it could carry forward the wording patterns already in the conversation.
+
+The editor returned 245 of 258 Task 2 drafts verbatim. It made 2 shorter and 11 longer. The 95% figure measures exact equality of draft and edit. The preliminary human-likeness averages summarize 16 rated Task 1 replies and 67 rated Task 2 replies. Lower JSD means a closer match to the human dialogue-act mix for that task.
+:::
