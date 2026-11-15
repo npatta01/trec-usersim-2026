@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TREC UserSim 2026 approach film</title>
+  <style>
+    :root {
+      --paper: #fbf4e5;
+      --panel: #fffaf1;
+      --ink: #192b30;
+      --muted: #465653;
+      --line: #ded4bf;
+      --teal: #116b63;
+      --teal-soft: #dfefea;
+      --violet: #58498d;
+      --violet-soft: #eee7f8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font: 28px/1.36 Inter, system-ui, sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+    }
+    h1, h2, h3, p { margin: 0; }
+    h1, h2, h3 { letter-spacing: -.032em; line-height: 1.08; }
+    h1 { font-size: 94px; font-weight: 820; }
+    h2 { font-size: 64px; font-weight: 810; }
+    h3 { font-size: 37px; font-weight: 780; }
+    #stage {
+      position: relative;
+      width: 1600px;
+      height: 900px;
+      overflow: hidden;
+      background: radial-gradient(ellipse at 68% 28%, #fff9ea, var(--paper) 73%);
+    }
+    .masthead {
+      position: absolute;
+      inset: 42px 80px auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 16px;
+      border-bottom: 2px solid var(--line);
+      color: var(--muted);
+      font-size: 22px;
+      font-weight: 750;
+    }
+    .masthead strong {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--ink);
+    }
+    .mark {
+      display: grid;
+      width: 48px;
+      height: 48px;
+      place-items: center;
+      border-radius: 13px;
+      background: var(--teal);
+      color: white;
+      font-size: 21px;
+    }
+    .scene {
+      position: absolute;
+      inset: 150px 80px 113px;
+      opacity: 0;
+      visibility: hidden;
+    }
+    #opening { opacity: 1; visibility: visible; }
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .title-note, .subtitle {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 30px;
+    }
+    .note {
+      padding: 11px 18px;
+      border-radius: 10px;
+      background: var(--teal-soft);
+      color: var(--teal);
+      font-weight: 720;
+    }
+    .title-note { max-width: 490px; }
+    #opening .note { display: inline-block; margin-top: 30px; }
+    .art {
+      display: block;
+      width: 100%;
+      height: auto;
+      border: 2px solid var(--line);
+      border-radius: 20px;
+    }
+    .lane, .node, .message, .score, .length-card {
+      border: 2px solid var(--line);
+      border-radius: 17px;
+      background: var(--panel);
+    }
+    .lane {
+      display: grid;
+      grid-template-columns: 230px 1fr;
+      align-items: center;
+      gap: 30px;
+      min-height: 170px;
+      padding: 25px;
+    }
+    .lane + .lane { margin-top: 22px; }
+    .lanes { margin-top: 36px; }
+    .lane p, .node p, .message p, .score p { color: var(--muted); }
+    .lane-flow, .context-values {
+      display: flex;
+      align-items: center;
+      gap: 17px;
+    }
+    .pill, .bubble {
+      padding: 12px 18px;
+      border-radius: 11px;
+      background: var(--violet-soft);
+      color: var(--violet);
+      font-weight: 730;
+    }
+    .bubble.teal, .pill.teal {
+      background: var(--teal-soft);
+      color: var(--teal);
+    }
+    .arrow { color: var(--teal); font-size: 44px; line-height: 1; }
+    .context-values { margin-top: 22px; }
+    .method-flow {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      align-items: center;
+      gap: 18px;
+      margin-top: 27px;
+    }
+    .node {
+      min-height: 217px;
+      padding: 24px;
+      border-top: 5px solid var(--violet);
+    }
+    .node:last-child { border-top-color: var(--teal); }
+    .node img {
+      display: block;
+      width: 82px;
+      height: 82px;
+      object-fit: contain;
+      margin-bottom: 8px;
+    }
+    .node p { margin-top: 6px; }
+    .stop-lane {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 26px;
+      gap: 24px;
+      color: var(--teal);
+      font-weight: 740;
+    }
+    .stop-track {
+      flex: 1;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--teal);
+      transform-origin: left;
+    }
+    .stop-lane .arrow { margin-left: -22px; }
+    .message {
+      padding: 23px 26px;
+      border-left: 5px solid var(--teal);
+    }
+    .message + .message { margin-top: 20px; border-left-color: var(--violet); }
+    .message h3 { margin-bottom: 8px; }
+    .message p { font-size: 31px; }
+    p.message-label {
+      color: var(--teal);
+      font-size: 23px;
+      font-weight: 780;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .case-art { width: min(100%, 600px); margin: 24px auto 0; }
+    #example .split { gap: 45px; align-items: start; }
+    .case-result { margin-top: 20px; }
+    .two-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 28px;
+    }
+    .score, .length-card { padding: 26px; }
+    .score { border-top: 5px solid var(--violet); }
+    .score:last-child { border-top-color: var(--teal); }
+    .score .coverage { margin-top: 12px; font-size: 28px; }
+    .score-value { display: block; margin-top: 16px; font-size: 72px; line-height: 1.05; }
+    .score-value span { font-size: .53em; }
+    .score-details { display: block; margin-top: 4px; color: var(--muted); font-weight: 660; }
+    .score-notes { margin-top: 18px; color: var(--muted); }
+    .length-card h3 { margin-bottom: 22px; }
+    .length-row {
+      display: grid;
+      grid-template-columns: 152px minmax(0, 1fr) 63px;
+      align-items: center;
+      gap: 13px;
+      margin-top: 12px;
+      font-weight: 710;
+    }
+    .length-row strong { text-align: right; }
+    .track { height: 20px; border-radius: 5px; background: #ece4d4; }
+    .bar {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--violet);
+      transform-origin: left;
+    }
+    .human .bar { background: var(--teal); }
+    .audit { display: inline-block; margin-top: 22px; }
+    .closing { margin-top: 17px; color: var(--teal); font-weight: 720; }
+    .progress {
+      position: absolute;
+      inset: auto 0 0;
+      height: 6px;
+      background: var(--teal);
+      transform: scaleX(0);
+      transform-origin: left;
+    }
+  </style>
+</head>
+<body>
+  <main id="stage" aria-label="TREC UserSim approach film">
+    <header class="masthead">
+      <strong><span class="mark" aria-hidden="true">NP</span> NP Labs</strong>
+      <span>TREC UserSim 2026</span>
+    </header>
+
+    <section id="opening" class="scene split">
+      <div>
+        <h1>Simulating a researcher’s dataset search</h1>
+        <p class="title-note">Our submission to the NIST TREC User Simulation Track.</p>
+        <p class="note" id="organizer-role">Search assistant provided by the organizers</p>
+      </div>
+      <img class="art" src="../slides/talk-assets/archive-research-rag-style.webp"
+           width="1300" height="975" alt="A researcher reads a historical text beside a laptop with datasets">
+    </section>
+
+    <section id="tasks-scene" class="scene">
+      <h2>One reply or a whole search</h2>
+      <div class="lanes">
+        <div class="lane" id="task-one">
+          <div><h3>Task 1</h3><p>Predict one reply</p></div>
+          <div class="lane-flow">
+            <span class="bubble">Supplied dialogue</span>
+            <span class="arrow" id="one-arrow" aria-hidden="true">→</span>
+            <span class="bubble teal" id="one-reply">Researcher reply</span>
+          </div>
+        </div>
+        <div class="lane" id="task-two">
+          <div><h3>Task 2</h3><p>Run the conversation</p></div>
+          <div class="lane-flow">
+            <span class="bubble">Researcher</span>
+            <span class="arrow" id="two-arrow" aria-hidden="true">→</span>
+            <span class="bubble teal" id="two-assistant">Search assistant</span>
+            <span class="arrow" id="return-arrow" aria-hidden="true">→</span>
+            <span class="bubble" id="two-reply">Researcher</span>
+            <span class="pill teal" id="two-stop">Continue or stop</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="method" class="scene">
+      <h2>One reply, two model calls</h2>
+      <p class="subtitle">Both calls receive the same context.</p>
+      <div class="context-values">
+        <span class="pill teal" id="input-profile">Researcher profile</span>
+        <span class="pill teal" id="input-goal">Search goal</span>
+        <span class="pill teal" id="input-dialogue">Dialogue so far</span>
+      </div>
+      <div class="method-flow">
+        <div class="node" id="draft-node">
+          <img src="../slides/talk-assets/icon-draft.webp" width="82" height="82" alt="">
+          <h3>Draft reply</h3>
+          <p>GPT-6 Luna</p>
+        </div>
+        <span class="arrow" id="draft-arrow" aria-hidden="true">→</span>
+        <div class="node" id="edit-node">
+          <img src="../slides/talk-assets/icon-edit.webp" width="82" height="82" alt="">
+          <h3>Edit wording</h3>
+          <p>GPT-6 Luna</p>
+        </div>
+        <span class="arrow" id="edit-arrow" aria-hidden="true">→</span>
+        <div class="node" id="send-node">
+          <img src="../slides/talk-assets/icon-send.webp" width="82" height="82" alt="">
+          <h3>Submit reply</h3>
+          <p>Send to the search assistant</p>
+        </div>
+      </div>
+      <div class="stop-lane" id="stop-lane">
+        <span class="pill teal">Task 2 draft decision</span>
+        <span class="stop-track" id="stop-track" aria-hidden="true"></span>
+        <span class="arrow" aria-hidden="true">→</span>
+        <span class="pill teal" id="copied-decision">Same continue or stop decision</span>
+      </div>
+    </section>
+
+    <section id="example" class="scene">
+      <h2>A dataset search in Task 2</h2>
+      <div class="split">
+        <img class="art case-art" src="../slides/talk-assets/archive-research-rag-style.webp"
+             width="1300" height="975" alt="Illustration of the historical-text search">
+        <div>
+          <p class="subtitle">One submitted conversation</p>
+          <div class="message" id="example-assistant">
+            <p class="message-label">Search assistant</p>
+            <h3>WikiANN and WikiNeural</h3>
+          </div>
+          <div class="message" id="example-researcher">
+            <p class="message-label">Researcher follow-up</p>
+            <p>Ask about licenses, dataset splits, and whether people verified the labels.</p>
+          </div>
+          <p class="note case-result" id="example-kept">Draft kept unchanged · Continue the search</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="scores" class="scene">
+      <h2>Preliminary organizer results</h2>
+      <p class="subtitle">November 4 release · Mean human-likeness on a 0–4 scale</p>
+      <div class="two-cols">
+        <div class="score" id="score-one">
+          <h3>Task 1</h3>
+          <p class="coverage">62 predictions</p>
+          <div id="rating-one">
+            <strong class="score-value">2.38 <span>/ 4</span></strong>
+            <span class="score-details">16 rated researcher turns</span>
+          </div>
+        </div>
+        <div class="score" id="score-two">
+          <h3>Task 2</h3>
+          <p class="coverage">57 conversations</p>
+          <div id="rating-two">
+            <strong class="score-value">2.31 <span>/ 4</span></strong>
+            <span class="score-details">67 rated researcher turns</span>
+          </div>
+        </div>
+      </div>
+      <p class="score-notes" id="closure-note">Task 2 includes eight administrative closures.</p>
+    </section>
+
+    <section id="comparison" class="scene">
+      <h2>Our replies were longer</h2>
+      <p class="subtitle">Mean characters per researcher reply</p>
+      <div class="two-cols">
+        <div class="length-card">
+          <h3>Task 1</h3>
+          <div class="length-row"><span>Simulator</span><div class="track"><span class="bar" data-chars="563"></span></div><strong>563</strong></div>
+          <div class="length-row human"><span>Human</span><div class="track"><span class="bar" data-chars="313"></span></div><strong>313</strong></div>
+        </div>
+        <div class="length-card">
+          <h3>Task 2</h3>
+          <div class="length-row"><span>Simulator</span><div class="track"><span class="bar" data-chars="382"></span></div><strong>382</strong></div>
+          <div class="length-row human"><span>Human</span><div class="track"><span class="bar" data-chars="199"></span></div><strong>199</strong></div>
+        </div>
+      </div>
+      <p class="note audit" id="audit-note">The editor kept 245 of 258 Task 2 drafts unchanged.</p>
+      <p class="closing" id="paper-link">Read the notebook paper for the scores and conversation examples.</p>
+    </section>
+
+    <div class="progress" id="progress" aria-hidden="true"></div>
+  </main>
+  <script>
+    const byId = (id) => document.getElementById(id);
+    const chapters = [
+      ["opening", "intro"],
+      ["tasks-scene", "task1"],
+      ["method", "context"],
+      ["example", "example"],
+      ["scores", "runs"],
+      ["comparison", "lengths"],
+    ].map(([id, cue]) => ({ element: byId(id), cue }));
+    const bars = [...document.querySelectorAll(".bar")];
+    for (const bar of bars) bar.style.width = (100 * Number(bar.dataset.chars) / 600) + "%";
+
+    function ease(time, start, end) {
+      const unit = Math.max(0, Math.min(1, (time - start) / (end - start)));
+      return unit * unit * (3 - 2 * unit);
+    }
+
+    function reveal(id, amount) {
+      const element = byId(id);
+      element.style.opacity = amount;
+      element.style.transform = "translateY(" + 12 * (1 - amount) + "px)";
+    }
+
+    window.setFilmTimeline = ({ cues, duration }) => {
+      const at = (id) => cues[id].start;
+      const boundaries = chapters.map(({ cue }, index) => index === 0 ? 0 : at(cue) - 0.16);
+
+      window.drawFilm = (time) => {
+        chapters.forEach(({ element }, index) => {
+          const begin = boundaries[index];
+          const finish = boundaries[index + 1] ?? duration + 1;
+          const entry = index === 0 ? 1 : ease(time, begin, begin + 0.29);
+          const exit = 1 - ease(time, finish - 0.23, finish);
+          const opacity = entry * exit;
+          element.style.visibility = opacity > 0 ? "visible" : "hidden";
+          element.style.opacity = opacity;
+        });
+
+        const motion = (id, cue, offset = 0, length = 0.45) => {
+          const start = at(cue) + offset;
+          reveal(id, ease(time, start, start + length));
+        };
+
+        motion("organizer-role", "assistant", 0.2);
+        motion("task-one", "task1");
+        motion("one-arrow", "task1", 1.8);
+        motion("one-reply", "task1", 2.2);
+        motion("task-two", "task2");
+        motion("two-arrow", "task2", 0.9);
+        motion("two-assistant", "task2", 1.2);
+        motion("return-arrow", "task2", 2.0);
+        motion("two-reply", "task2", 2.3);
+        motion("two-stop", "task2", 3.05);
+
+        motion("input-profile", "context", 0.8);
+        motion("input-goal", "context", 1.45);
+        motion("input-dialogue", "context", 2.12);
+        motion("draft-node", "draft", 0.45);
+        motion("draft-arrow", "edit");
+        motion("edit-node", "edit", 0.35);
+        motion("edit-arrow", "edit", 1.6);
+        motion("send-node", "edit", 1.93);
+        motion("stop-lane", "edit", 2.48);
+        const stopProgress = ease(time, at("edit") + 2.68, at("edit") + 3.46);
+        byId("stop-track").style.transform = "scaleX(" + stopProgress + ")";
+        motion("copied-decision", "edit", 3.26);
+
+        motion("example-assistant", "example", 0.75);
+        motion("example-researcher", "followup", 0.3);
+        motion("example-kept", "kept", 0.7);
+
+        motion("score-one", "runs", 0.75);
+        motion("score-two", "runs", 2.45);
+        motion("closure-note", "closures", 0.3);
+        motion("rating-one", "ratings", 1.6);
+        motion("rating-two", "ratings", 3.2);
+
+        bars.forEach((bar, index) => {
+          const start = at("lengths") + 0.35 + (index % 2) * 0.38;
+          bar.style.transform = "scaleX(" + ease(time, start, start + 1.4) + ")";
+        });
+        motion("audit-note", "audit", 0.65);
+        motion("paper-link", "end");
+        byId("progress").style.transform = "scaleX(" + Math.min(1, time / duration) + ")";
+      };
+      window.drawFilm(0);
+    };
+  </script>
+</body>
+</html>
