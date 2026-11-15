@@ -479,3 +479,30 @@ on the final page, and a clean LaTeX log with no overflow or undefined reference
 Saved the verified build as usersim2026.pdf and refreshed usersim2026-draft.pdf
 for existing annotation links. Venue submission requirements remain unconfirmed;
 nothing was uploaded or submitted.
+
+## Dataset search running example — November 14
+
+The manuscript opens with the simulator's recorded request for annotated
+historical texts. Figure 1 follows its next message about WikiANN and WikiNeural
+through the draft and editor calls. The editor's style input contained the
+opening request. Its output matched the draft and accepted submission exactly.
+The draft, editor input, and submitted turn all carried a continue decision.
+Figure 4 returns to the organizer's rating of the same follow-up and places it
+beside a second NER conversation.
+
+The source checks matched the opening and four comparison quotes against saved
+model calls and organizer receipts, then checked their ratings and decision flags
+against the preserved preliminary evaluation. Recounting the 258 generated
+Task 2 pairs gave 245 unchanged, two shorter, and eleven longer. The two
+conversations illustrate which wording the editor preserved. Measuring the
+editor's effect would require paired draft and edit ratings.
+
+From the paper directory, rebuild with:
+
+    latexmk -g -xelatex -interaction=nonstopmode -halt-on-error -outdir=build/running-example-2026-11-14 usersim2026-draft.tex
+
+All five rendered pages were inspected, including grayscale checks of the
+result figures. The build log, scores, PDF metadata, URL targets, and internal
+links passed verification. The two manuscript PDF filenames match the verified
+build byte for byte. The previous source and PDF copies are in the ignored
+build directory under before/.

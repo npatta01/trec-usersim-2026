@@ -1,14 +1,23 @@
 # Paper preparation
 
-Updated November 7, 2026. The paper is for fellow UserSim participants and now
-includes only the submitted system, a recorded conversation flow and preliminary
-organizer results. Development experiments and detailed evidence inventories stay
-in repository notes, outside the manuscript. Author details are complete; venue format, page-limit and submission-route
-confirmation remain open. The final manuscript is [usersim2026.pdf](usersim2026.pdf).
+Updated November 14, 2026. The [manuscript](usersim2026.pdf) follows the
+recorded WikiANN and WikiNeural search from the opening request through the two
+model calls and the organizer's rating of the licensing follow-up. See the
+[evidence notes](draft-evidence.md#dataset-search-running-example--november-14)
+for the receipt checks and build command. The notebook uses the preliminary
+organizer evaluation and reports only the submitted system.
 
-Current layout: task explanation on page 1, submitted method on page 2,
-organizer results on page 3, aligned conversation excerpts on page 4, and discussion
-with references on page 5.
+The talk follows the same search. Download the self-contained HTML to present
+offline. From this directory, rebuild it with
+`quarto render slides/trec-usersim-2026-talk.qmd --to revealjs`.
+[HTML deck](slides/trec-usersim-2026-talk.html) ·
+[Slide PDF](slides/trec-usersim-2026-talk.pdf) ·
+[Quarto source](slides/trec-usersim-2026-talk.qmd)
+
+Page 1 introduces the dataset search and the two tasks. Page 2 traces the
+draft, editor output, and continue decision. Page 3 reports aggregate
+results. Page 4 returns to the same search and compares it with a second
+conversation. Page 5 contains discussion and references.
 
 Both official baselines are complete. No additional experiment or submission is
 required by this paper plan. Debug v5 remains intentionally paused.

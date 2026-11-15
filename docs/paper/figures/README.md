@@ -10,6 +10,22 @@
   `xelatex -output-directory=../build preview.tex`, then
   `pdftoppm -r 130 -singlefile -png ../build/preview.pdf sample-conversation`.
 
+## Current manuscript figures
+
+- [WikiANN and WikiNeural follow-up](wikiann-followup.tex) shows one recorded
+  Task 2 draft, the editor returning the same text, and the submitted turn
+  keeping the draft's continue decision.
+- [Task 2 editor prompt](prompt-audit.tex) gives the instructions referenced in
+  the method and discussion.
+- [Aggregate comparison](results-comparison.pdf) shows organizer-reported mean
+  reply lengths and researcher turns.
+- [Conversation comparison](conversations-side-by-side.tex) returns to the
+  same search and aligns its follow-up and closing with a second conversation.
+  The [case evidence](../draft-evidence.md#dataset-search-running-example--november-14)
+  records the source checks.
+
+## Historical figure revisions
+
 ## Image-generation prompts
 
 Built-in tool, no private inputs. Initial generation prompt:
