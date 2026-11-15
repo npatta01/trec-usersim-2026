@@ -276,6 +276,26 @@ main, .section { scroll-margin-top: 64px; }
 
 .card p { color: var(--muted); }
 
+.film {
+  max-width: 980px;
+  margin: 0;
+}
+
+.film video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fbf4e5;
+}
+
+.film figcaption {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 0.94rem;
+}
+
 .diagram {
   max-width: 900px;
   margin: 24px auto 0;

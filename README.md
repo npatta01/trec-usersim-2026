@@ -5,6 +5,7 @@ looking for datasets with a conversational search assistant supplied by the orga
 
 ## [Project site →](https://npatta01.github.io/trec-usersim-2026/)
 
+**[Watch the approach (1:22)](https://npatta01.github.io/trec-usersim-2026/#film)** ·
 [Notebook paper (PDF)](docs/paper/usersim2026.pdf) ·
 [Workshop slides (PDF)](docs/paper/slides/trec-usersim-2026-talk.pdf) ·
 [Editable workshop slides](docs/paper/slides/trec-usersim-2026-talk.qmd)

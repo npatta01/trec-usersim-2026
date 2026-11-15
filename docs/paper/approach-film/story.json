@@ -1,0 +1,82 @@
+[
+  {
+    "id": "intro",
+    "text": "At TREC UserSim 2026, we played a researcher looking for datasets.",
+    "spoken": "At Treck User Sim twenty twenty-six, we played a researcher looking for datasets."
+  },
+  {
+    "id": "assistant",
+    "text": "The track organizers provided the search assistant."
+  },
+  {
+    "id": "task1",
+    "text": "In Task 1, we predicted one researcher reply from a supplied conversation.",
+    "spoken": "In Task One, we predicted one researcher reply from a supplied conversation.",
+    "gap": 0.42
+  },
+  {
+    "id": "task2",
+    "text": "In Task 2, we exchanged messages with the assistant and decided when to stop.",
+    "spoken": "In Task Two, we exchanged messages with the assistant and decided when to stop.",
+    "gap": 0.36
+  },
+  {
+    "id": "context",
+    "text": "Both model calls saw the researcher’s profile, search goal, and dialogue so far.",
+    "gap": 0.42
+  },
+  {
+    "id": "draft",
+    "text": "GPT-6 Luna drafted the next reply and decided whether to continue in Task 2.",
+    "spoken": "G P T six Luna drafted the next reply and decided whether to continue in Task Two."
+  },
+  {
+    "id": "edit",
+    "text": "A second call edited the wording. Task 2 kept the draft’s decision to continue or stop.",
+    "spoken": "A second call edited the wording. Task Two kept the draft's decision to continue or stop."
+  },
+  {
+    "id": "example",
+    "text": "In one Task 2 search, the assistant suggested WikiANN and WikiNeural.",
+    "spoken": "In one Task Two search, the assistant suggested Wiki Ann and Wiki Neural.",
+    "gap": 0.42
+  },
+  {
+    "id": "followup",
+    "text": "Our researcher asked about licenses, dataset splits, and who had verified the labels."
+  },
+  {
+    "id": "kept",
+    "text": "The editor kept that draft unchanged, and the search continued."
+  },
+  {
+    "id": "runs",
+    "text": "We submitted 62 predictions for Task 1 and processed 57 conversations for Task 2.",
+    "spoken": "We submitted sixty-two predictions for Task One and processed fifty-seven conversations for Task Two.",
+    "gap": 0.42
+  },
+  {
+    "id": "closures",
+    "text": "Eight Task 2 conversations ended through administrative closures.",
+    "spoken": "Eight Task Two conversations ended through administrative closures."
+  },
+  {
+    "id": "ratings",
+    "text": "Preliminary mean human-likeness was 2.38 out of 4 in Task 1 and 2.31 in Task 2.",
+    "spoken": "Preliminary mean human likeness was two point three eight out of four in Task One, and two point three one in Task Two."
+  },
+  {
+    "id": "lengths",
+    "text": "Our replies were longer on average than the human replies in both tasks.",
+    "gap": 0.42
+  },
+  {
+    "id": "audit",
+    "text": "The editor left 245 of 258 generated Task 2 drafts word for word.",
+    "spoken": "The editor left two hundred forty-five of two hundred fifty-eight generated Task Two drafts word for word."
+  },
+  {
+    "id": "end",
+    "text": "The notebook paper has the scores and examples."
+  }
+]
