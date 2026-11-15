@@ -1,44 +1,62 @@
-# TREC UserSim 2026
+# NP Labs · TREC UserSim 2026
 
-We simulate a researcher looking for datasets. The organizer supplies the
-search assistant; our model writes the researcher's next reaction.
+Our submission to the NIST TREC User Simulation Track. We simulated a researcher
+looking for datasets with a conversational search assistant supplied by the organizers.
 
-**Both official baselines are complete.** Task 1 submitted 62 predictions.
-Task 2 processed 57 conversations: 49 normal endings and eight administrative
-closures. Completion audits passed; competition results are not yet recorded.
-Debug v5 remains intentionally paused.
+## [Project site →](https://npatta01.github.io/trec-usersim-2026/)
 
-- [Understand the system](docs/task2_architecture.md): illustrated architecture.
-- [Check submissions](docs/submission-ledger.md): run IDs, costs, quotas and evidence.
-- [Prepare the paper](docs/paper/README.md): claim-to-evidence map, preserved records and missing items.
-- [Start reading or developing](docs/README.md): setup, data, research and history.
-- [Resume project context](docs/project-handoff.md): current decisions and limits.
-- [Continue without the original chat](docs/continuity.md): durable handoff, private evidence and reader locations.
-- [Download preserved artifacts](docs/artifacts.md): GitHub release, checksums and tested restore instructions.
+[Notebook paper (PDF)](docs/paper/usersim2026.pdf) ·
+[Workshop slides (PDF)](docs/paper/slides/trec-usersim-2026-talk.pdf) ·
+[Editable workshop slides](docs/paper/slides/trec-usersim-2026-talk.qmd)
 
-## The two tasks
+## How we simulated the researcher
 
-**Task 1:** given a persona, goal and conversation prefix, predict one researcher
-message. Each new input replaces the previous one.
+GPT-6 Luna drafts and edits each reply using the researcher’s profile,
+search goal, and the dialogue so far.
 
-**Task 2:** play that researcher across a conversation, reacting to assistant
-replies and deciding when to stop. Reset history on a new conversation.
+[![GPT-6 Luna uses the researcher profile, search goal, and dialogue to draft and edit each reply. Task 2 carries the draft's continue-or-stop decision straight to submission.](docs/paper/figures/submitted-overview-illustrated.png)](https://npatta01.github.io/trec-usersim-2026/#approach)
 
-![Task 1 predicts one researcher message from a supplied prefix; Task 2 repeats researcher and assistant exchanges until the conversation ends.](docs/images/task-comparison.png)
+- **Task 1 predicts one reply.** Each case supplies its own conversation history.
+  The editor can correct wording and unsupported claims about completed actions.
+- **Task 2 runs the conversation.** The simulator exchanges messages with the
+  search assistant. The first model call drafts the reply and decides whether to
+  continue. The second call edits the wording.
 
-## The selected baseline
+## Preliminary organizer results
 
-Luna drafts a reply, then makes one editor pass using the persona and observed
-researcher voice. Task 1 official uses narrow fidelity editing; Task 2 uses style
-editing and retains the draft's stop flag. Available utterance text stays intact.
-Compaction and a repeated judge/retry loop are not enabled.
+We submitted **62 Task 1 predictions** and processed **57 Task 2 conversations**.
+Task 2 had 49 normal endings and eight administrative closures. The scores
+below come from the organizers’ November 4 preliminary release.
 
-The [method decisions](docs/research/method-decisions.md) explain the alternatives
-we tested and the remaining voice, knowledge and persistence concerns. The
-[official-data audit](docs/research/official-data-evidence.md) separates training
-coverage from assumptions and identifies the missing human-stop supervision.
+| Measure | Task 1 | Task 2 |
+| --- | ---: | ---: |
+| Dialogue-act JSD (lower is closer) | 0.106 | 0.158 |
+| Mean human-likeness (0–4) | 2.375 | 2.313 |
+| Rated researcher turns | 16 | 67 |
 
-## Work locally
+Jensen–Shannon divergence (JSD) compares the mix of dialogue acts, such as
+clarification requests, with the human reference. Our replies averaged about 80%
+more characters than human replies in Task 1 and 92% more in Task 2. The editor
+left 245 of 258 generated Task 2 drafts unchanged.
+
+[Results and analysis](docs/paper/organizer-results-2026-11-07.md)
+
+## Repository guide
+
+- [Illustrated architecture](docs/task2_architecture.md) explains the tasks,
+  prompts, and recovery behavior.
+- [Submission ledger](docs/submission-ledger.md) records the run IDs, counts, and
+  completion audits.
+- [Paper evidence map](docs/paper/README.md) links the manuscript, figures, and
+  supporting analysis.
+- [Simulator code](usersim/) and [runner guides](docs/README.md#run-or-test-the-code)
+  cover the runtime and offline checks.
+- [Research index](docs/research/README.md) and [project handoff](docs/project-handoff.md)
+  document the selected method and project status. Debug v5 remains paused.
+- The [documentation index](docs/README.md) links data notes, maintenance
+  guides, and project history.
+
+## Local setup
 
 ```bash
 python -m venv .venv
@@ -46,23 +64,6 @@ python -m venv .venv
 .venv/bin/python -m unittest discover -s tests -p 'test_*.py'
 ```
 
-Synthetic runtime tests need no keys, participant data, model calls or organizer
-access. See the [runner guides](docs/README.md#run-or-test-the-code) before any
-execution. The original starter's two known test-collection failures are
-[documented separately](docs/task2_debug_runner.md#setup-and-offline-verification).
-
-| Directory | Responsibility |
-|---|---|
-| `usersim/` | Supported runtime, prompt builders and checkpoints |
-| `scripts/` | Thin runners and documentation rendering |
-| `tests/` | Offline synthetic verification |
-| `experiments/` | Historical studies and unselected variants |
-| `simulator/` | Imported organizer starter |
-| `docs/` | Current guides, evidence and preserved history |
-| `submissions/` | Public per-run metadata and evidence hashes; exact records are private |
-
-The [original organizer guide](docs/organizer-starter.md) is retained for
-provenance. The [official website](https://trec.usersim.ai/) and
-[guidelines](https://trec.usersim.ai/guidelines) define the competition.
-Training transcripts, model outputs and API receipts are preserved in this repository’s
-[evidence release](docs/artifacts.md). Credentials stay outside git and release assets.
+The synthetic runtime tests run offline with no keys or participant data. The
+[track guidelines](https://trec.usersim.ai/guidelines) and
+[organizer starter guide](docs/organizer-starter.md) describe the task contracts.

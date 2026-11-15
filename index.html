@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="NP Labs at TREC UserSim 2026. Explore our draft-and-edit researcher simulator, preliminary results, paper, and workshop slides.">
+  <title>TREC UserSim 2026 · NP Labs</title>
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body id="top">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="#top">
+        <span class="brand-mark" aria-hidden="true">NP</span>
+        <span>TREC UserSim 2026</span>
+      </a>
+      <nav aria-label="Project navigation">
+        <a href="docs/paper/usersim2026.pdf">Paper</a>
+        <a href="#approach">Approach</a>
+        <a href="#results">Results</a>
+        <a href="#resources">Resources</a>
+        <a href="https://github.com/npatta01/trec-usersim-2026">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <section class="hero" aria-labelledby="project-title">
+      <div class="shell hero-inner">
+        <div>
+          <p class="eyebrow">NP Labs · NIST TREC 2026</p>
+          <h1 id="project-title">Simulating a researcher’s dataset search</h1>
+          <p class="lede">We played the researcher in a conversation with the organizers’ dataset-search assistant. GPT-6 Luna drafted each researcher reply, then made one pass to edit the wording.</p>
+          <div class="actions">
+            <a class="button primary" href="docs/paper/usersim2026.pdf">Read the paper (PDF)</a>
+            <a class="button" href="docs/paper/slides/trec-usersim-2026-talk.html">View workshop slides</a>
+          </div>
+        </div>
+        <img class="hero-art" src="docs/paper/slides/talk-assets/archive-research-rag-style.webp"
+             width="1300" height="975" alt="Illustration of a researcher comparing historical texts with datasets on a laptop">
+      </div>
+    </section>
+
+    <div class="shell">
+      <ul class="facts" aria-label="Submitted runs">
+        <li><strong>62 Task 1 predictions</strong><span>One researcher reply per case</span></li>
+        <li><strong>57 Task 2 conversations</strong><span>49 normal endings and 8 administrative closures</span></li>
+      </ul>
+    </div>
+
+    <section id="approach" class="section">
+      <div class="shell">
+        <h2>How the simulator works</h2>
+        <div class="pair">
+          <article class="card violet">
+            <h3>Task 1 · Predict one reply</h3>
+            <p>Given a researcher profile, search goal, and conversation prefix, the simulator predicts the next researcher message. Every case starts from its supplied history. The editor can repair unsupported claims about actions such as downloading a dataset.</p>
+          </article>
+          <article class="card">
+            <h3>Task 2 · Run the conversation</h3>
+            <p>The simulator exchanges messages with the search assistant. Each draft includes a choice to continue or stop. The editor revises the text, and the runner sends the edited reply with the draft’s decision.</p>
+          </article>
+        </div>
+        <figure class="diagram">
+          <img src="docs/paper/figures/submitted-overview-illustrated.png" width="1902" height="827"
+               loading="lazy" alt="The same researcher profile, goal, and dialogue feed both GPT-6 Luna calls. The first drafts the reply. The second edits it. In Task 2 the draft stop decision is copied into the submitted reply.">
+          <figcaption>
+            <a href="docs/paper/figures/submitted-overview-illustrated.png">Full-size diagram</a> ·
+            <a href="https://github.com/npatta01/trec-usersim-2026/blob/main/docs/task2_architecture.md">Architecture and prompts</a>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="results" class="section">
+      <div class="shell">
+        <h2>Preliminary organizer results</h2>
+        <p class="section-intro">The November 4 release compares our submissions with human reference conversations. Jensen–Shannon divergence (JSD) measures the difference in the mix of dialogue acts, such as asking for clarification. Lower values mean a closer match.</p>
+        <div class="card scorecard">
+          <table aria-label="Preliminary organizer scores by task">
+            <thead>
+              <tr><th scope="col">Measure</th><th scope="col">Task 1</th><th scope="col">Task 2</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Dialogue-act JSD</th><td>0.106</td><td>0.158</td></tr>
+              <tr><th scope="row">Mean human-likeness (0–4)</th><td>2.375</td><td>2.313</td></tr>
+              <tr><th scope="row">Rated researcher turns</th><td>16</td><td>67</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="section-note">Our replies averaged 563 characters in Task 1 and 382 in Task 2. Human replies averaged 313 and 199 characters, respectively. The editor left 245 of 258 generated Task 2 drafts unchanged.</p>
+        <p class="section-link"><a href="https://github.com/npatta01/trec-usersim-2026/blob/main/docs/paper/organizer-results-2026-11-07.md">Read the results notes and editor audit</a></p>
+      </div>
+    </section>
+
+    <section id="resources" class="section">
+      <div class="shell">
+        <h2>Project resources</h2>
+        <div class="grid">
+          <article class="card violet">
+            <h3>Paper and workshop</h3>
+            <ul class="links">
+              <li><a href="docs/paper/usersim2026.pdf">Notebook paper (PDF)</a></li>
+              <li><a href="docs/paper/slides/trec-usersim-2026-talk.html">Workshop slides (HTML)</a></li>
+              <li><a href="docs/paper/slides/trec-usersim-2026-talk.pdf">Workshop slides (PDF)</a></li>
+              <li><a href="https://github.com/npatta01/trec-usersim-2026/blob/main/docs/paper/slides/trec-usersim-2026-talk.qmd">Editable workshop slides</a></li>
+            </ul>
+          </article>
+          <article class="card green">
+            <h3>Submitted runs</h3>
+            <ul class="links">
+              <li><a href="https://github.com/npatta01/trec-usersim-2026/blob/main/docs/submission-ledger.md">Submission ledger</a></li>
+              <li><a href="https://github.com/npatta01/trec-usersim-2026/blob/main/docs/paper/preliminary-results-2026-11-07.json">Preliminary scores (JSON)</a></li>
+              <li><a href="https://trec.usersim.ai/guidelines">Official track guidelines</a></li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Code and experiments</h3>
+            <ul class="links">
+              <li><a href="https://github.com/npatta01/trec-usersim-2026/tree/main/usersim">Simulator implementation</a></li>
+              <li><a href="https://github.com/npatta01/trec-usersim-2026/blob/main/docs/README.md#run-or-test-the-code">Runner guides and offline tests</a></li>
+              <li><a href="https://github.com/npatta01/trec-usersim-2026/blob/main/docs/research/README.md">Research index</a></li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell footer-inner">
+      <p>NP Labs · Nidhin Pattaniyil, Tanwir Zaman, Semih Yagli</p>
+      <a href="https://github.com/npatta01/trec-usersim-2026#readme">Repository README</a>
+    </div>
+  </footer>
+</body>
+</html>
