@@ -11,8 +11,10 @@ The talk follows the same search. Download the self-contained HTML to present
 offline. From this directory, rebuild it with
 `quarto render slides/trec-usersim-2026-talk.qmd --to revealjs`.
 [HTML deck](slides/trec-usersim-2026-talk.html) ·
-[Slide PDF](slides/trec-usersim-2026-talk.pdf) ·
+[Slide PDF (11 pages)](slides/trec-usersim-2026-talk.pdf) ·
 [Quarto source](slides/trec-usersim-2026-talk.qmd)
+
+The slide PDF contains all 11 slides, with one complete presentation-layout slide per page and selectable text.
 
 Page 1 introduces the dataset search and the two tasks. Page 2 traces the
 draft, editor output, and continue decision. Page 3 reports aggregate
